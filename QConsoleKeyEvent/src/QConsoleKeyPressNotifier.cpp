@@ -27,8 +27,7 @@ void QConsoleKeyPressNotifier::stop() {
 }
 
 void QConsoleKeyPressNotifier::keyPressEvent( QKeyEvent * e ) {
-	emit keyPressed( e->key(), e->modifiers() );
-	emit keyPressed( e->text() );
+	emit keyPressed( (Qt::Key) e->key(), e->modifiers(), e->text() );
 }
 
 bool QConsoleKeyPressNotifier::eventFilter( QObject * obj, QEvent * e ) {

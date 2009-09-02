@@ -21,8 +21,7 @@ public slots:
 	bool isRunning() { return p_running; }
 
 signals:
-	void keyPressed(int key, Qt::KeyboardModifiers modifiers );
-	void keyPressed(QString text);
+	void keyPressed(Qt::Key, Qt::KeyboardModifiers, QString );
 
 protected:
 	bool eventFilter(QObject *obj, QEvent *event);

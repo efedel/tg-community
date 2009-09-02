@@ -29,6 +29,7 @@ void QConsoleKeyPressThread::run() {
 
 		int mod_key=0;
 		for ( int i=0; i < kbd_input_available(); ++i ) {
+			// TODO: prob a better way to do this than getchar
 			int code = getchar();
 			if ( kbd_is_modifier(code) ) {
 				mod_key = code;
