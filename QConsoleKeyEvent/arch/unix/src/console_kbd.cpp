@@ -6,6 +6,8 @@
 #include <sys/ioctl.h>
 #include <termios.h>
 
+#include <console_kbd.h>
+
 int kbd_input_available() {
 	static bool init=false;
 	static int fd;
@@ -37,7 +39,12 @@ bool kbd_is_modifier( int code ) {
 	return code == 27;
 }
 
-void kbd_keyevent_from_code( KeyEvent *, int code, int mod_code ) {
+QKeyEvent * kbd_keyevent_from_code( int code, int mod_code ) {
 	// TODO
+	QKeyEvent * ke = new QKeyEvent( QEvent::KeyPress,
+					Qt::Key_A,
+					Qt::ShiftModifier,
+					QString("%1").arg(code) );
+	return ke;
 }
 

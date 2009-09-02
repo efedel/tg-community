@@ -8,13 +8,10 @@
 #include <QConsoleKeyPressThread.h>
 #include <console_kbd.h>
 
+/* ---------------------------------------------------------------------- */
+
 static void gen_kbd_event( int code, int mod_key ) {
-	/* TODO: generate a keyevent for key code */
-	QKeyEvent * k1 = new QKeyEvent( QEvent::KeyPress, 
-					Qt::Key_A,
-					Qt::ShiftModifier,
-					QString("%1").arg(code) );
-	qApp->postEvent( qApp, k1 );
+	qApp->postEvent( qApp, kbd_keyevent_from_code(code, mod_key) );
 }
 
 /* ---------------------------------------------------------------------- */
