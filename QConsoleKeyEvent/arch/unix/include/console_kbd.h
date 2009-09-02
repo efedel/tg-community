@@ -9,4 +9,6 @@ int kbd_input_available();
 /* is this a modifier key, i.e. Alt? */
 bool kbd_is_modifier( int );
 
+void kbd_keyevent_from_code( KeyEvent *, int code, int mod_code );
+
 #endif

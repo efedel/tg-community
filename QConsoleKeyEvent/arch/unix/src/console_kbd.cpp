@@ -33,5 +33,11 @@ int kbd_input_available() {
 }
 
 bool kbd_is_modifier( int code ) {
+	// TODO
 	return code == 27;
 }
+
+void kbd_keyevent_from_code( KeyEvent *, int code, int mod_code ) {
+	// TODO
+}
+
