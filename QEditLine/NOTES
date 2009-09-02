@@ -1,0 +1,13 @@
+TODO:
+we should make qmake generate these files instead of configure
+here's the files that the configure makes:
+config.status: creating Makefile
+config.status: creating libedit.pc
+config.status: creating src/Makefile
+config.status: creating doc/Makefile
+config.status: creating examples/Makefile
+config.status: creating config.h
+config.status: config.h is unchanged
+config.status: executing depfiles commands
+config.status: executing libtool commands
+
