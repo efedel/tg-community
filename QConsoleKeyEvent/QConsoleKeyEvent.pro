@@ -4,7 +4,7 @@
 TEMPLATE	=	lib
 LANGUAGE	=	C++
 
-CONFIG		+=	qt thread warn_on debug
+CONFIG		+=	qt thread warn_on debug staticlib
 
 TARGET		=	QConsoleKeyEvent
 VERSION		=	1.0

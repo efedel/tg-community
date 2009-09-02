@@ -35,16 +35,22 @@ int kbd_input_available() {
 }
 
 bool kbd_is_modifier( int code ) {
-	// TODO
+	// TODO: other modifiers?
 	return code == 27;
 }
 
 QKeyEvent * kbd_keyevent_from_code( int code, int mod_code ) {
-	// TODO
-	QKeyEvent * ke = new QKeyEvent( QEvent::KeyPress,
-					Qt::Key_A,
-					Qt::ShiftModifier,
-					QString("%1").arg(code) );
+	// TODO: do this properly
+	
+	Qt::KeyboardModifiers modifiers = Qt::NoModifier;
+	if ( mod_code == 27 ) {
+		modifiers = Qt::AltModifier;
+	}
+	Qt::Key key = (Qt::Key) code;
+	// TODO: convert key to KeyEvent, e.g. get modifiers
+
+	QKeyEvent * ke = new QKeyEvent( QEvent::KeyPress, key,
+					modifiers, QString(QChar(code)) );
 	return ke;
 }
 

@@ -10,12 +10,16 @@
 KeyEventTestApp::KeyEventTestApp( int & argc, char ** argv ) 
 	: QCoreApplication( argc, argv ) {
 
-	connect( &p_notifier, SIGNAL(keyPressed(QString)), 
-		 this, SLOT(keyPress(QString)) );
+	connect( &p_notifier, 
+		 SIGNAL(keyPressed(Qt::Key, Qt::KeyboardModifiers, QString)), 
+		 this, 
+		 SLOT(keyPress(Qt::Key, Qt::KeyboardModifiers, QString)) );
 }
 
-void KeyEventTestApp::keyPress( QString text ) {
-	std::cout << "Key Pressed: " << qPrintable(text) << "\n";
+void KeyEventTestApp::keyPress( Qt::Key key, Qt::KeyboardModifiers mod, 
+				QString text ) {
+	std::cout << "Key " << (int) key << "(" << (int) mod << ") Pressed: ";
+	std::cout << qPrintable(text) << "\n";
 }
 
 /* ---------------------------------------------------------------------- */

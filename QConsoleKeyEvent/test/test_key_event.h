@@ -16,7 +16,7 @@ public:
 	KeyEventTestApp( int & argc, char ** argv ) ;
 
 public slots:
-	void keyPress( QString text );
+	void keyPress( Qt::Key, Qt::KeyboardModifiers, QString );
 
 private:
 	QConsoleKeyPressNotifier p_notifier;
