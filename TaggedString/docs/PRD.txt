@@ -1,0 +1,7 @@
+Fri Dec 11 23:22:51 EST 2009
+This is a C library for a string implementation that has a header
+tag that contains the length.
+
+The TaggedString is an implementation of a C string that will have:
+1. memory management built in via NewTagStr and DelTagStr
+2. the ability to pass a char * directly to other functions (i.e. printf)
