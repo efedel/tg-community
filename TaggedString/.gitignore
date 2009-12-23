@@ -2,3 +2,5 @@
 *.so.*
 *.o
 *.swp
+release*
+main
