@@ -1,0 +1,2 @@
+Another point about this is the structure of the library build framework 
+- it can be reused for other projects.
