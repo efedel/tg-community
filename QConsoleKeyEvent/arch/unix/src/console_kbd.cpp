@@ -28,6 +28,7 @@ int kbd_input_available() {
 	}
 
 	int bytes;	/* # bytes available */
+	/* FIONREAD: get # bytes in buffer */
 	if ( ioctl( fd, FIONREAD, &bytes ) < 0 ) {
 		return 0;
 	}
