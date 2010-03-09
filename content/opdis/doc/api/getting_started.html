@@ -22,20 +22,133 @@
 <div class="contents">
 
 
-<h1><a class="anchor" id="getting_started">Getting started with Opdis </a></h1><h2><a class="anchor" id="Using">
-opdis to disassemble an ELF binary</a></h2>
-<h2><a class="anchor" id="Using">
-opdis to disassemble an ELF binary</a></h2>
-<h2><a class="anchor" id="Using">
-opdis to disassemble an ELF binary</a></h2>
-<h2><a class="anchor" id="Using">
-opdis to disassemble an ELF binary</a></h2>
-<h2><a class="anchor" id="Using">
-opdis to disassemble an ELF binary</a></h2>
-<h2><a class="anchor" id="Using">
-opdis to disassemble an ELF binary</a></h2>
-</div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Sat Mar 6 18:51:18 2010 for Opdis Disassembly Library by&nbsp;
+<h1><a class="anchor" id="getting_started">Getting started with Opdis </a></h1><p>This document provides some brief examples of how to use <em>libopdis</em> and the <em>opdis</em> command line utility.</p>
+<ul>
+<li><a class="el" href="getting_started.html#start_opdis_main">Using opdis to disassemble an object file symbol</a></li>
+<li><a class="el" href="getting_started.html#start_opdis_bytes">Using opdis to disassemble a hex string</a></li>
+<li><a class="el" href="getting_started.html#start_opdis_elf">Using opdis to disassemble an ELF binary</a></li>
+<li><a class="el" href="getting_started.html#start_libopdis_mem">Using libopdis to disassemble a memory location</a></li>
+<li><a class="el" href="getting_started.html#start_libopdis_file">Using libopdis to disassemble a file</a></li>
+<li><a class="el" href="getting_started.html#start_libopdis_bfd_section">Using libopdis and BFD to disassemble an object file section</a></li>
+<li><a class="el" href="getting_started.html#start_libopdis_bfd_entry">Using libopdis and BFD to disassemble an object file entry point</a> </li>
+</ul>
+<hr/>
+<h2><a class="anchor" id="start_opdis_main">
+Using opdis to disassemble an object file symbol</a></h2>
+<p>Use the <em>-N</em> option to disassemble a symbol in an object file using the control-flow algorithm. </p>
+<div class="fragment"><pre class="fragment">opdis -N main a.out
+</pre></div><p> Note: Only symbols recognized by <em>libbfd</em> can be disassembled. The <em>--list-bfd-symbols</em> option can be used to list all available symbols in a BFD target: </p>
+<div class="fragment"><pre class="fragment">opdis --list-bfd-symbols -B a.out
+</pre></div> <h2><a class="anchor" id="start_opdis_bytes">
+Using opdis to disassemble a hex string</a></h2>
+<p>Enclose the hexadecimal bytes in quotes as an argument to the <em>-b</em> option.</p>
+<div class="fragment"><pre class="fragment">opdis -b <span class="stringliteral">&apos;90 90 90 90&apos;</span>
+opdis -b <span class="stringliteral">&apos;CC&apos;</span>
+opdis -b <span class="stringliteral">&quot;`od -j 0x1C20 -t x1 -A x -N 16 -w16 dist/.libs/opdis | head -1 | cut -f 1 -d &apos; &apos; --complement `&quot;</span>
+</pre></div> <h2><a class="anchor" id="start_opdis_elf">
+Using opdis to disassemble an ELF binary</a></h2>
+<p>1. Use readelf to get the offset, size, and vma of the .text section. </p>
+<div class="fragment"><pre class="fragment">readelf -S a.out | grep -A 1 text
+  [14] .text             PROGBITS         0000000000401c20  00001c20
+       0000000000004de8  0000000000000000  AX       0     0     16
+</pre></div><p> This section can be mapped to the load address with the option <em>-m :0x1C20@0x401C20+0x4DE8</em> (:offset+size). The section can be disassembled using the option <em>-l @0x401C20+0x4DE8</em> (+length).</p>
+<p>2. Use readelf to get the address of the <em>main</em> symbol. </p>
+<div class="fragment"><pre class="fragment">readelf -s dist/.libs/opdis | grep main
+    17: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main\@GLIBC_2.2.5 (3)
+   124: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main\@\@GLIBC_
+   208: 00000000004026c0  1417 FUNC    GLOBAL DEFAULT   14 main
+</pre></div><p> The symbol can be disassembled using <em>-c @0x4026C0</em> ().</p>
+<p>3. Run opdis to generate the disassembly.</p>
+<p>Linear disassembly of text section: </p>
+<div class="fragment"><pre class="fragment">opdis -m :0x1C20@0x401C20+0x4DE8 -l @0x401C20+0x4DE8
+</pre></div><p>Control-flow disassembly of entry point: </p>
+<div class="fragment"><pre class="fragment">opdis -m :0x1C20@0x401C20+0x4DE8 -c @0x4026C0
+</pre></div> <h2><a class="anchor" id="start_libopdis_mem">
+Using libopdis to disassemble a memory location</a></h2>
+<p>First, an <a class="el" href="group__types.html#ga03d60c165854b5d0295b89bf03fb0faf">opdis_buf_t</a> must be allocated and filled with the contents of the memory location. The VMA of the memory location can be used as the VMA of the <a class="el" href="group__types.html#ga03d60c165854b5d0295b89bf03fb0faf">opdis_buf_t</a>. Next, an <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a> is created using the default values, and <a class="el" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f">opdis_disasm_linear</a> is used to disassemble the bytes. </p>
+<div class="fragment"><pre class="fragment"><span class="preprocessor">#include &lt;<a class="code" href="opdis_8h.html" title="Public API for libopdis.">opdis/opdis.h</a>&gt;</span>
+
+<span class="keywordtype">void</span> disassemble_mem( <span class="keywordtype">void</span> * src, opdis_offset_t length ) {
+        <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a> o;
+        <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf = <a class="code" href="group__types.html#ga6d276711586d3f615c363201636bf9ba" title="Allocate an opdis buffer.">opdis_buf_alloc</a>( length, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) src );
+        <a class="code" href="group__types.html#gaf476a0732cca2421eb41b81be65c6a4d" title="Fill an opdis buffer from a memory location.">opdis_buf_fill</a>( buf, 0, src, length );
+
+        o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+        <a class="code" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f" title="Disassemble a sequence of instructions in order.">opdis_disasm_linear</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) src, length );
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+}
+</pre></div><p> Note that the <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a> is never configured, so the default values are used. This means that the architecture is i386, the syntax is Intel, and the instructions are written to STDOUT. </p>
+<h2><a class="anchor" id="start_libopdis_file">
+Using libopdis to disassemble a file</a></h2>
+<p>This is the same as disassembling a memory location except that the opdis_buf_t is read from a file. </p>
+<div class="fragment"><pre class="fragment"><span class="preprocessor">#include &lt;<a class="code" href="opdis_8h.html" title="Public API for libopdis.">opdis/opdis.h</a>&gt;</span>
+
+<span class="keywordtype">void</span> disassemble_file( FILE * f, <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma, opdis_offset_t offset ) {
+        <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a> o;
+        <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf = <a class="code" href="group__types.html#ga5e7ef356af0d6187f6938e653509bec5" title="Allocate an opdis buffer containing contents of file.">opdis_buf_read</a>( f, 0, 0 );
+
+        o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+        <a class="code" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f" title="Disassemble a sequence of instructions in order.">opdis_disasm_linear</a>( o, buf, offset, length );
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+}
+</pre></div> <h2><a class="anchor" id="start_libopdis_bfd_section">
+Using libopdis and BFD to disassemble an object file section</a></h2>
+<p>Initializing an <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a> from a valid <em>bfd</em> pointer will configure the target architecture automatically. A valid BFD section can then be disassembled using <a class="el" href="group__bfd.html#ga7e41726af2386e31480f9ddd9a9a0951">opdis_disasm_bfd_section</a>. </p>
+<div class="fragment"><pre class="fragment"><span class="preprocessor">#include &lt;<a class="code" href="opdis_8h.html" title="Public API for libopdis.">opdis/opdis.h</a>&gt;</span>
+
+<span class="keywordtype">int</span> disassemble_bfd_section( <span class="keyword">const</span> <span class="keywordtype">char</span> * filename, <span class="keyword">const</span> <span class="keywordtype">char</span> * sec_name ) {
+        <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a> o;
+        <span class="keyword">struct </span>bfd_section * section;
+        bfd *abfd = bfd_openr( filename, NULL );
+        <span class="keywordflow">if</span> (! abfd  ) {
+                fprintf( stderr, <span class="stringliteral">&quot;Unable to create BFD for %s\n&quot;</span>, filename );
+                <span class="keywordflow">return</span> 0;
+        }
+
+        <span class="keywordflow">if</span> ( bfd_get_flavour( abfd ) == bfd_target_unknown_flavour ) {
+                fprintf( stderr, <span class="stringliteral">&quot;Unknown BFD flavor: cannot continue\n&quot;</span> );
+                <span class="keywordflow">return</span> 0;
+        }
+
+        section = bfd_get_section_by_name( abfd, sec_name );
+        <span class="keywordflow">if</span> (! section ) {
+                fprintf( stderr, <span class="stringliteral">&quot;Cannot find BFD section %s\n&quot;</span>, sec_name );
+                <span class="keywordflow">return</span> 0;
+        }
+
+        o = <a class="code" href="group__bfd.html#gae374625fb321f79356f99ca3d37d928b" title="Initialize an opdis disassembler based on a BFD object.">opdis_init_from_bfd</a>( abfd );
+        <a class="code" href="group__bfd.html#ga7e41726af2386e31480f9ddd9a9a0951" title="Disassemble a the contents of a BFD section using linear disassembly.">opdis_disasm_bfd_section</a>( o, section )
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+
+        return 1;
+}
+</pre></div><p> Note: <a class="el" href="group__bfd.html#gae374625fb321f79356f99ca3d37d928b">opdis_init_from_bfd</a> only configures the architecture of the <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a>. The other options will be set to their defaults, e.g. the instructions will be printed to STDOUT. </p>
+<h2><a class="anchor" id="start_libopdis_bfd_entry">
+Using libopdis and BFD to disassemble an object file entry point</a></h2>
+<p>As with disassembling a BFD section, a valid <em>bfd</em> object can be used to configure an <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a>. The  opdis_disasm_bfd_entry function can be used to disassemble the entry point of the object file, if one exists. </p>
+<div class="fragment"><pre class="fragment"><span class="preprocessor">#include &lt;<a class="code" href="opdis_8h.html" title="Public API for libopdis.">opdis/opdis.h</a>&gt;</span>
+
+<span class="keywordtype">int</span> disassemble_bfd_entry( <span class="keyword">const</span> <span class="keywordtype">char</span> * filename ) {
+        <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a> o;
+        bfd *abfd = bfd_openr( filename, NULL );
+        <span class="keywordflow">if</span> (! abfd  ) {
+                fprintf( stderr, <span class="stringliteral">&quot;Unable to create BFD for %s\n&quot;</span>, filename );
+                <span class="keywordflow">return</span> 0;
+        }
+
+        <span class="keywordflow">if</span> ( bfd_get_flavour( abfd ) == bfd_target_unknown_flavour ) {
+                fprintf( stderr, <span class="stringliteral">&quot;Unknown BFD flavor: cannot continue\n&quot;</span> );
+                <span class="keywordflow">return</span> 0;
+        }
+
+        o = <a class="code" href="group__bfd.html#gae374625fb321f79356f99ca3d37d928b" title="Initialize an opdis disassembler based on a BFD object.">opdis_init_from_bfd</a>( abfd );
+        <a class="code" href="group__bfd.html#ga81464351aa77cd893bc6c22babb08083" title="Disassemble a BFD following flow of control from entry point (_start).">opdis_disasm_bfd_entry</a>( o, abfd )
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+
+        return 1;
+}
+</pre></div> </div>
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:51 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

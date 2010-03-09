@@ -69,9 +69,8 @@ void *&nbsp;</td><td class="memItemRight" valign="bottom"><b>decoder_arg</b></td
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9c93639bb47a5029bfd8a881ceb7faa3"></a><!-- doxytag: member="opdis_info_t::buf" ref="a9c93639bb47a5029bfd8a881ceb7faa3" args="" -->
 <a class="el" href="structopdis__insn__buffer__t.html">opdis_insn_buf_t</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopdis__info__t.html#a9c93639bb47a5029bfd8a881ceb7faa3">buf</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">buffer for storing libopcodes strings as they are emitted. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa10f667405871db0d79ddb4a45d1fb9c"></a><!-- doxytag: member="opdis_info_t::visited_addr" ref="aa10f667405871db0d79ddb4a45d1fb9c" args="" -->
-<a class="el" href="structopdis__tree__base__t.html">opdis_vma_tree_t</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopdis__info__t.html#aa10f667405871db0d79ddb4a45d1fb9c">visited_addr</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Index of all VMAs that have been disassembled and displayed. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structopdis__tree__base__t.html">opdis_vma_tree_t</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopdis__info__t.html#aa10f667405871db0d79ddb4a45d1fb9c">visited_addr</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Index of all VMAs that have been disassembled and displayed.  <a href="#aa10f667405871db0d79ddb4a45d1fb9c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6bdcff528cd6d10e74c51fb484b1913b"></a><!-- doxytag: member="opdis_info_t::debug" ref="a6bdcff528cd6d10e74c51fb484b1913b" args="" -->
 int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopdis__info__t.html#a6bdcff528cd6d10e74c51fb484b1913b">debug</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Print debug info to STDERR. <br/></td></tr>
@@ -107,11 +106,26 @@ int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struc
 
 </div>
 </div>
+<a class="anchor" id="aa10f667405871db0d79ddb4a45d1fb9c"></a><!-- doxytag: member="opdis_info_t::visited_addr" ref="aa10f667405871db0d79ddb4a45d1fb9c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structopdis__info__t.html#aa10f667405871db0d79ddb4a45d1fb9c">opdis_info_t::visited_addr</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>A tree of all instructions that have been disassembled. If this is non-NULL, the default handler will check if the VMA for the current instruction is in the tree. If not, the instruction is added to the tree and the handler returns 1 (i.e. instruction will be displayed). Otherwise, the handler returns 0 (do not display the instruction, and stop disassembly). </p>
+<dl class="note"><dt><b>Note:</b></dt><dd>Use of the visited addresses tree will ensure that no duplicate instructions are emitted, but will noticably slow down disassembly. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>opdis/<a class="el" href="opdis_8h_source.html">opdis.h</a></li>
 </ul>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Sat Mar 6 18:51:18 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:52 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

@@ -113,84 +113,84 @@
 <a name="l00268"></a><a class="code" href="structopdis__info__t.html#a9c93639bb47a5029bfd8a881ceb7faa3">00268</a>         <a class="code" href="structopdis__insn__buffer__t.html" title="A buffer that stores the output of libopcodes before processing.">opdis_insn_buf_t</a> buf;
 <a name="l00269"></a>00269 
 <a name="l00270"></a>00270 
-<a name="l00274"></a><a class="code" href="structopdis__info__t.html#aa10f667405871db0d79ddb4a45d1fb9c">00274</a>         <a class="code" href="structopdis__tree__base__t.html" title="The base of the tree.">opdis_vma_tree_t</a> visited_addr;
-<a name="l00275"></a>00275 
-<a name="l00279"></a><a class="code" href="structopdis__info__t.html#a6bdcff528cd6d10e74c51fb484b1913b">00279</a>         <span class="keywordtype">int</span> debug;
-<a name="l00280"></a>00280 } <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_info_t</a>;
-<a name="l00281"></a>00281 
-<a name="l00288"></a><a class="code" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">00288</a> <span class="keyword">typedef</span> <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_info_t</a> * <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a>;
-<a name="l00289"></a>00289 
-<a name="l00290"></a>00290 <span class="comment">/* ---------------------------------------------------------------------- */</span>
-<a name="l00291"></a>00291 
-<a name="l00301"></a>00301 opdis_t LIBCALL <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>( <span class="keywordtype">void</span> );
-<a name="l00302"></a>00302 
-<a name="l00303"></a>00303 
-<a name="l00317"></a>00317 opdis_t LIBCALL <a class="code" href="group__bfd.html#gae374625fb321f79356f99ca3d37d928b" title="Initialize an opdis disassembler based on a BFD object.">opdis_init_from_bfd</a>( bfd * target );
-<a name="l00318"></a>00318 
-<a name="l00328"></a>00328 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( opdis_t o );
-<a name="l00329"></a>00329 
-<a name="l00330"></a>00330 
-<a name="l00342"></a>00342 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga64f53da56263db300c5179989c725576" title="Initializes an opdis object to default, sane values.">opdis_set_defaults</a>( opdis_t o );
-<a name="l00343"></a>00343 
-<a name="l00351"></a><a class="code" href="group__configuration.html#ga3a5299b15960a05e1f75f5dfb9726b9f">00351</a> <span class="keyword">enum</span> <a class="code" href="group__configuration.html#ga3a5299b15960a05e1f75f5dfb9726b9f" title="Syntax options for x86 disassembly.">opdis_x86_syntax_t</a> { 
-<a name="l00352"></a><a class="code" href="opdis_8h.html#ga3a5299b15960a05e1f75f5dfb9726b9fa1351837bb18eb975ea5b72a01e8ca903">00352</a>         <a class="code" href="opdis_8h.html#ga3a5299b15960a05e1f75f5dfb9726b9fa1351837bb18eb975ea5b72a01e8ca903">opdis_x86_syntax_intel</a>,         
-<a name="l00353"></a><a class="code" href="opdis_8h.html#ga3a5299b15960a05e1f75f5dfb9726b9fa247fb272b325eb12e47a02c7f77e95d1">00353</a>         <a class="code" href="opdis_8h.html#ga3a5299b15960a05e1f75f5dfb9726b9fa247fb272b325eb12e47a02c7f77e95d1">opdis_x86_syntax_att</a>            
-<a name="l00354"></a>00354 };
-<a name="l00355"></a>00355 
-<a name="l00366"></a>00366 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga257a208c2b2611f98b5c995de603680b" title="Configure the disassembler to use Intel or AT&amp;amp;T syntax.">opdis_set_x86_syntax</a>( opdis_t o, <span class="keyword">enum</span> <a class="code" href="group__configuration.html#ga3a5299b15960a05e1f75f5dfb9726b9f" title="Syntax options for x86 disassembly.">opdis_x86_syntax_t</a> syntax );
-<a name="l00367"></a>00367 
-<a name="l00400"></a>00400 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga28975603cdec9b3f23c359779360e2d6" title="Set the architecture and disassembler routine for libopcodes.">opdis_set_arch</a>( opdis_t o, <span class="keyword">enum</span> bfd_architecture arch, 
-<a name="l00401"></a>00401                              <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> mach, disassembler_ftype fn );
-<a name="l00402"></a>00402 
-<a name="l00416"></a>00416 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#gab5a0060194eaa81f6f91d9a8dd1d632b" title="Set libopcodes disassembler options.">opdis_set_disassembler_options</a>( opdis_t o, <span class="keyword">const</span> <span class="keywordtype">char</span> * options );
-<a name="l00417"></a>00417 
-<a name="l00433"></a>00433 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga147b6b4a5cdf1c7613f9c5ab4613055a" title="Set the callback used to display or store disassembled instructions.">opdis_set_display</a>( opdis_t o, <a class="code" href="group__configuration.html#ga173e7d27078a821bd3201a01f70cfba0" title="Callback used to display or store a disassembled instruction.">OPDIS_DISPLAY</a> fn, <span class="keywordtype">void</span> * arg );
-<a name="l00434"></a>00434 
-<a name="l00449"></a>00449 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga1d33455d66bd8b6ab54e872536dbe36d" title="Set the callback used to determine whether to continue disassembly.">opdis_set_handler</a>( opdis_t o, <a class="code" href="group__configuration.html#ga37d4f948fc2b9ece769ebcf1bd49e0df" title="Callback used to determine if disassembly should continue.">OPDIS_HANDLER</a> fn, <span class="keywordtype">void</span> * arg );
-<a name="l00450"></a>00450 
-<a name="l00466"></a>00466 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga0b8981e6d86cbe9da620bd1d5c973b90" title="Set the callback used to build an opdis_insn_t from libopcodes data.">opdis_set_decoder</a>( opdis_t o, <a class="code" href="group__configuration.html#gaa815fec2e1e52adb3176ec4ebda45920" title="Callback used to fill an opdis_insn_t from an opdis_insn_buf_t.">OPDIS_DECODER</a> fn, <span class="keywordtype">void</span> * arg );
-<a name="l00467"></a>00467 
-<a name="l00484"></a>00484 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga07c4629ae65952da207df725d3b9446f" title="Set the callback used to obtain the buffer offset of a branch target.">opdis_set_resolver</a>( opdis_t o, <a class="code" href="group__configuration.html#gab1bafa0fab6fa510abfcd8e64ca04418" title="Callback used to convert a branch target to a buffer offset.">OPDIS_RESOLVER</a> fn, <span class="keywordtype">void</span> * arg );
-<a name="l00485"></a>00485 
-<a name="l00496"></a>00496 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga78d06efa474543a0bd918f734a7f60ed" title="Set the callback used to report errors.">opdis_set_error_reporter</a>( opdis_t o, <a class="code" href="group__configuration.html#ga74777b55fa160e8eb444b7695e37818b" title="Callback used to handle error messages.">OPDIS_ERROR</a> fn, <span class="keywordtype">void</span> * arg );
-<a name="l00497"></a>00497 
-<a name="l00507"></a>00507 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__disassembly.html#ga7433a0350a49d6fca8f22ab6ba25c813" title="Return the size of the instruction at an offset in the buffer.">opdis_disasm_insn_size</a>( opdis_t o, <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf, 
-<a name="l00508"></a>00508                                              <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma );
-<a name="l00509"></a>00509 
-<a name="l00510"></a>00510 <span class="comment">// TODO: opdis_disam_invariant</span>
-<a name="l00511"></a>00511 <span class="comment">//       * wraps decoder</span>
-<a name="l00512"></a>00512 <span class="comment">//       * after decode, find addr arguments in insns bytes (search backwards</span>
-<a name="l00513"></a>00513 <span class="comment">//         from end) and wildcard them out of bytes to create signature</span>
-<a name="l00524"></a>00524 <span class="comment"></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__disassembly.html#ga96337cd32f016985d2c40219fcb1d3c6" title="Disassemble a single instruction in the buffer.">opdis_disasm_insn</a>( opdis_t o, <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf, 
-<a name="l00525"></a>00525                                         <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma, 
-<a name="l00526"></a>00526                                         <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * insn );
-<a name="l00527"></a>00527 
-<a name="l00540"></a>00540 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f" title="Disassemble a sequence of instructions in order.">opdis_disasm_linear</a>( opdis_t o, <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf, <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma,
-<a name="l00541"></a>00541                                  <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length );
-<a name="l00551"></a>00551 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94" title="Disassemble a buffer following flow of control.">opdis_disasm_cflow</a>( opdis_t o, <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf, 
-<a name="l00552"></a>00552                                 <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma );
-<a name="l00564"></a>00564 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#ga866a5c9228044a433239c46ad130a38c" title="Disassemble a sequence of instructions in a BFD.">opdis_disasm_bfd_linear</a>( opdis_t o, bfd * abfd, <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma,
-<a name="l00565"></a>00565                                      <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length );
-<a name="l00574"></a>00574 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#ga0c5021e97119dd49cabef83edfd42858" title="Disassemble a contents of a BFD following flow of control.">opdis_disasm_bfd_cflow</a>( opdis_t o, bfd * abfd, <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma );
-<a name="l00575"></a>00575 
-<a name="l00583"></a>00583 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#ga7e41726af2386e31480f9ddd9a9a0951" title="Disassemble a the contents of a BFD section using linear disassembly.">opdis_disasm_bfd_section</a>( opdis_t o, asection * sec );
+<a name="l00283"></a><a class="code" href="structopdis__info__t.html#aa10f667405871db0d79ddb4a45d1fb9c">00283</a>         <a class="code" href="structopdis__tree__base__t.html" title="The base of the tree.">opdis_vma_tree_t</a> visited_addr;
+<a name="l00284"></a>00284 
+<a name="l00288"></a><a class="code" href="structopdis__info__t.html#a6bdcff528cd6d10e74c51fb484b1913b">00288</a>         <span class="keywordtype">int</span> debug;
+<a name="l00289"></a>00289 } <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_info_t</a>;
+<a name="l00290"></a>00290 
+<a name="l00297"></a><a class="code" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">00297</a> <span class="keyword">typedef</span> <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_info_t</a> * <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a>;
+<a name="l00298"></a>00298 
+<a name="l00299"></a>00299 <span class="comment">/* ---------------------------------------------------------------------- */</span>
+<a name="l00300"></a>00300 
+<a name="l00310"></a>00310 opdis_t LIBCALL <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>( <span class="keywordtype">void</span> );
+<a name="l00311"></a>00311 
+<a name="l00312"></a>00312 
+<a name="l00326"></a>00326 opdis_t LIBCALL <a class="code" href="group__bfd.html#gae374625fb321f79356f99ca3d37d928b" title="Initialize an opdis disassembler based on a BFD object.">opdis_init_from_bfd</a>( bfd * target );
+<a name="l00327"></a>00327 
+<a name="l00337"></a>00337 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( opdis_t o );
+<a name="l00338"></a>00338 
+<a name="l00339"></a>00339 
+<a name="l00351"></a>00351 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga64f53da56263db300c5179989c725576" title="Initializes an opdis object to default, sane values.">opdis_set_defaults</a>( opdis_t o );
+<a name="l00352"></a>00352 
+<a name="l00360"></a><a class="code" href="group__configuration.html#ga3a5299b15960a05e1f75f5dfb9726b9f">00360</a> <span class="keyword">enum</span> <a class="code" href="group__configuration.html#ga3a5299b15960a05e1f75f5dfb9726b9f" title="Syntax options for x86 disassembly.">opdis_x86_syntax_t</a> { 
+<a name="l00361"></a><a class="code" href="opdis_8h.html#ga3a5299b15960a05e1f75f5dfb9726b9fa1351837bb18eb975ea5b72a01e8ca903">00361</a>         <a class="code" href="opdis_8h.html#ga3a5299b15960a05e1f75f5dfb9726b9fa1351837bb18eb975ea5b72a01e8ca903">opdis_x86_syntax_intel</a>,         
+<a name="l00362"></a><a class="code" href="opdis_8h.html#ga3a5299b15960a05e1f75f5dfb9726b9fa247fb272b325eb12e47a02c7f77e95d1">00362</a>         <a class="code" href="opdis_8h.html#ga3a5299b15960a05e1f75f5dfb9726b9fa247fb272b325eb12e47a02c7f77e95d1">opdis_x86_syntax_att</a>            
+<a name="l00363"></a>00363 };
+<a name="l00364"></a>00364 
+<a name="l00375"></a>00375 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga257a208c2b2611f98b5c995de603680b" title="Configure the disassembler to use Intel or AT&amp;amp;T syntax.">opdis_set_x86_syntax</a>( opdis_t o, <span class="keyword">enum</span> <a class="code" href="group__configuration.html#ga3a5299b15960a05e1f75f5dfb9726b9f" title="Syntax options for x86 disassembly.">opdis_x86_syntax_t</a> syntax );
+<a name="l00376"></a>00376 
+<a name="l00409"></a>00409 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga28975603cdec9b3f23c359779360e2d6" title="Set the architecture and disassembler routine for libopcodes.">opdis_set_arch</a>( opdis_t o, <span class="keyword">enum</span> bfd_architecture arch, 
+<a name="l00410"></a>00410                              <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> mach, disassembler_ftype fn );
+<a name="l00411"></a>00411 
+<a name="l00425"></a>00425 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#gab5a0060194eaa81f6f91d9a8dd1d632b" title="Set libopcodes disassembler options.">opdis_set_disassembler_options</a>( opdis_t o, <span class="keyword">const</span> <span class="keywordtype">char</span> * options );
+<a name="l00426"></a>00426 
+<a name="l00442"></a>00442 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga147b6b4a5cdf1c7613f9c5ab4613055a" title="Set the callback used to display or store disassembled instructions.">opdis_set_display</a>( opdis_t o, <a class="code" href="group__configuration.html#ga173e7d27078a821bd3201a01f70cfba0" title="Callback used to display or store a disassembled instruction.">OPDIS_DISPLAY</a> fn, <span class="keywordtype">void</span> * arg );
+<a name="l00443"></a>00443 
+<a name="l00458"></a>00458 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga1d33455d66bd8b6ab54e872536dbe36d" title="Set the callback used to determine whether to continue disassembly.">opdis_set_handler</a>( opdis_t o, <a class="code" href="group__configuration.html#ga37d4f948fc2b9ece769ebcf1bd49e0df" title="Callback used to determine if disassembly should continue.">OPDIS_HANDLER</a> fn, <span class="keywordtype">void</span> * arg );
+<a name="l00459"></a>00459 
+<a name="l00475"></a>00475 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga0b8981e6d86cbe9da620bd1d5c973b90" title="Set the callback used to build an opdis_insn_t from libopcodes data.">opdis_set_decoder</a>( opdis_t o, <a class="code" href="group__configuration.html#gaa815fec2e1e52adb3176ec4ebda45920" title="Callback used to fill an opdis_insn_t from an opdis_insn_buf_t.">OPDIS_DECODER</a> fn, <span class="keywordtype">void</span> * arg );
+<a name="l00476"></a>00476 
+<a name="l00493"></a>00493 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga07c4629ae65952da207df725d3b9446f" title="Set the callback used to obtain the buffer offset of a branch target.">opdis_set_resolver</a>( opdis_t o, <a class="code" href="group__configuration.html#gab1bafa0fab6fa510abfcd8e64ca04418" title="Callback used to convert a branch target to a buffer offset.">OPDIS_RESOLVER</a> fn, <span class="keywordtype">void</span> * arg );
+<a name="l00494"></a>00494 
+<a name="l00505"></a>00505 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__configuration.html#ga78d06efa474543a0bd918f734a7f60ed" title="Set the callback used to report errors.">opdis_set_error_reporter</a>( opdis_t o, <a class="code" href="group__configuration.html#ga74777b55fa160e8eb444b7695e37818b" title="Callback used to handle error messages.">OPDIS_ERROR</a> fn, <span class="keywordtype">void</span> * arg );
+<a name="l00506"></a>00506 
+<a name="l00516"></a>00516 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__disassembly.html#ga7433a0350a49d6fca8f22ab6ba25c813" title="Return the size of the instruction at an offset in the buffer.">opdis_disasm_insn_size</a>( opdis_t o, <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf, 
+<a name="l00517"></a>00517                                              <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma );
+<a name="l00518"></a>00518 
+<a name="l00519"></a>00519 <span class="comment">// TODO: opdis_disam_invariant</span>
+<a name="l00520"></a>00520 <span class="comment">//       * wraps decoder</span>
+<a name="l00521"></a>00521 <span class="comment">//       * after decode, find addr arguments in insns bytes (search backwards</span>
+<a name="l00522"></a>00522 <span class="comment">//         from end) and wildcard them out of bytes to create signature</span>
+<a name="l00533"></a>00533 <span class="comment"></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__disassembly.html#ga96337cd32f016985d2c40219fcb1d3c6" title="Disassemble a single instruction in the buffer.">opdis_disasm_insn</a>( opdis_t o, <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf, 
+<a name="l00534"></a>00534                                         <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma, 
+<a name="l00535"></a>00535                                         <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * insn );
+<a name="l00536"></a>00536 
+<a name="l00549"></a>00549 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f" title="Disassemble a sequence of instructions in order.">opdis_disasm_linear</a>( opdis_t o, <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf, <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma,
+<a name="l00550"></a>00550                                  <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length );
+<a name="l00560"></a>00560 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94" title="Disassemble a buffer following flow of control.">opdis_disasm_cflow</a>( opdis_t o, <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf, 
+<a name="l00561"></a>00561                                 <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma );
+<a name="l00573"></a>00573 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#ga866a5c9228044a433239c46ad130a38c" title="Disassemble a sequence of instructions in a BFD.">opdis_disasm_bfd_linear</a>( opdis_t o, bfd * abfd, <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma,
+<a name="l00574"></a>00574                                      <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length );
+<a name="l00583"></a>00583 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#ga0c5021e97119dd49cabef83edfd42858" title="Disassemble a contents of a BFD following flow of control.">opdis_disasm_bfd_cflow</a>( opdis_t o, bfd * abfd, <a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a> vma );
 <a name="l00584"></a>00584 
-<a name="l00592"></a>00592 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#gac9b2f1ca6de3df7dcdd213b3c6823dd2" title="Disassemble a BFD following flow of control from a symbol.">opdis_disasm_bfd_symbol</a>( opdis_t o, asymbol * sym );
+<a name="l00592"></a>00592 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#ga7e41726af2386e31480f9ddd9a9a0951" title="Disassemble a the contents of a BFD section using linear disassembly.">opdis_disasm_bfd_section</a>( opdis_t o, asection * sec );
 <a name="l00593"></a>00593 
-<a name="l00601"></a>00601 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#ga81464351aa77cd893bc6c22babb08083" title="Disassemble a BFD following flow of control from entry point (_start).">opdis_disasm_bfd_entry</a>( opdis_t o, bfd * abfd );
+<a name="l00601"></a>00601 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#gac9b2f1ca6de3df7dcdd213b3c6823dd2" title="Disassemble a BFD following flow of control from a symbol.">opdis_disasm_bfd_symbol</a>( opdis_t o, asymbol * sym );
 <a name="l00602"></a>00602 
-<a name="l00612"></a>00612 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__disassembly.html#ga68dbe055759625e6c8504cf55cf4891c" title="Send an error message to the error reporter/.">opdis_error</a>( opdis_t o, <span class="keyword">enum</span> <a class="code" href="group__disassembly.html#gae90f684a09c4afb4d2189ad97fce7095" title="Error codes passed to OPDIS_ERROR.">opdis_error_t</a> error, 
-<a name="l00613"></a>00613                           <span class="keyword">const</span> <span class="keywordtype">char</span> * msg );
-<a name="l00614"></a>00614 
-<a name="l00620"></a>00620 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__internal.html#ga694a4dca293295a128218895b38dc05f" title="Print debug message to STDERR.">opdis_debug</a>( opdis_t o, <span class="keywordtype">int</span> min_level, <span class="keyword">const</span> <span class="keywordtype">char</span> * format, ... );
-<a name="l00621"></a>00621 
-<a name="l00622"></a>00622 <span class="preprocessor">#ifdef __cplusplus</span>
-<a name="l00623"></a>00623 <span class="preprocessor"></span>}
-<a name="l00624"></a>00624 <span class="preprocessor">#endif</span>
-<a name="l00625"></a>00625 <span class="preprocessor"></span>
-<a name="l00626"></a>00626 <span class="preprocessor">#endif</span>
+<a name="l00610"></a>00610 <span class="keywordtype">int</span> LIBCALL <a class="code" href="group__bfd.html#ga81464351aa77cd893bc6c22babb08083" title="Disassemble a BFD following flow of control from entry point (_start).">opdis_disasm_bfd_entry</a>( opdis_t o, bfd * abfd );
+<a name="l00611"></a>00611 
+<a name="l00621"></a>00621 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__disassembly.html#ga68dbe055759625e6c8504cf55cf4891c" title="Send an error message to the error reporter/.">opdis_error</a>( opdis_t o, <span class="keyword">enum</span> <a class="code" href="group__disassembly.html#gae90f684a09c4afb4d2189ad97fce7095" title="Error codes passed to OPDIS_ERROR.">opdis_error_t</a> error, 
+<a name="l00622"></a>00622                           <span class="keyword">const</span> <span class="keywordtype">char</span> * msg );
+<a name="l00623"></a>00623 
+<a name="l00629"></a>00629 <span class="keywordtype">void</span> LIBCALL <a class="code" href="group__internal.html#ga694a4dca293295a128218895b38dc05f" title="Print debug message to STDERR.">opdis_debug</a>( opdis_t o, <span class="keywordtype">int</span> min_level, <span class="keyword">const</span> <span class="keywordtype">char</span> * format, ... );
+<a name="l00630"></a>00630 
+<a name="l00631"></a>00631 <span class="preprocessor">#ifdef __cplusplus</span>
+<a name="l00632"></a>00632 <span class="preprocessor"></span>}
+<a name="l00633"></a>00633 <span class="preprocessor">#endif</span>
+<a name="l00634"></a>00634 <span class="preprocessor"></span>
+<a name="l00635"></a>00635 <span class="preprocessor">#endif</span>
 </pre></div></div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Sat Mar 6 18:51:18 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:51 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>
