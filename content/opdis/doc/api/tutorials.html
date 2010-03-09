@@ -34,14 +34,335 @@
 Disassembly Tutorials</a></h2>
 <h3><a class="anchor" id="tute_linear_disasm">
 Writing a Linear Disassembler</a></h3>
-<hr/>
+<p>This tutorial demonstrates how to implement a very basic linear disassembler. </p>
+<p>1. Create a basic <b>main()</b> to run linear disassembly on an input file. </p>
+<div class="fragment"><pre class="fragment"><span class="preprocessor">#include &lt;errno.h&gt;</span>
+<span class="preprocessor">#include &lt;stdio.h&gt;</span>
+<span class="preprocessor">#include &lt;stdlib.h&gt;</span>
+<span class="preprocessor">#include &lt;string.h&gt;</span>
+
+<span class="preprocessor">#include &lt;<a class="code" href="opdis_8h.html" title="Public API for libopdis.">opdis/opdis.h</a>&gt;</span>
+
+<span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset,
+                             <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length ) {
+        <span class="keywordflow">return</span> 0;
+}
+
+<span class="keywordtype">int</span> main( <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> ** argv ) {
+        <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset = 0;
+        <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length = 0;
+
+        <span class="keywordflow">if</span> ( argc &lt; 2 ) {
+                printf( <span class="stringliteral">&quot;Usage: %s file [offset [len]]\n&quot;</span>, argv[0] );
+                <span class="keywordflow">return</span> 1;
+        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> ( argc &gt;= 3 ) {
+                offset = (<a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a>) strtoul( argv[2], NULL, 0 );
+                <span class="keywordflow">if</span> ( argc &gt;= 4 ) {
+                        length = (<a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a>) strtoul( argv[3], NULL, 0 );
+                }
+        }
+        <span class="keywordflow">return</span> disassemble_file( argv[1], offset, length );
+}
+</pre></div> <p>2. Create an <b>opdis</b> buffer from the input filename. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset,
+                             <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length ) {
+        FILE * f;
+        <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf;
+
+        f = fopen( name, <span class="stringliteral">&quot;r&quot;</span> );
+        <span class="keywordflow">if</span> (! f ) {
+                printf( <span class="stringliteral">&quot;Unable to open file %s: %s\n&quot;</span>, name, strerror(errno) );
+                <span class="keywordflow">return</span> -1;
+        }
+
+        buf = <a class="code" href="group__types.html#ga5e7ef356af0d6187f6938e653509bec5" title="Allocate an opdis buffer containing contents of file.">opdis_buf_read</a>( f, 0, 0 );
+
+        fclose( f );
+        
+        <span class="keywordflow">return</span> 0;
+}
+</pre></div> <p>3. Add a call to <a class="el" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f">opdis_disasm_linear</a> to perform the disassembly. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset,
+                             <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length ) {
+        <span class="keywordtype">int</span> rv;
+
+        <span class="comment">/* ... */</span>
+
+        fclose( f );
+
+        o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+        rv = <a class="code" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f" title="Disassemble a sequence of instructions in order.">opdis_disasm_linear</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) offset, length );
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+        
+        <span class="keywordflow">return</span> (rv &gt; 0) ? 0 : -2;
+}
+</pre></div> <p>4. Override the default display callback. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">void</span> display_insn( <span class="keyword">const</span> <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * insn, <span class="keywordtype">void</span> * arg ) {
+        <span class="keyword">const</span> <span class="keywordtype">char</span> * filename = (<span class="keyword">const</span> <span class="keywordtype">char</span> *) arg;
+        printf( <span class="stringliteral">&quot;%08X [%s:%X]\t%s\n&quot;</span>, insn-&gt;<a class="code" href="structopdis__insn__t.html#a13bbd4f11610ddfdb1729af4efcd3420">vma</a>, filename, insn-&gt;<a class="code" href="structopdis__insn__t.html#a6660f8ece379eee21455538734ed45ff">offset</a>,
+                insn-&gt;<a class="code" href="structopdis__insn__t.html#adc7f17c7bbc038b434629d9ea18588e3">ascii</a> );
+}
+
+<span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset,
+                             <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length ) {
+        <span class="comment">/* ... */</span>
+
+        o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+        <a class="code" href="group__configuration.html#ga147b6b4a5cdf1c7613f9c5ab4613055a" title="Set the callback used to display or store disassembled instructions.">opdis_set_display</a>( o, display_insn, name );
+
+        rv = <a class="code" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f" title="Disassemble a sequence of instructions in order.">opdis_disasm_linear</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) offset, length );
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+        
+        <span class="keywordflow">return</span> (rv &gt; 0) ? 0 : -2;
+}
+</pre></div> <hr/>
  <h3><a class="anchor" id="tute_cflow_disasm">
 Writing a Control-flow Disassembler</a></h3>
-<hr/>
+<p>This tutorial demonstrates how to write a basic control-flow disassembler which stores instructions instead of displaying them immediately.</p>
+<p>1. Create a <b>main()</b> and function to load a buffer, as in tute_cflow_linear. </p>
+<div class="fragment"><pre class="fragment"><span class="preprocessor">#include &lt;errno.h&gt;</span>
+<span class="preprocessor">#include &lt;stdio.h&gt;</span>
+<span class="preprocessor">#include &lt;stdlib.h&gt;</span>
+<span class="preprocessor">#include &lt;string.h&gt;</span>
+
+<span class="preprocessor">#include &lt;<a class="code" href="opdis_8h.html" title="Public API for libopdis.">opdis/opdis.h</a>&gt;</span>
+
+<span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset ) {
+        FILE * f;
+        <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf;
+
+        f = fopen( name, <span class="stringliteral">&quot;r&quot;</span> );
+        <span class="keywordflow">if</span> (! f ) {
+                printf( <span class="stringliteral">&quot;Unable to open file %s: %s\n&quot;</span>, name, strerror(errno) );
+                <span class="keywordflow">return</span> -1;
+        }
+
+        buf = <a class="code" href="group__types.html#ga5e7ef356af0d6187f6938e653509bec5" title="Allocate an opdis buffer containing contents of file.">opdis_buf_read</a>( f, 0, 0 );
+
+        fclose( f );
+        
+        <span class="keywordflow">return</span> 0;
+}
+
+<span class="keywordtype">int</span> main( <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> ** argv ) {
+        <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset = 0;
+
+        <span class="keywordflow">if</span> ( argc &lt; 2 ) {
+                printf( <span class="stringliteral">&quot;Usage: %s file [offset]\n&quot;</span>, argv[0] );
+                <span class="keywordflow">return</span> 1;
+        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> ( argc &gt;= 3 ) {
+                offset = (<a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a>) strtoul( argv[2], NULL, 0 );
+        }
+        <span class="keywordflow">return</span> disassemble_file( argv[1], offset );
+}
+</pre></div> <p>2. Add a call to <a class="el" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94">opdis_disasm_cflow</a> to perform the disassembly. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset) {
+        <span class="keywordtype">int</span> rv;
+
+        <span class="comment">/* ... */</span>
+
+        fclose( f );
+
+        o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+        rv = <a class="code" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94" title="Disassemble a buffer following flow of control.">opdis_disasm_cflow</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) offset );
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+        
+        <span class="keywordflow">return</span> (rv &gt; 0) ? 0 : -2;
+}
+</pre></div> <p>3. Override the default display callback with one that duplicates the instruction. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">void</span> store_insn( <span class="keyword">const</span> <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * insn, <span class="keywordtype">void</span> * arg ) {
+        <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * i = <a class="code" href="group__model.html#ga6c019dce7557b07130f039ffbbdfba0f" title="Duplicate an instruction object.">opdis_insn_dupe</a>( insn );
+}
+
+<span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset ) {
+        <span class="comment">/* ... */</span>
+
+        o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+        <a class="code" href="group__configuration.html#ga147b6b4a5cdf1c7613f9c5ab4613055a" title="Set the callback used to display or store disassembled instructions.">opdis_set_display</a>( o, store_insn, NULL );
+
+        rv = <a class="code" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94" title="Disassemble a buffer following flow of control.">opdis_disasm_cflow</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) offset );
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+        
+        <span class="keywordflow">return</span> (rv &gt; 0) ? 0 : -2;
+}
+</pre></div> <p>4. Add an <a class="el" href="group__tree.html#gaa9a9d27400c3b328fc91e68f513dcfa7">opdis_insn_tree_t</a> to store the instructions. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">void</span> store_insn( <span class="keyword">const</span> <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * insn, <span class="keywordtype">void</span> * arg ) {
+        <a class="code" href="structopdis__tree__base__t.html" title="The base of the tree.">opdis_insn_tree_t</a> tree = (<a class="code" href="structopdis__tree__base__t.html" title="The base of the tree.">opdis_insn_tree_t</a>) arg;
+        <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * i = <a class="code" href="group__model.html#ga6c019dce7557b07130f039ffbbdfba0f" title="Duplicate an instruction object.">opdis_insn_dupe</a>( insn );
+
+        <a class="code" href="group__tree.html#gaba70d76551d478f6ee815555f8e7d814" title="Insert an instruction into the tree.">opdis_insn_tree_add</a>( tree, i );
+}
+
+<span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset ) {
+        <a class="code" href="structopdis__tree__base__t.html" title="The base of the tree.">opdis_insn_tree_t</a> tree;
+
+        <span class="comment">/* ... */</span>
+
+        o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+        tree = <a class="code" href="group__tree.html#gaf9663d376c0bba8f90ee0602d2733f27" title="Allocate an Instruction Tree.">opdis_insn_tree_init</a>( 1 );
+
+        <a class="code" href="group__configuration.html#ga147b6b4a5cdf1c7613f9c5ab4613055a" title="Set the callback used to display or store disassembled instructions.">opdis_set_display</a>( o, store_insn, tree );
+
+        rv = <a class="code" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94" title="Disassemble a buffer following flow of control.">opdis_disasm_cflow</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) offset );
+
+        <a class="code" href="group__tree.html#gada866fbac43b77800d7292c6bd0cb7c7" title="Delete an instruction from the tree.">opdis_insn_tree_delete</a>( tree );
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+        
+        <span class="keywordflow">return</span> (rv &gt; 0) ? 0 : -2;
+}
+</pre></div> <p>5. Add code to print the tree after disassembly is complete. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">int</span> print_insn( <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * insn, <span class="keywordtype">void</span> * arg ) {
+        <span class="keyword">const</span> <span class="keywordtype">char</span> * filename = (<span class="keyword">const</span> <span class="keywordtype">char</span> *) arg;
+        printf( <span class="stringliteral">&quot;%08X [%s:%X]\t%s\n&quot;</span>, insn-&gt;<a class="code" href="structopdis__insn__t.html#a13bbd4f11610ddfdb1729af4efcd3420">vma</a>, filename, insn-&gt;<a class="code" href="structopdis__insn__t.html#a6660f8ece379eee21455538734ed45ff">offset</a>,
+                insn-&gt;<a class="code" href="structopdis__insn__t.html#adc7f17c7bbc038b434629d9ea18588e3">ascii</a> );
+        <span class="keywordflow">return</span> 1;
+}
+
+<span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset ) {
+        <span class="comment">/* ... */</span>
+
+        rv = <a class="code" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94" title="Disassemble a buffer following flow of control.">opdis_disasm_cflow</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) offset );
+        <a class="code" href="group__tree.html#gaba90a447a4ec0a905b8f52605e29c42d" title="Invoke a callback for every item in the tree.">opdis_insn_tree_foreach</a>( tree, print_insn, name );
+
+        <span class="comment">/* ... */</span>
+}
+</pre></div> <hr/>
  <h3><a class="anchor" id="tute_bfd_disasm">
 Writing a BFD-based disassembler</a></h3>
+<p>This tutorial demonstrates how to write a simple disassembler that performs control-flow disassembly on a BFD entry point.</p>
+<p>1. Create a <b>main()</b> as in tute_cflow_linear. </p>
+<div class="fragment"><pre class="fragment"><span class="preprocessor">#include &lt;errno.h&gt;</span>
+<span class="preprocessor">#include &lt;stdio.h&gt;</span>
+<span class="preprocessor">#include &lt;stdlib.h&gt;</span>
+<span class="preprocessor">#include &lt;string.h&gt;</span>
+
+<span class="preprocessor">#include &lt;<a class="code" href="opdis_8h.html" title="Public API for libopdis.">opdis/opdis.h</a>&gt;</span>
+
+<span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <span class="keyword">const</span> <span class="keywordtype">char</span> * symbol ) {
+        <span class="keywordflow">return</span> 0;
+}
+
+<span class="keywordtype">int</span> main( <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> ** argv ) {
+        <span class="keywordflow">if</span> ( argc &lt; 3 ) {
+                printf( <span class="stringliteral">&quot;Usage: %s file name\n&quot;</span>, argv[0] );
+                <span class="keywordflow">return</span> 1;
+        }
+
+        <span class="keywordflow">return</span> disassemble_file( argv[1], argv[2] );
+}
+</pre></div> <p>2. Write code to load the file using <b>libbfd</b>. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <span class="keyword">const</span> <span class="keywordtype">char</span> * symbol ) {
+        bfd * abfd;
+
+        abfd = bfd_openr( name, NULL );
+        <span class="keywordflow">if</span> (! bfd ) {
+                printf( <span class="stringliteral">&quot;Unable to open file %s: %s\n&quot;</span>, name, strerror(errno) );
+                <span class="keywordflow">return</span> -1;
+        }
+        <span class="keywordflow">if</span> ( bfd_get_flavour( abfd ) == bfd_target_unknown_flavour ) {
+                printf( <span class="stringliteral">&quot;BFD does not recognize file format for %s\n&quot;</span>, name );
+                bfd_close( abfd );
+                <span class="keywordflow">return</span> -2;
+        }
+
+        bfd_close( abfd );
+        <span class="keywordflow">return</span> 0;
+}
+</pre></div> <p>3. Load the BFD symbol tables to find the symbol in the file. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> asymbol * find_in_symtab( asymbol ** syms, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_syms,
+                                 <span class="keyword">const</span> <span class="keywordtype">char</span> * name ) {
+        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i;
+        symbol_info info;
+        asymbol * sym = NULL;
+
+        <span class="keywordflow">for</span> ( i = 0; i &lt; num_syms; i++ ) {
+                bfd_symbol_info( syms[i], &amp;info );
+                <span class="keywordflow">if</span> ( strcmp( info.name, name ) ) {
+                        <span class="keywordflow">continue</span>;
+                }
+                sym = malloc( <span class="keyword">sizeof</span>(asymbol) );
+                <span class="keywordflow">if</span> ( sym ) {
+                        memcpy( sym, syms[i], <span class="keyword">sizeof</span>(asymbol) );
+                        <span class="keywordflow">break</span>;
+                }
+        }
+
+        <span class="keywordflow">return</span> sym;
+}
+
+<span class="keyword">static</span> asymbol * find_bfd_symbol( bfd * abfd, <span class="keyword">const</span> <span class="keywordtype">char</span> * name ) {
+        <span class="keywordtype">size_t</span> size;
+        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num;
+        asymbol ** syms, *s = NULL;
+
+        <span class="keywordflow">if</span> (! bfd_get_file_flags(abfd) &amp; HAS_SYMS ) {
+                <span class="keywordflow">return</span>;
+        }
+
+        <span class="comment">/* check dynamic symtab first */</span>
+        size = bfd_get_dynamic_symtab_upper_bound( abfd );
+        <span class="keywordflow">if</span> ( size &gt; 0 ) {
+                syms = (asymbol **) malloc(size);
+                <span class="keywordflow">if</span> ( syms ) {
+                        num = bfd_canonicalize_dynamic_symtab( abfd, syms );
+                        s = find_in_symtab( syms, num, name );
+                        free(syms);
+                }
+        }
+        <span class="keywordflow">if</span> ( s ) {
+                <span class="keywordflow">return</span> s;
+        }
+
+        <span class="comment">/* check regular symtab */</span>
+        size = bfd_get_symtab_upper_bound( abfd );
+        <span class="keywordflow">if</span> ( size &gt; 0 ) {
+                syms = (asymbol **) malloc(size);
+                <span class="keywordflow">if</span> ( syms ) {
+                        num = bfd_canonicalize_symtab( abfd, syms );
+                        s = find_in_symtab( syms, num, name );
+                        free(syms);
+                }
+        }
+
+        <span class="keywordflow">return</span> s;
+}
+
+<span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <span class="keyword">const</span> <span class="keywordtype">char</span> * symbol ) {
+        bfd * abfd;
+        asymbol * sym;
+
+        <span class="comment">/* ... */</span>
+
+        sym = find_bfd_symbol( abfd, symbol );
+        <span class="keywordflow">if</span> (! sym ) {
+                printf( <span class="stringliteral">&quot;%s does not contain symbol &apos;%s&apos;\n&quot;</span>, name, symbol );
+                <span class="keywordflow">return</span> -3;
+        }
+
+        free( sym );
+        bfd_close( abfd );
+
+        <span class="keywordflow">return</span> 0;
+}
+</pre></div> <p>4. Add an <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a> and a call to <a class="el" href="group__bfd.html#gac9b2f1ca6de3df7dcdd213b3c6823dd2">opdis_disasm_bfd_symbol</a> to perform control-flow disassembly on the symbol. </p>
+<div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <span class="keyword">const</span> <span class="keywordtype">char</span> * symbol ) {
+        <span class="keywordtype">int</span> rv;
+        <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a> o;
+
+        <span class="comment">/* ... */</span>
+
+        o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+        rv = <a class="code" href="group__bfd.html#gac9b2f1ca6de3df7dcdd213b3c6823dd2" title="Disassemble a BFD following flow of control from a symbol.">opdis_disasm_bfd_symbol</a>( o, sym );
+        <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+
+        free( sym );
+        bfd_close( abfd );
+
+        <span class="keywordflow">return</span> 0;
+}
+</pre></div> <p>5. Add code to store instructions in an <a class="el" href="group__tree.html#gaa9a9d27400c3b328fc91e68f513dcfa7">opdis_insn_tree_t</a> and print the instructions after disassembly as demonstrated in <a class="el" href="tutorials.html#tute_cflow_disasm">Writing a Control-flow Disassembler</a>. </p>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 03:57:16 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 05:18:27 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>
