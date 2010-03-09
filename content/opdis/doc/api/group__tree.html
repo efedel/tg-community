@@ -20,7 +20,10 @@
   </div>
 </div>
 <div class="contents">
-<h1>Tree</h1><table border="0" cellpadding="0" cellspacing="0">
+<h1>Tree</h1>
+<p>AVL trees for opdis addresses and instructions.  
+<a href="#_details">More...</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Data Structures</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopdis__tree__node__t.html">opdis_tree_node_t</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A node in an AVL tree.  <a href="structopdis__tree__node__t.html#_details">More...</a><br/></td></tr>
@@ -113,6 +116,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Callback invoked for every address emitted by opdis_vma_tree_foreach. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>addr</em>&nbsp;</td><td>The address. </td></tr>
@@ -134,6 +139,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Callback invoked for each insn emitted by opdis_insn_tree_foreach. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>addr</em>&nbsp;</td><td>The instruction. </td></tr>
@@ -155,6 +162,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Callback to compare two keys. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>a</em>&nbsp;</td><td>The first key. </td></tr>
@@ -177,6 +186,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Callback invoked by opdis_tree_foreach. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>item</em>&nbsp;</td><td>The current item. </td></tr>
@@ -198,6 +209,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Callback to free items stored in the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>item</em>&nbsp;</td><td>The item to free. </td></tr>
@@ -217,6 +230,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Callback to get the key for an item stored in a tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>item</em>&nbsp;</td><td>The item in the tree. </td></tr>
@@ -253,6 +268,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Insert an instruction into the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Instruction Tree. </td></tr>
@@ -289,6 +306,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Determine if an instruction is in the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Instruction Tree. </td></tr>
@@ -325,6 +344,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Delete an instruction from the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Instruction Tree. </td></tr>
@@ -362,6 +383,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Find an instruction in the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Instruction Tree. </td></tr>
@@ -404,6 +427,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Invoke a callback for every item in the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Instruction Tree. </td></tr>
@@ -430,6 +455,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Free the instruction tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The instruction Tree. </td></tr>
@@ -456,6 +483,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Allocate an Instruction Tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>manage</em>&nbsp;</td><td>1 if tree should free items on deletion; 0 otherwise. </td></tr>
@@ -492,6 +521,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Insert a node into the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree. </td></tr>
@@ -529,6 +560,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Find closest match to data in a tree. This returns the item that matches the key, or the item that is closest to (but less than) the key, or NULL if there is no item less than or equal to the key. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree. </td></tr>
@@ -564,6 +597,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Determine if tree contains data. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree. </td></tr>
@@ -592,6 +627,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Return the number of items in the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree. </td></tr>
@@ -626,6 +663,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Remove an item from the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree. </td></tr>
@@ -663,6 +702,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Find data in a tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree. </td></tr>
@@ -705,6 +746,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Iterate over the tree, invoking a callback for each item. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree. </td></tr>
@@ -731,6 +774,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Free an AVL tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree to free. </td></tr>
@@ -772,6 +817,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Allocate and initialize for an AVL tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>key_fn</em>&nbsp;</td><td>Callback to use for key retrieval. </td></tr>
@@ -810,6 +857,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Find the data succeeding the key in a tree. This returns the item that occurs immediately after <em>key</em> in the tree, or immediately after where <em>key</em> would be if it were in the tree. If there are no items greater than <em>key</em> in the tree, this returns NULL. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree. </td></tr>
@@ -845,6 +894,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Insert or overwrite a node in the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The AVL tree. </td></tr>
@@ -882,6 +933,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Insert an address into the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Address Tree. </td></tr>
@@ -918,6 +971,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Determine if an address is in the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Address Tree. </td></tr>
@@ -954,6 +1009,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Delete an address from the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Address Tree. </td></tr>
@@ -990,6 +1047,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Find an address in the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Address Tree. </td></tr>
@@ -1032,6 +1091,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Invoke a callback for every item in the tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Address Tree. </td></tr>
@@ -1058,6 +1119,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Free the address tree. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>tree</em>&nbsp;</td><td>The Address Tree. </td></tr>
@@ -1083,6 +1146,8 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
       </table>
 </div>
 <div class="memdoc">
+
+<p>Allocate an Address Tree. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The allocated tree. </dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__tree.html#ga794c82fb6567c84f30b99014f8934013" title="Free the address tree.">opdis_vma_tree_free</a></dd></dl>
 <p>This creates a balanced binary tree of addresses. In this tree, the key is the same as the data: its primary use is to keep track of addresses which have been visited. </p>
@@ -1090,7 +1155,7 @@ typedef <a class="el" href="structopdis__tree__base__t.html">opdis_tree_base_t</
 </div>
 </div>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:52 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 03:57:16 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

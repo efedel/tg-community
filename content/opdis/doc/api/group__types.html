@@ -20,7 +20,10 @@
   </div>
 </div>
 <div class="contents">
-<h1>Types</h1><table border="0" cellpadding="0" cellspacing="0">
+<h1>Types</h1>
+<p>Datatypes used by opdis.  
+<a href="#_details">More...</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Data Structures</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopdis__insn__buffer__t.html">opdis_insn_buffer_t</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A buffer that stores the output of libopcodes before processing.  <a href="structopdis__insn__buffer__t.html#_details">More...</a><br/></td></tr>
@@ -124,6 +127,8 @@ typedef <a class="el" href="structopdis__buffer__t.html">opdis_buffer_t</a> *&nb
       </table>
 </div>
 <div class="memdoc">
+
+<p>Allocate an opdis buffer. </p>
 <p>Allocates an <a class="el" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buffer_t</a> of specified size. The buffer contents are initialized to zero. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -173,6 +178,8 @@ typedef <a class="el" href="structopdis__buffer__t.html">opdis_buffer_t</a> *&nb
       </table>
 </div>
 <div class="memdoc">
+
+<p>Fill an opdis buffer from a memory location. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>buf</em>&nbsp;</td><td>Opdis buffer to fill. </td></tr>
@@ -201,6 +208,8 @@ typedef <a class="el" href="structopdis__buffer__t.html">opdis_buffer_t</a> *&nb
       </table>
 </div>
 <div class="memdoc">
+
+<p>Free an opdis buffer. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>buf</em>&nbsp;</td><td>Opdis buffer to free. </td></tr>
@@ -241,6 +250,8 @@ typedef <a class="el" href="structopdis__buffer__t.html">opdis_buffer_t</a> *&nb
       </table>
 </div>
 <div class="memdoc">
+
+<p>Allocate an opdis buffer containing contents of file. </p>
 <p>Allocates an opdis buffer and fills it with the contents of the file. This reads <em>size</em> bytes from the current position in <em>f</em>, or from the current position to the end of the file if <em>size</em> is 0. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -280,6 +291,8 @@ typedef <a class="el" href="structopdis__buffer__t.html">opdis_buffer_t</a> *&nb
       </table>
 </div>
 <div class="memdoc">
+
+<p>Set the VMA for a buffer. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>buf</em>&nbsp;</td><td>The opdis buffer. </td></tr>
@@ -291,7 +304,7 @@ typedef <a class="el" href="structopdis__buffer__t.html">opdis_buffer_t</a> *&nb
 </div>
 </div>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:52 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 03:57:16 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

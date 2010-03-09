@@ -20,7 +20,10 @@
   </div>
 </div>
 <div class="contents">
-<h1>Disassembly</h1><table border="0" cellpadding="0" cellspacing="0">
+<h1>Disassembly</h1>
+<p>API for disassembly.  
+<a href="#_details">More...</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Enumerations</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__disassembly.html#gae90f684a09c4afb4d2189ad97fce7095">opdis_error_t</a> { <br/>
 &nbsp;&nbsp;<b>opdis_error_unknown</b>, 
@@ -52,6 +55,19 @@
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>API for disassembly. </p>
+<p>The general use of <b>libopdis</b> is to create an <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a>, invoke a disassembly function on a buffer, and free the opdis_t: </p>
+<div class="fragment"><pre class="fragment">        <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a> o;
+        <a class="code" href="structopdis__buffer__t.html" title="A buffer containing bytes to disassemble.">opdis_buf_t</a> buf;
+
+        FILE * f = fopen( <span class="stringliteral">&quot;a.out&quot;</span>, <span class="stringliteral">&quot;r&quot;</span> );
+        <span class="keywordflow">if</span> ( f ) {
+                buf = <a class="code" href="group__types.html#ga5e7ef356af0d6187f6938e653509bec5" title="Allocate an opdis buffer containing contents of file.">opdis_buf_read</a>( f, 0, 0 );
+                o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+                <a class="code" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f" title="Disassemble a sequence of instructions in order.">opdis_disasm_linear</a>( o, buf, 0, 0 );
+                <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
+                fclose(f);
+        }
+</pre></div><p> More control over the process is generally achieved through <a class="el" href="group__configuration.html">configuration </a> of the <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a>. </p>
 <hr/><h2>Enumeration Type Documentation</h2>
 <a class="anchor" id="gae90f684a09c4afb4d2189ad97fce7095"></a><!-- doxytag: member="opdis.h::opdis_error_t" ref="gae90f684a09c4afb4d2189ad97fce7095" args="" -->
 <div class="memitem">
@@ -63,6 +79,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Error codes passed to OPDIS_ERROR. </p>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" id="gae90f684a09c4afb4d2189ad97fce7095a5f41b74d3217c5b99635140539bd0485"></a><!-- doxytag: member="opdis_error_bounds" ref="gae90f684a09c4afb4d2189ad97fce7095a5f41b74d3217c5b99635140539bd0485" args="" -->opdis_error_bounds</em>&nbsp;</td><td>
 <p>Buffer bounds exceeded </p>
@@ -116,6 +134,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Disassemble a buffer following flow of control. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>o</em>&nbsp;</td><td>opdis disassembler </td></tr>
@@ -164,6 +184,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Disassemble a single instruction in the buffer. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>o</em>&nbsp;</td><td>opdis disassembler </td></tr>
@@ -207,6 +229,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Return the size of the instruction at an offset in the buffer. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>o</em>&nbsp;</td><td>opdis disassembler </td></tr>
@@ -255,6 +279,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Disassemble a sequence of instructions in order. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>o</em>&nbsp;</td><td>opdis disassembler </td></tr>
@@ -300,6 +326,8 @@ If <em>length</em> is zero, then all bytes from <em>offset</em> to the end of th
       </table>
 </div>
 <div class="memdoc">
+
+<p>Send an error message to the error reporter/. </p>
 <p>This is used internally and by callbacks to report errors. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -327,6 +355,8 @@ If <em>length</em> is zero, then all bytes from <em>offset</em> to the end of th
       </table>
 </div>
 <div class="memdoc">
+
+<p>Initialize an opdis disassembler. </p>
 <p>Allocates an opdis_t and configures it using <a class="el" href="group__configuration.html#ga64f53da56263db300c5179989c725576" title="Initializes an opdis object to default, sane values.">opdis_set_defaults()</a>. </p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__bfd.html#gae374625fb321f79356f99ca3d37d928b" title="Initialize an opdis disassembler based on a BFD object.">opdis_init_from_bfd</a> <a class="el" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a> </dd></dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>An opdis disassembler object </dd></dl>
@@ -348,6 +378,8 @@ If <em>length</em> is zero, then all bytes from <em>offset</em> to the end of th
       </table>
 </div>
 <div class="memdoc">
+
+<p>Cleanup an opdis disassembler. </p>
 <p>Frees an opdis_t and all its associated resources </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -360,7 +392,7 @@ If <em>length</em> is zero, then all bytes from <em>offset</em> to the end of th
 </div>
 </div>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:51 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 03:57:16 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

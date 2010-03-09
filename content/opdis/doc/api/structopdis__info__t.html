@@ -76,6 +76,7 @@ int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struc
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Print debug info to STDERR. <br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
+<p>An opdis disassembler. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>The <em>visited_addr</em> tree is NULL by default. Both opdis_disasm_cflow and opdis_disasm_bfd_cflow create this tree if <em>visited_addr</em> is NULL. This means that linear disassembly will not check if an address exists before invoking the display callback. </dd></dl>
 <hr/><h2>Field Documentation</h2>
 <a class="anchor" id="a9b6051646b452358f8e264e278367b0b"></a><!-- doxytag: member="opdis_info_t::config" ref="a9b6051646b452358f8e264e278367b0b" args="" -->
@@ -88,6 +89,8 @@ int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struc
       </table>
 </div>
 <div class="memdoc">
+
+<p>libopcodes configuration structure </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>This is defined in dis-asm.h in the binutils distribution. </dd></dl>
 
 </div>
@@ -102,6 +105,8 @@ int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struc
       </table>
 </div>
 <div class="memdoc">
+
+<p>libopcodes print_insn routine </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>This is defined in dis-asm.h in the binutils distribution. </dd></dl>
 
 </div>
@@ -116,6 +121,8 @@ int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struc
       </table>
 </div>
 <div class="memdoc">
+
+<p>Index of all VMAs that have been disassembled and displayed. </p>
 <p>A tree of all instructions that have been disassembled. If this is non-NULL, the default handler will check if the VMA for the current instruction is in the tree. If not, the instruction is added to the tree and the handler returns 1 (i.e. instruction will be displayed). Otherwise, the handler returns 0 (do not display the instruction, and stop disassembly). </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>Use of the visited addresses tree will ensure that no duplicate instructions are emitted, but will noticably slow down disassembly. </dd></dl>
 
@@ -125,7 +132,7 @@ int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struc
 <li>opdis/<a class="el" href="opdis_8h_source.html">opdis.h</a></li>
 </ul>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:52 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 03:57:16 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

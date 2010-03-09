@@ -55,13 +55,19 @@ union {</td></tr>
 <tr><td class="memItemLeft" valign="top">}&nbsp;</td><td class="memItemRight" valign="bottom"><b>displacement</b></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>An address expression or "effective address" operand. scale, index, base. </p>
+<p>An address expression operand. </p>
+<p>An address expression or "effective address" operand. This consists of a displacement or absolute address, a base register, an index register, a scale factor, and a scale operation. All of these components are optional. The general format in x86 is </p>
+<div class="fragment"><pre class="fragment">          segment:[base + index * scale + displacement]
+</pre></div><p> for Intel syntax and </p>
+<div class="fragment"><pre class="fragment">          segment:displacement(base,index,scale)
+</pre></div><p> for AT&amp;T syntax.</p>
+<p>In general, the scale operation is always a left shift, though in the ARM architecture additional scale operations can be specified. </p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="structopdis__op__t.html" title="Operand object.">opdis_op_t</a> </dd></dl>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>opdis/<a class="el" href="model_8h_source.html">model.h</a></li>
 </ul>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:52 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 03:57:16 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

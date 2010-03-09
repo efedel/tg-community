@@ -20,7 +20,10 @@
   </div>
 </div>
 <div class="contents">
-<h1>Data Model</h1><table border="0" cellpadding="0" cellspacing="0">
+<h1>Data Model</h1>
+<p>Data Model for disassembled objects.  
+<a href="#_details">More...</a></p>
+<table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Data Structures</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopdis__reg__t.html">opdis_reg_t</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">CPU Register operand.  <a href="structopdis__reg__t.html#_details">More...</a><br/></td></tr>
@@ -215,6 +218,12 @@
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>Data Model for disassembled objects. </p>
+<p>The <b>libopdis</b> data model consist of objects for instructions, operands, and operand values. </p>
+<p>Each <a class="el" href="structopdis__insn__t.html">instruction </a> consists of <b>address</b> details (vma, offset, size, bytes), zero or more <b>prefixes</b>, a <br/>
+ mnemonic for the machine opcode, and zero or more <b>operands</b>. Each <a class="el" href="structopdis__op__t.html">operand </a> consists of a <b>value</b> which may be a <a class="el" href="structopdis__reg__t.html">register </a>, <a class="el" href="structopdis__abs__addr__t.html">absolute address </a>, <a class="el" href="structopdis__addr__expr__t.html">address expression </a>, or immediate value. </p>
+<p>Instruction, operand, and register objects all have an <b>ascii</b> attribute that contains the raw output from <b>libopcodes</b> for this object. Note that <b>libopcodes</b> attempts to format its output for objdump, so there may be trailing whitespace in the <b>ascii</b> fields. </p>
+<p>Instruction and operand objects have a <b>category</b> attribute that determines the broad type or category of the instruction (e.g. is it a control flow or stack operation) or operand (e.g. is it a register or immediate value). </p>
+<p>Insructions, operands, and registers also have a <b>flags</b> attribute that contains additional information. For instructions, this will consist of a more detailed operation type (e.g. jump vs call). For operands, this will contain usage info (e.g. is the operand an address, is the operand read or written, etc). For registers, this will contain general usage info about the register (e.g. is it general-purpose, it is a stack pointer, etc). </p>
 <hr/><h2>Enumeration Type Documentation</h2>
 <a class="anchor" id="ga72a00cd036e505d7c7538fc4a4427549"></a><!-- doxytag: member="model.h::opdis_addr_expr_elem_t" ref="ga72a00cd036e505d7c7538fc4a4427549" args="" -->
 <div class="memitem">
@@ -226,6 +235,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Elements present in an address expression. </p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="structopdis__addr__expr__t.html" title="An address expression operand.">opdis_addr_expr_t</a> </dd></dl>
 <dl class="note"><dt><b>Note:</b></dt><dd>Scale factor is always present; it defaults to 1. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
@@ -263,6 +274,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Type of shift operation used in address expression. </p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="structopdis__addr__expr__t.html" title="An address expression operand.">opdis_addr_expr_t</a> </dd></dl>
 <dl class="note"><dt><b>Note:</b></dt><dd>These only apply to ARM; x86 is always ASL. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
@@ -297,6 +310,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Details of the instruction. </p>
 <p>These flags encode specific information about the instructions: is it a shift or rotate (and is the carry flag significant), is it an AND/OR/XOR/NOT operation, etc. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>It is the responsibility of the architecture-specific decoder to enure that the correct flags set. A missing flag does not necessarily mean that the flag does not apply, but may indicate that the decoder does not fully support the instruction. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
@@ -355,6 +370,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Details of the control flow instruction. </p>
 <p>These flags encode specific information about the control flow instructions: is it a call, does it branch, is it a return, etc. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>It is the responsibility of the architecture-specific decoder to enure that the correct flags set. A missing flag does not necessarily mean that the flag does not apply, but may indicate that the decoder does not fully support the instruction. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
@@ -392,6 +409,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>The <em>category</em> of an instruction. </p>
 <p>The type or <em>category</em> of an instruction. This is used to distinguish between instructions at a high level : control flow instructions (jmp, call, ret), stack instructions (push, pop), floating point instructions, etc. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>It is the responsibility of the architecture-specific decoder to enure that the correct category is set. A value of 'unknown' does not ensure that one of the other values is not suitable, but may indicate that the decoder does not fully support the instruction. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
@@ -444,6 +463,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>The <em>subset</em> of an ISA that the instruction belongs to. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>It is the responsibility of the architecture-specific decoder to enure that the correct ISA is set. A value of 'general' does not ensure that one of the other values is not suitable, but may indicate that the decoder does not fully support the ISA. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" id="gab3e66fe59b04d4eef45728bd9922d573a3e655c97d6a45ab5952729eb740a7723"></a><!-- doxytag: member="opdis_insn_subset_gen" ref="gab3e66fe59b04d4eef45728bd9922d573a3e655c97d6a45ab5952729eb740a7723" args="" -->opdis_insn_subset_gen</em>&nbsp;</td><td>
@@ -477,6 +498,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Details of the instruction. </p>
 <p>These flags encode specific information about the instructions: does it read input from a port, does it write output to a port, etc. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>It is the responsibility of the architecture-specific decoder to enure that the correct flags set. A missing flag does not necessarily mean that the flag does not apply, but may indicate that the decoder does not fully support the instruction. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
@@ -505,6 +528,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>The <em>category</em> of an operand. </p>
 <p>The type or <em>category</em> of an instruction operand. This is used to distinguish between operands that are registers, memory locations, immediate values, or relative offsets. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>It is the responsibility of the architecture-specific decoder to enure that the correct category is set. A value of 'unknown' does not ensure that one of the other values is not suitable, but may indicate that the decoder does not fully support the operand. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
@@ -539,6 +564,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Flags applied to an operand. </p>
 <p>Operand flags are used to encode additional information about the operand. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>It is the responsibility of the architecture-specific decoder to enure that the correct flags set. A missing flag does not necessarily mean that the flag does not apply, but may indicate that the decoder does not fully support the operand. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
@@ -579,6 +606,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Details of the instruction. </p>
 <p>These flags encode specific information about the instructions: is it a push or a pop, does it enter or leave a stack frame, etc. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>It is the responsibility of the architecture-specific decoder to enure that the correct flags set. A missing flag does not necessarily mean that the flag does not apply, but may indicate that the decoder does not fully support the instruction. </dd></dl>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
@@ -634,6 +663,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Generate a string representation of addr expression shift field. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>exp</em>&nbsp;</td><td>The address expression. </td></tr>
@@ -673,6 +704,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Append a string to the <em>comment</em> field. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>The instruction to modify. </td></tr>
@@ -707,6 +740,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Add an operand to an instruction. </p>
 <p>Append an operand to the list of operands in the instruction. This does <em>not</em> duplicate the operand; it performs a realloc on the <em>operands</em> array, appends the pointer <em>op</em> to it, and increases the instruction count. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -744,6 +779,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Append a string to the <em>prefix</em> field. </p>
 <p>a a</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -770,6 +807,8 @@
       </table>
 </div>
 <div class="memdoc">
+
+<p>Allocate an instruction object and initialize its contents to zero. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>num_operands</em>&nbsp;</td><td>The number of operands to allocate, or 0. </td></tr>
@@ -820,6 +859,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Allocate a fixed-size instruction object for use as a buffer. </p>
 <p>This allocates an instruction object with the specified number of operands, and with <em>ascii</em> and <em>mnemonic</em> allocated to the specified sizes. Each operand is allocated by opdis_op_alloc_fixed. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -868,6 +909,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Generate a string representation of instruction category field. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>The instruction. </td></tr>
@@ -899,6 +942,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Clear the contents of an instruction object. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>The instruction to clear. </td></tr>
@@ -923,6 +968,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Duplicate an instruction object. </p>
 <p>Allocate an instruction object and initialize it with the contents of <em>i</em>. This is primarily used to create an instruction object from a fixed-size <a class="el" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a>. The <em>ascii</em>, <em>mnemonic</em>, and <em>operands</em> fields are only as large as they need to be (i.e. the length of the string and the number of valid operands). </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -950,6 +997,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Determine if the execution falls through to the next instruction. </p>
 <p>Returns true (1) if execution falls through to the subsequent instruction in memory. This is true for all instructions except unconditional jumps (JMP) and procedure returns (RET). </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -998,6 +1047,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Generate a string representation of instruction flags field. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>The instruction. </td></tr>
@@ -1029,6 +1080,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Free an allocated instruction object. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>The instruction to free. </td></tr>
@@ -1055,6 +1108,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Determine if the instruction has a branch target operand. </p>
 <p>Returns true (1) if the instruction has a branch target operand. The branch target operand is accessible via <em>i-&gt;target</em>. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -1097,6 +1152,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Generate a string representation of instruction isa field. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>The instruction. </td></tr>
@@ -1127,6 +1184,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Return next available allocated operand. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>The instruction to containing the operand. </td></tr>
@@ -1161,6 +1220,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Set the <em>ascii</em> field of an instruction. </p>
 <p>This duplicates the string <em>ascii</em> and sets the <em>ascii</em> field of <em>i</em> to the new string. If the <em>ascii</em> field is non-NULL, it is freed before the assignment. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -1197,6 +1258,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Set the <em>mnemonic</em> field of an instruction. </p>
 <p>This duplicates the string <em>mnemonic</em> and sets the <em>mnemonic</em> field of <em>i</em> to the new string. If the <em>mnemonic</em> field is non-NULL, it is freed before the assignment. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -1224,6 +1287,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Allocate an operand object. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The allocated operand. </dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__model.html#ga24074cb8c02c91af679cf200f3c8f6a0" title="Free an allocated operand object.">opdis_op_free</a> </dd></dl>
 
@@ -1244,6 +1309,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Allocate a fixed-size operand object for use as a buffer. </p>
 <p>This allocates an operand object with <em>ascii</em> allocated to the specified size. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -1288,6 +1355,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Generate a string representation of operand category field. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>op</em>&nbsp;</td><td>The operand. </td></tr>
@@ -1318,6 +1387,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Clear the contents of an operand object. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>o</em>&nbsp;</td><td>The operand to clear. </td></tr>
@@ -1342,6 +1413,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Duplicate an operand object. </p>
 <p>Allocate an operand object and initialize it with the contents of <em>op</em>. This is primarily used to create an operand object from a fixed-size <a class="el" href="structopdis__op__t.html" title="Operand object.">opdis_op_t</a>. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -1392,6 +1465,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Generate a string representation of operand flags field. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>op</em>&nbsp;</td><td>The operand. </td></tr>
@@ -1423,6 +1498,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Free an allocated operand object. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>op</em>&nbsp;</td><td>The operand to free. </td></tr>
@@ -1457,6 +1534,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Set the <em>ascii</em> field of an operand. </p>
 <p>This duplicates the string <em>ascii</em> and sets the <em>ascii</em> field of <em>op</em> to the new string. If the <em>ascii</em> field is non-NULL, it is freed before the assignment. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -1504,6 +1583,8 @@ The operands array is allocated as an empty array of pointers; the operands them
       </table>
 </div>
 <div class="memdoc">
+
+<p>Generate a string representation of register flags field. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>reg</em>&nbsp;</td><td>The register. </td></tr>
@@ -1521,7 +1602,7 @@ The operands array is allocated as an empty array of pointers; the operands them
 </div>
 </div>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:51 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 03:57:16 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

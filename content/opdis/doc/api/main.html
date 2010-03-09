@@ -20,7 +20,7 @@
   </div>
 </div>
 <div class="contents">
-<h1>Opdis : Opcode Disassembler</h1><h3>Verison 1-pre </h3><h2><a class="anchor" id="overview">
+<h1>Opdis : Opcode Disassembler</h1><h3>Verison 1.0 </h3><h2><a class="anchor" id="overview">
 Overview</a></h2>
 <p>Opdis is a wrapper for the libopcodes disassembler library distributed as part of GNU binutils. It extends the libopcodes library by offering linear and control-flow disassembly algorithms, instruction and operand objects that are suitable for analysis, and a command-line utility to perform disassembly on arbitrary locations in a file. </p>
 <p>These features are lacking in libopcodes and objdump. The design of libopcodes makes it awkward to use for binary analysis; it assumes that disassembled instructions are going to be printed, not stored or analyzed, and therefore it invokes a callback with an fprintf(3) signature. The shortcomings of objdump are even greater: it does not support control-flow disassembly, nor does it allow the user to specify which bytes in the file to disassemble. </p>
@@ -29,17 +29,15 @@ Overview</a></h2>
  <h2><a class="anchor" id="sec_libopdis">
 libopdis</a></h2>
 <p>The libopdis library contains the core functionality; it uses linear and control-flow algorithms to generate instruction and operand objects. </p>
-<h3><a class="anchor" id="sec_libopdis_config">
-Configuration</a></h3>
-<h3><a class="anchor" id="sec_libopdis_disasm">
-Disassembly</a></h3>
-<h3><a class="anchor" id="sec_libopdis_model">
-Data Model</a></h3>
+<p><a class="el" href="group__configuration.html">Configuration </a> </p>
+<p><a class="el" href="group__disassembly.html">Disassembly </a> </p>
+<p><a class="el" href="group__model.html">Data Model </a> </p>
+<p><a class="el" href="group__bfd.html">BFD Support </a> </p>
 <h3><a class="anchor" id="sec_libopdis_link">
 Linking to libopdis</a></h3>
-<p><a class="el" href="structopdis__insn__t.html">opdis_insn_t</a></p>
-<p>opdis_operand_t</p>
-<hr/>
+<p><b>libopdis</b> requires both <b>libopcodes</b> and <b>libbfd</b> : </p>
+<div class="fragment"><pre class="fragment">-lopdis -lopcodes -lbfd
+</pre></div> <hr/>
  <h2><a class="anchor" id="sec_opdis">
 opdis</a></h2>
 <p>The opdis utility is a command-line front-end to the library which attempts to meet the needs of a generic disassembler. </p>
@@ -76,7 +74,7 @@ Other Documentation</a></h2>
 License</a></h2>
 <p>Both <em>opdis</em> and <em>libopdis</em> are covered by the GNU Public License, version 3. See the file COPYING included in the distribution, or <a href="http://www.gnu.org/licenses/gpl.txt">http://www.gnu.org/licenses/gpl.txt</a> . </p>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:51 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 03:57:16 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

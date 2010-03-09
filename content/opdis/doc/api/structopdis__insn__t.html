@@ -66,7 +66,8 @@
 <tr><td class="memItemLeft" align="right" valign="top">unsigned char&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structopdis__insn__t.html#a0f9fcad0c1414afa68b473d25188acf2">mnemonic_sz</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>A disassembled instruction. Depending on the decoder, some or all of the fields will be set. </p>
+<p>Instruction object. </p>
+<p>A disassembled instruction. Depending on the decoder, some or all of the fields will be set. The <em>status</em> field specifies what information is present. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>The <em>ascii</em> field always contains the raw libopcodes output for the instruction. </dd>
 <dd>
 The <em>offset</em> field is always set to the offset of the instruction in the buffer. By default, the <em>vma</em> field will be set to the value in <em>offset</em>. The <a class="el" href="group__configuration.html#ga37d4f948fc2b9ece769ebcf1bd49e0df">OPDIS_HANDLER</a> callback can set <em>vma</em> to the load address of the instruction. </dd>
@@ -154,7 +155,7 @@ For instructions allocated by opdis_insn_alloc, <em>num_operands</em> and <em>al
       </table>
 </div>
 <div class="memdoc">
-<p>Type of insn </p>
+<p>Type of insn opcode </p>
 
 </div>
 </div>
@@ -252,7 +253,7 @@ For instructions allocated by opdis_insn_alloc, <em>num_operands</em> and <em>al
       </table>
 </div>
 <div class="memdoc">
-<p>Subset of ISA for insn </p>
+<p>Subset of ISA for insn opcode </p>
 
 </div>
 </div>
@@ -266,7 +267,7 @@ For instructions allocated by opdis_insn_alloc, <em>num_operands</em> and <em>al
       </table>
 </div>
 <div class="memdoc">
-<p>ASCII mnemonic for insn </p>
+<p>ASCII mnemonic for insn opcode </p>
 
 </div>
 </div>
@@ -442,7 +443,7 @@ For instructions allocated by opdis_insn_alloc, <em>num_operands</em> and <em>al
 <li>opdis/<a class="el" href="model_8h_source.html">model.h</a></li>
 </ul>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 01:49:52 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 03:57:16 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>
