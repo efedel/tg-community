@@ -94,8 +94,9 @@ What output formats are available?</a></h3>
 <li>asm : raw libopcodes output</li>
 <li>dump : standard disassembled listing</li>
 <li>delim : pipe-delimited table of instructions</li>
-<li>xml : xml representation of instructions The default output format is 'dump'. </li>
+<li>xml : xml representation of instructions </li>
 </ul>
+<p>The default output format is 'dump'. </p>
 <p>The <b>asm</b> format consists of the libopcodes strings followed by a comment containing the VMA of the instruction. </p>
 <div class="fragment"><pre class="fragment">bash$ opdis -f <span class="keyword">asm</span> -E /bin/ls  |more
 xor    %ebp,%ebp        # [0x4026e0]
@@ -287,8 +288,9 @@ How are target IDs assigned?</a></h3>
 <li>: buffer '90 90 90 90'</li>
 <li>: buffer 'cc cc cc cc'</li>
 <li>: file 'a.out'</li>
-<li>: file 'rom.bin' Use the <b>--dry-run</b> option to preview the target list. </li>
+<li>: file 'rom.bin' </li>
 </ol>
+<p>Use the <b>--dry-run</b> option to preview the target list. </p>
 <h3><a class="anchor" id="faq_opdis_job">
 How do jobs get created?</a></h3>
 <p>Disassembly jobs are created with the <b>-l</b>, <b>-c</b>, <b>-E</b>, <b>-N</b>, and <b>-S</b> options. Jobs are scheduled in the order they are encountered. Use the <b>--dry-run</b> to preview the job list. </p>
@@ -298,8 +300,9 @@ What are memory maps used for?</a></h3>
 <ul>
 <li>to change the VMA that appears in the output</li>
 <li>to allow multiple files and buffers to appear contiguous in memory</li>
-<li>to disassemble multiple targets This last point is worth examining in more detail. </li>
+<li>to disassemble multiple targets </li>
 </ul>
+<p>This last point is worth examining in more detail. </p>
 <p>When <b>opdis</b> disassembles a target, it stores the disassembled instructions using their VMA as a primary key. The same storage is used for all targets; if an instruction is already stored for a VMA, all subsequent instructions with the same VMA will be discarded. </p>
 <p>By default, the VMA for every target will be 0 (i.e., each instruction in the target will use its offset in the target as its VMA). Thus, when disassembling two targets, the instructions in the second will be discarded. Creating a memory map that places the second target after the first in memory (i.e. map it to a VMA equal to the first target's size) fixes this issue. </p>
 <p>Note that BFD targets do not require memory maps, as the BFD structure contains sections that provide their own mapping. Also, all <b>-b</b> options are mapped sequentially in memory, so that they appear to be part of the same contiguous memory region. </p>
@@ -334,8 +337,9 @@ What are the various opdis_disasm_bfd functions used for?</a></h3>
 <li><a class="el" href="group__bfd.html#ga0c5021e97119dd49cabef83edfd42858">opdis_disasm_bfd_cflow</a> : control-flow disassembly on a vma in a <b>bfd</b> object</li>
 <li><a class="el" href="group__bfd.html#ga7e41726af2386e31480f9ddd9a9a0951">opdis_disasm_bfd_section</a> : linear disassembly on a <b>bfd</b> section</li>
 <li><a class="el" href="group__bfd.html#gac9b2f1ca6de3df7dcdd213b3c6823dd2">opdis_disasm_bfd_symbol</a> : control-flow disassembly on a <b>bfd</b> symbol</li>
-<li><a class="el" href="group__bfd.html#ga81464351aa77cd893bc6c22babb08083">opdis_disasm_bfd_entry</a> : control-flow disassembly on the entry point of a <b>bfd</b> object Using <b>libbfd</b> to manage <b>libopdis</b> targets has some advantages and disadvantages. On the positive side, it simplifies the loading of the target by detecting the architecture, and provides access to symbolic information such as program sections and symbol tables. On the negative side, <b>libbfd</b> will fail to load a file which has malformed or missing headers, or which is not in a recognized file format. </li>
+<li><a class="el" href="group__bfd.html#ga81464351aa77cd893bc6c22babb08083">opdis_disasm_bfd_entry</a> : control-flow disassembly on the entry point of a <b>bfd</b> object </li>
 </ul>
+<p>Using <b>libbfd</b> to manage <b>libopdis</b> targets has some advantages and disadvantages. On the positive side, it simplifies the loading of the target by detecting the architecture, and provides access to symbolic information such as program sections and symbol tables. On the negative side, <b>libbfd</b> will fail to load a file which has malformed or missing headers, or which is not in a recognized file format. </p>
 <p>It is recommended that users employ the BFD API where suitable, while keeping the standard API in reserve to handle files that BFD fails to load. </p>
 <h3><a class="anchor" id="faq_libopdis_meta">
 Why is metadata not being generated for a particular architecture?</a></h3>
@@ -366,7 +370,7 @@ How much work is it to write a decoder?</a></h3>
 <p>More complete support of an architecture, such as detection of register flags or stack trap instruction types, is a great deal of work, and should ideally be automated. </p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="howtos.html#howto_app_decoder">Writing a decoder callback</a>. </dd></dl>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 15:31:56 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 18:59:32 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

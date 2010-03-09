@@ -66,6 +66,7 @@ custom output formats is provided.
 <A NAME="lbAE">&nbsp;</A>
 <H2>OPTIONS</H2>
 
+<P>
 <DL COMPACT>
 <DT><B>-c</B><DD>
 
@@ -257,6 +258,7 @@ Print a list of the targets, jobs, and memory maps without actually doing any di
 <A NAME="lbAF">&nbsp;</A>
 <H2>DISASSEMBLY</H2>
 
+<P>
 <B>opdis</B> implements two disassembly algorithms:
 <DL COMPACT>
 <DT><DD>
@@ -278,6 +280,7 @@ If no jobs are requested by the user, a linear disassembly of all target buffers
 <A NAME="lbAG">&nbsp;</A>
 <H2>DATA MODEL</H2>
 
+<P>
 The data model used by <B>opdis</B> and <B>libopdis</B> uses seven types of objects: offsets, VMAs, instructions, operands, CPU registers, address expressions, and absoute addresses.
 <P>
 
@@ -371,6 +374,7 @@ An <B>absolute</B> operand has the following fields:
 <A NAME="lbAH">&nbsp;</A>
 <H2>TARGETS</H2>
 
+<P>
 A target is a buffer for disassembly. Targets may be declared in one of two ways: by specifying the specific bytes to disassemble in an argument to the <B>-b</B> option, or by declaring object file arguments on the command line. Targets are assigned an ID in the order they appear in the command line, with the first target given ID 1. The first target is always the default target for all operations. It is recommended that <B>--dry-run</B> be used to preview targets before performing disassembly.
 <P>
 
@@ -380,18 +384,9 @@ The disassembler checks for unique addresses while disassembling, and will not d
 It is not possible to load targets with different architectures in the same invocation of <B>opdis</B>.
 <P>
 <A NAME="lbAI">&nbsp;</A>
-<H2>MEMORY MAPS</H2>
-
-A <I>memory map</I> associates a VMA with an offset into a target buffer. This is useful when a target buffer must appear to be at a specific load address, either to clarify the output or to combine multiple targets into a single address space. It is recommended that <B>--dry-run</B> be used to preview memory maps before performing a disassembly.
-<P>
-
-Note that memory maps are only used when creating disassembly jobs. The actual disassembler algorithms rely on ofsets from the load address of the target buffer (provided by a memory map), and do not respect the size of memory maps delcared by the user (i.e. a linear disassembly of size 0 will continue until the end of the buffer, not the end of the memory map). Memory maps are ignored for BFD targets.
-
-See <B>ADDRESS FORMAT</B>.
-<P>
-<A NAME="lbAJ">&nbsp;</A>
 <H2>BFD SUPPORT</H2>
 
+<P>
 <B>opdis</B>, like <B>libopcodes</B>, supports <I>BFD</I> targets through <B>libbfd</B>. Three additional jobs are available for BFD targets:
 <DL COMPACT>
 <DT><DD>
@@ -418,6 +413,17 @@ The format for specifying a <I>bfdname</I> is
 
 where <B>target</B> is the ID of the target containing the symbol and <B>name</B> is a valid BFD symbol. The <B>target</B> is only required if more than one target is being disassembled. A list of symbols found in a target can be printed to
 STDOUT by using the <B>--list-bfd-symbols</B> option.
+<P>
+<A NAME="lbAJ">&nbsp;</A>
+<H2>MEMORY MAPS</H2>
+
+<P>
+A <I>memory map</I> associates a VMA with an offset into a target buffer. This is useful when a target buffer must appear to be at a specific load address, either to clarify the output or to combine multiple targets into a single address space. It is recommended that <B>--dry-run</B> be used to preview memory maps before performing a disassembly.
+<P>
+
+Note that memory maps are only used when creating disassembly jobs. The actual disassembler algorithms rely on ofsets from the load address of the target buffer (provided by a memory map), and do not respect the size of memory maps delcared by the user (i.e. a linear disassembly of size 0 will continue until the end of the buffer, not the end of the memory map). Memory maps are ignored for BFD targets.
+
+See <B>ADDRESS FORMAT</B>.
 <P>
 <A NAME="lbAK">&nbsp;</A>
 <H2>ADDRESS FORMAT</H2>
@@ -635,14 +641,12 @@ See <B>%?</B>.
 <H2>NOTES</H2>
 
 <P>
+<P>
 
 The level of detail available to <B>opdis</B> is determined by the decoders available in <B>libopdis</B>. Currently, <B>libopdis</B> provides three decoders: x86 AT&amp;T syntax, x86 Intel syntax, and generic. The AT&amp;T syntax decoder (used by default or when <I>-s at</I> is supplied) provides the most detail, and generates output that is best suited for analysis. The generic decoder, the only decoder available for non-x86 architectures, only provides the raw libopcodes representation (the <I>asciiR field) of the instruction and no operand information. Additional architecture-specific decoders must be added to </I><B>libopdis</B> to overcome this limitation.
 <P>
 
 <B>opdis</B> does not emit instructions as they are disassembled. Instead, instructions are stored in a binary tree and printed in order of VMA after all dfisassembly jobs have completed.
-<P>
-
-Control Flow disassembly is very slow due to the visited-address tracking.
 <P>
 <A NAME="lbAR">&nbsp;</A>
 <H2>EXAMPLES</H2>
@@ -765,8 +769,8 @@ section entitled &quot;GNU Free Documentation License&quot;.
 <DT><A HREF="#lbAF">DISASSEMBLY</A><DD>
 <DT><A HREF="#lbAG">DATA MODEL</A><DD>
 <DT><A HREF="#lbAH">TARGETS</A><DD>
-<DT><A HREF="#lbAI">MEMORY MAPS</A><DD>
-<DT><A HREF="#lbAJ">BFD SUPPORT</A><DD>
+<DT><A HREF="#lbAI">BFD SUPPORT</A><DD>
+<DT><A HREF="#lbAJ">MEMORY MAPS</A><DD>
 <DT><A HREF="#lbAK">ADDRESS FORMAT</A><DD>
 <DT><A HREF="#lbAL">FORMAT STRINGS</A><DD>
 <DL>
@@ -784,6 +788,6 @@ section entitled &quot;GNU Free Documentation License&quot;.
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 22:55:51 GMT, March 08, 2010
+Time: 23:59:15 GMT, March 09, 2010
 </BODY>
 </HTML>
