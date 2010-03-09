@@ -408,7 +408,7 @@ The default display routine writes instructions to STDOUT without storing or sor
 <div class="memdoc">
 
 <p>The built-in opdis handler callback. The default handler returns true unless the instruction is invalid or if the address has already been visited. </p>
-<dl class="note"><dt><b>Note:</b></dt><dd>The default handler callback takes an opdis_t as the <em>arg</em> parameter. If this parameter is NULL, the handler will not check if an address has already been visited (which could lead to cflow disassembler loops). </dd></dl>
+<dl class="note"><dt><b>Note:</b></dt><dd>The default handler callback takes an opdis_t as the <em>arg</em> parameter. If this parameter is NULL, or if the <em>visited_addr</em> field of the opdis_t is NULL, the handler will not check check if an address has already been visited. </dd></dl>
 
 </div>
 </div>
@@ -836,7 +836,7 @@ The <em>arch</em> parameter is only used when calling <em>disassemble_init_for_t
 </div>
 </div>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 05:18:27 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 15:31:57 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

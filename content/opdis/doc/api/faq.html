@@ -364,8 +364,9 @@ How much work is it to write a decoder?</a></h3>
 <p>As discussed in <a class="el" href="faq.html#faq_libopdis_meta">Why is metadata not being generated for a particular architecture?</a>, <b>libopcodes</b> generates a sequence of strings for each instruction; <b>libopdis</b> stores these in an opdis_insn_buf_t. This means that a decoder must scan through a list of strings in order to detect instruction mnemonics and operands. </p>
 <p>For the simple case of supporting control-flow disassembly, this is not too much work. The decoder can scan for the handful of relevant instructions, then generate an operand for the branch target and set all relevant metadata (instruction category, instruction flags, operand category, operand flags, instruction target operand pointer). </p>
 <p>More complete support of an architecture, such as detection of register flags or stack trap instruction types, is a great deal of work, and should ideally be automated. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="howtos.html#howto_app_decoder">Writing a decoder callback</a>. </dd></dl>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 05:18:27 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 15:31:56 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

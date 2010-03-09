@@ -35,7 +35,7 @@ Disassembly Tutorials</a></h2>
 <h3><a class="anchor" id="tute_linear_disasm">
 Writing a Linear Disassembler</a></h3>
 <p>This tutorial demonstrates how to implement a very basic linear disassembler. </p>
-<p>1. Create a basic <b>main()</b> to run linear disassembly on an input file. </p>
+<p>1. Create a basic <b>main()</b> to validate arguments and invoke a disassembly routine. </p>
 <div class="fragment"><pre class="fragment"><span class="preprocessor">#include &lt;errno.h&gt;</span>
 <span class="preprocessor">#include &lt;stdio.h&gt;</span>
 <span class="preprocessor">#include &lt;stdlib.h&gt;</span>
@@ -81,10 +81,11 @@ Writing a Linear Disassembler</a></h3>
         
         <span class="keywordflow">return</span> 0;
 }
-</pre></div> <p>3. Add a call to <a class="el" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f">opdis_disasm_linear</a> to perform the disassembly. </p>
+</pre></div> <p>3. Add a <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a> and a call to <a class="el" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f">opdis_disasm_linear</a> to perform the disassembly. </p>
 <div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset,
                              <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> length ) {
         <span class="keywordtype">int</span> rv;
+        <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a> o;
 
         <span class="comment">/* ... */</span>
 
@@ -108,7 +109,7 @@ Writing a Linear Disassembler</a></h3>
         <span class="comment">/* ... */</span>
 
         o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
-        <a class="code" href="group__configuration.html#ga147b6b4a5cdf1c7613f9c5ab4613055a" title="Set the callback used to display or store disassembled instructions.">opdis_set_display</a>( o, display_insn, name );
+        <a class="code" href="group__configuration.html#ga147b6b4a5cdf1c7613f9c5ab4613055a" title="Set the callback used to display or store disassembled instructions.">opdis_set_display</a>( o, display_insn, (<span class="keywordtype">void</span> *) name );
 
         rv = <a class="code" href="group__disassembly.html#ga527caa3860d061a63941a7a5828d265f" title="Disassemble a sequence of instructions in order.">opdis_disasm_linear</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) offset, length );
         <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
@@ -155,9 +156,10 @@ Writing a Control-flow Disassembler</a></h3>
         }
         <span class="keywordflow">return</span> disassemble_file( argv[1], offset );
 }
-</pre></div> <p>2. Add a call to <a class="el" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94">opdis_disasm_cflow</a> to perform the disassembly. </p>
+</pre></div> <p>2. Add an <a class="el" href="group__configuration.html#ga38db2ae554cc6fb7bc2f1467d4ae4c61">opdis_t</a> and a call to <a class="el" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94">opdis_disasm_cflow</a> to perform the disassembly. </p>
 <div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">int</span> disassemble_file( <span class="keyword">const</span> <span class="keywordtype">char</span> * name, <a class="code" href="types_8h.html#abd14f9464752cb16147541a663f70797" title="A buffer offset.">opdis_off_t</a> offset) {
         <span class="keywordtype">int</span> rv;
+        <a class="code" href="structopdis__info__t.html" title="An opdis disassembler.">opdis_t</a> o;
 
         <span class="comment">/* ... */</span>
 
@@ -205,7 +207,7 @@ Writing a Control-flow Disassembler</a></h3>
 
         rv = <a class="code" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94" title="Disassemble a buffer following flow of control.">opdis_disasm_cflow</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) offset );
 
-        <a class="code" href="group__tree.html#gada866fbac43b77800d7292c6bd0cb7c7" title="Delete an instruction from the tree.">opdis_insn_tree_delete</a>( tree );
+        <a class="code" href="group__tree.html#ga3871dfb18bb29c2bdf4d80456fc74a15" title="Free the instruction tree.">opdis_insn_tree_free</a>( tree );
         <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
         
         <span class="keywordflow">return</span> (rv &gt; 0) ? 0 : -2;
@@ -222,14 +224,14 @@ Writing a Control-flow Disassembler</a></h3>
         <span class="comment">/* ... */</span>
 
         rv = <a class="code" href="group__disassembly.html#gac25293cb2448af37755c82e192e6bb94" title="Disassemble a buffer following flow of control.">opdis_disasm_cflow</a>( o, buf, (<a class="code" href="group__types.html#ga840b1c720d75ade1aa951917191ab1f8">opdis_vma_t</a>) offset );
-        <a class="code" href="group__tree.html#gaba90a447a4ec0a905b8f52605e29c42d" title="Invoke a callback for every item in the tree.">opdis_insn_tree_foreach</a>( tree, print_insn, name );
+        <a class="code" href="group__tree.html#gaba90a447a4ec0a905b8f52605e29c42d" title="Invoke a callback for every item in the tree.">opdis_insn_tree_foreach</a>( tree, print_insn, (<span class="keywordtype">void</span> *) name );
 
         <span class="comment">/* ... */</span>
 }
 </pre></div> <hr/>
  <h3><a class="anchor" id="tute_bfd_disasm">
 Writing a BFD-based disassembler</a></h3>
-<p>This tutorial demonstrates how to write a simple disassembler that performs control-flow disassembly on a BFD entry point.</p>
+<p>This tutorial demonstrates how to write a simple disassembler that performs control-flow disassembly on a BFD symbol.</p>
 <p>1. Create a <b>main()</b> as in tute_cflow_linear. </p>
 <div class="fragment"><pre class="fragment"><span class="preprocessor">#include &lt;errno.h&gt;</span>
 <span class="preprocessor">#include &lt;stdio.h&gt;</span>
@@ -255,7 +257,7 @@ Writing a BFD-based disassembler</a></h3>
         bfd * abfd;
 
         abfd = bfd_openr( name, NULL );
-        <span class="keywordflow">if</span> (! bfd ) {
+        <span class="keywordflow">if</span> (! abfd ) {
                 printf( <span class="stringliteral">&quot;Unable to open file %s: %s\n&quot;</span>, name, strerror(errno) );
                 <span class="keywordflow">return</span> -1;
         }
@@ -351,7 +353,7 @@ Writing a BFD-based disassembler</a></h3>
 
         <span class="comment">/* ... */</span>
 
-        o = <a class="code" href="group__disassembly.html#ga6d51b0d9f6d24a65189c149bcfe3cfd4" title="Initialize an opdis disassembler.">opdis_init</a>();
+        o = <a class="code" href="group__bfd.html#gae374625fb321f79356f99ca3d37d928b" title="Initialize an opdis disassembler based on a BFD object.">opdis_init_from_bfd</a>( abfd );
         rv = <a class="code" href="group__bfd.html#gac9b2f1ca6de3df7dcdd213b3c6823dd2" title="Disassemble a BFD following flow of control from a symbol.">opdis_disasm_bfd_symbol</a>( o, sym );
         <a class="code" href="group__disassembly.html#gacff8b8105b872bde8ef22dc598052026" title="Cleanup an opdis disassembler.">opdis_term</a>( o );
 
@@ -362,7 +364,7 @@ Writing a BFD-based disassembler</a></h3>
 }
 </pre></div> <p>5. Add code to store instructions in an <a class="el" href="group__tree.html#gaa9a9d27400c3b328fc91e68f513dcfa7">opdis_insn_tree_t</a> and print the instructions after disassembly as demonstrated in <a class="el" href="tutorials.html#tute_cflow_disasm">Writing a Control-flow Disassembler</a>. </p>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 05:18:27 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Tue Mar 9 15:31:57 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>
