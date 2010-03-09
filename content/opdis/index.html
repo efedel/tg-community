@@ -3,17 +3,63 @@
 </HEAD><BODY>
 <H1>OPDIS</H1>
 <HR>
-<!-- Description -->
+<P>
+Opdis is a wrapper for the libopcodes disassembler library distributed as part
+of GNU binutils. It extends the libopcodes library by offering linear and
+control-flow disassembly algorithms, instruction and operand objects that
+are suitable for analysis, and a command-line utility to perform disassembly 
+on arbitrary locations in a file.
+</P>
+<P>
+These features are lacking in libopcodes and objdump. The design of libopcodes
+makes it awkward to use for binary analysis; it assumes that disassembled
+instructions are going to be printed, not stored or analyzed, and therefore
+it invokes a callback with an fprintf(3) signature. The shortcomings of objdump
+are even greater: it does not support control-flow disassembly, nor does it
+allow the user to specify which bytes in the file to disassemble.
+</P>
+<P>
+The Opdis project consists of the <B>libopdis</B> library and the 
+<B>opdis</B> command-line utility.
+</P>
+
+<!-- ====================================================================== -->
+<B>Supported Architectures</B><BR>
+<P>
+Opdis supports the disassembly of all architectures that GNU 
+<A HREF='http://www.gnu.org/software/binutils/'>binutils</A> supports.
+On most of these architectures, however, only the ASCII string for the
+disassembled instruction is available.
+</P>
+<P>
+Complete instruction and operand objects are generated only for the following
+platforms:
+<UL>
+	<LI>x86
+	<LI>x86-64
+</UL>
+</P>
+
+<!-- ====================================================================== -->
+<B>License</B><BR>
+<P>
+Both <b>opdis</b> and <b>libopdis</b> are covered by the 
+<A HREF='http://www.gnu.org/licenses/gpl.txt'>GNU Public License, version 3</A>.
+</P>
+
+<!-- ====================================================================== -->
 <B>Documentation</B><BR>
 <UL>
+<LI><A HREF='doc/api/faq.html'>FAQ</A>
 <LI><A HREF='doc/opdis.1.html'>opdis(1) man page</A>
 <LI><A HREF='doc/api/index.html'>libopdis API documentation</A>
-<LI><A HREF='doc/api/faq.html'>FAQ</A>
 <LI><A HREF='doc/api/tutorials.html'>Tutorials</A>
 <LI><A HREF='doc/api/howtos.html'>HOWTOs</A>
 <!-- Examples -->
 </UL>
 <P>
+
+<!-- ====================================================================== -->
 <B>Releases</B><BR>
 </BODY>
 </HTML>
