@@ -234,7 +234,8 @@ flags?,operands?,invalid?)&gt;
   &lt;/operands&gt;
 &lt;/instruction&gt;
 &lt;/disassembly&gt;
-</pre></div> <h3><a class="anchor" id="faq_opdis_fmt_str">
+</pre></div> <dl class="see"><dt><b>See also:</b></dt><dd>faq_opdis_fmt_str </dd></dl>
+<h3><a class="anchor" id="faq_opdis_fmt_str">
 How can the output format be customized?</a></h3>
 <p>Custom output formats can be specified using a printf- or strftime-style format string as the argument to <b>-f</b>. </p>
 <p>The available format operators are:</p>
@@ -294,6 +295,11 @@ How are target IDs assigned?</a></h3>
 <h3><a class="anchor" id="faq_opdis_job">
 How do jobs get created?</a></h3>
 <p>Disassembly jobs are created with the <b>-l</b>, <b>-c</b>, <b>-E</b>, <b>-N</b>, and <b>-S</b> options. Jobs are scheduled in the order they are encountered. Use the <b>--dry-run</b> to preview the job list. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="getting_started.html#start_opdis_main">Using opdis to disassemble an object file symbol</a> </dd>
+<dd>
+<a class="el" href="getting_started.html#start_opdis_bytes">Using opdis to disassemble a hex string</a> </dd>
+<dd>
+<a class="el" href="getting_started.html#start_opdis_elf">Using opdis to disassemble an ELF binary</a> </dd></dl>
 <h3><a class="anchor" id="faq_opdis_map">
 What are memory maps used for?</a></h3>
 <p>Memory maps have three main uses:</p>
@@ -306,6 +312,7 @@ What are memory maps used for?</a></h3>
 <p>When <b>opdis</b> disassembles a target, it stores the disassembled instructions using their VMA as a primary key. The same storage is used for all targets; if an instruction is already stored for a VMA, all subsequent instructions with the same VMA will be discarded. </p>
 <p>By default, the VMA for every target will be 0 (i.e., each instruction in the target will use its offset in the target as its VMA). Thus, when disassembling two targets, the instructions in the second will be discarded. Creating a memory map that places the second target after the first in memory (i.e. map it to a VMA equal to the first target's size) fixes this issue. </p>
 <p>Note that BFD targets do not require memory maps, as the BFD structure contains sections that provide their own mapping. Also, all <b>-b</b> options are mapped sequentially in memory, so that they appear to be part of the same contiguous memory region. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="howtos.html#howto_cli_map">Mapping memory regions</a> </dd></dl>
 <h3><a class="anchor" id="faq_opdis_map_size">
 Why does a memory map size not limit disassembly?</a></h3>
 <p>The memory maps are only used when scheduling jobs. Once disassembly starts, libopcodes is invoked in a loop using the <b>disassemble_info</b> structure contained in the opdis_. This structure uses the target buffer to determine the bounds of disassembly. </p>
@@ -317,6 +324,11 @@ What target architectures does libopdis support?</a></h3>
 <p><b>libopdis</b> will support whatever architectures are supported by the locally-installed GNU <b>binutils</b>. The list of architectures and file formats that <b>binutils</b> supports can be displayed by running <em>objdump -i</em>. </p>
 <p>Note that basic support for an architecture only means that the <em>ascii</em>, <em>offset</em>, <em>vma</em>, <em>size</em>, and <em>bytes</em> fields of the <a class="el" href="structopdis__insn__t.html">opdis_insn_t</a> are guaranteed to be filled. All other fields, including the operand list, require that an architecture-specific decoder function be invoked by <b>libopdis</b>. Use the <em>status</em> field to determine if any of these additional fields have been filled. </p>
 <p>Currently, <b>libopdis</b> ships only with an i386 (x86, x86-64) decoder. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="howtos.html#howto_cli_arch">Setting the target architecture</a> </dd>
+<dd>
+<a class="el" href="howtos.html#howto_cli_disasm_opts">Setting disassembler options</a> </dd>
+<dd>
+<a class="el" href="faq.html#faq_libopdis_arch">What target architectures does libopdis support?</a> </dd></dl>
 <h3><a class="anchor" id="faq_libopdis_algo">
 What is the difference between linear and control flow disassembly?</a></h3>
 <p>Most disassemblers, including <b>objdump(1)</b>, implement what is known as <em>linear</em> or <em>linear sweep</em> disassembly: the algorithm starts disassembly at a given entry point, using the byte after a disassembled instruction as the start of the next instruction. This type of disassembly is fast and easy to implement, as there is no analysis of the instruction needed, and no danger of getting caught in an endless loop. </p>
@@ -341,14 +353,21 @@ What are the various opdis_disasm_bfd functions used for?</a></h3>
 </ul>
 <p>Using <b>libbfd</b> to manage <b>libopdis</b> targets has some advantages and disadvantages. On the positive side, it simplifies the loading of the target by detecting the architecture, and provides access to symbolic information such as program sections and symbol tables. On the negative side, <b>libbfd</b> will fail to load a file which has malformed or missing headers, or which is not in a recognized file format. </p>
 <p>It is recommended that users employ the BFD API where suitable, while keeping the standard API in reserve to handle files that BFD fails to load. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="tutorials.html#tute_bfd_disasm">Writing a BFD-based disassembler</a> </dd></dl>
 <h3><a class="anchor" id="faq_libopdis_meta">
 Why is metadata not being generated for a particular architecture?</a></h3>
 <p>The disassembly generated by <b>libopcodes</b> is a sequence of strings intended for writing to a stream. There is no metadata, so the strings must be examined to determine which are mnemonics and which are operands, and which of these are branch/jump/return instructions and what their targets are. </p>
 <p>This means that the logic which generates an <a class="el" href="structopdis__insn__t.html">opdis_insn_t</a> from <b>libopcodes</b> output must be able to parse every assembly language that is supported by GNU <b>binutils</b>. Doing do would, it goes without saying, be a long and time-consuming endeavor that only delay the release of <b>libopdis</b>. Instead, metadata support for the x86 architecture has been provided, and support for additional architectures will be add as time and merit warrant. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd>faq_libopdis_cflow </dd>
+<dd>
+<a class="el" href="howtos.html#howto_app_decoder">Writing a decoder callback</a> </dd></dl>
 <h3><a class="anchor" id="faq_libopdis_cflow_arch">
 Why does control flow disassembly not work for a particular architecture?</a></h3>
 <p>The control-flow algorithm requires that metadata be generated for every instruction disassembled by <b>libopcodes</b>. As discussed in <a class="el" href="faq.html#faq_libopdis_meta">Why is metadata not being generated for a particular architecture?</a>, this is infeasible, so most architectures supported by <b>libopcodes</b> will have no metadata generated by <b>libopdis</b>. </p>
 <p>Those in need of control-flow disassembly on an architecture for which metadata support is missing may want to write their own decoder callback (see <a class="el" href="faq.html#faq_libopdis_decoder_work">How much work is it to write a decoder?</a>) to provide the metadata to <b>libopdis</b>. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="faq.html#faq_libopdis_meta">Why is metadata not being generated for a particular architecture?</a> </dd>
+<dd>
+<a class="el" href="howtos.html#howto_app_decoder">Writing a decoder callback</a> </dd></dl>
 <h3><a class="anchor" id="faq_libopdis_cflow_dupe">
 Why are duplicate instructions emitted during control flow disassembly?</a></h3>
 <p>When using the default display callback, or any display callback that does not perform its own instruction management, the same instruction may be disassembled multiple times. </p>
@@ -362,7 +381,7 @@ Why are duplicate instructions emitted during control flow disassembly?</a></h3>
 </pre></div><p> Note: This will slow down disassembly considerably. </p>
 <h3><a class="anchor" id="faq_libopdis_decoder_when">
 When will additional decoders be made available?</a></h3>
-<p>There are currently no plans to develop additional decoders for <b>libopdis</b>; the x86 decoder currently meets the needs of the <b>libopdis</b> developers. If there is sufficient demand, work might begin on ARM, SPARK, or IA-64 decoders. Submissions of decoder implementations for any architecture are of course welcome. </p>
+<p>There are currently no plans to develop additional decoders for <b>libopdis</b>; the x86 decoder currently meets the needs of the <b>libopdis</b> developers. If there is sufficient demand, work might begin on ARM, SPARC, or IA-64 decoders. Submissions of decoder implementations for any architecture are of course welcome. </p>
 <h3><a class="anchor" id="faq_libopdis_decoder_work">
 How much work is it to write a decoder?</a></h3>
 <p>As discussed in <a class="el" href="faq.html#faq_libopdis_meta">Why is metadata not being generated for a particular architecture?</a>, <b>libopcodes</b> generates a sequence of strings for each instruction; <b>libopdis</b> stores these in an opdis_insn_buf_t. This means that a decoder must scan through a list of strings in order to detect instruction mnemonics and operands. </p>
@@ -370,7 +389,7 @@ How much work is it to write a decoder?</a></h3>
 <p>More complete support of an architecture, such as detection of register flags or stack trap instruction types, is a great deal of work, and should ideally be automated. </p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="howtos.html#howto_app_decoder">Writing a decoder callback</a>. </dd></dl>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Wed Mar 10 00:40:34 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Wed Mar 10 14:20:48 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

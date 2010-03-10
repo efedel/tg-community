@@ -84,7 +84,7 @@ with the -M <span class="keywordflow">switch</span> (multiple options should be 
 Mapping memory regions</a></h3>
 <p>The general format for specifying a memory map is: </p>
 <div class="fragment"><pre class="fragment">[target]:offset@vma[+size]
-</pre></div><p> The <b></b>:, <b>@</b>, and <b>+</b> characters are delimiters indicating that what follows is an offset, a vma, or a size, respectively. These components may appear in any order, but the <b>target</b> must always be first as it is not delimited. Note that these values are all parsed with strtoul, and so they may appear in any supported base (octal, decimal, or hexadecimal). </p>
+</pre></div><p> The <b></b>:, <b>@</b>, and <b>+</b> characters are delimiters indicating that what follows is an offset, a vma, or a size, respectively. These components may appear in any order, but the <b>target</b> must always be first as it is not delimited. Note that these values are all parsed with strtoul, and so they may appear in any supported base (octal with a '0' prefix, decimal, or hexadecimal with a '0x' prefix). </p>
 <p>The <b>target</b>, <b>size</b>, and <b>offset</b> components are all optional. The default value for <b>target</b> is 1, the ID of the first target. The default value for <b>offset</b> is 0. The default value for <b>size</b> is the size of the target. </p>
 <p>Memory maps are generally used for the following purposes:</p>
 <ul>
@@ -95,17 +95,39 @@ Mapping memory regions</a></h3>
 </ul>
 <p><b>Examples</b> </p>
 <p>Map the entirety of a.out to VMA 0x400000: </p>
-<div class="fragment"><pre class="fragment">opdis -m @0x400000 a.out
+<div class="fragment"><pre class="fragment">opdis -m @0x400000 --dry-run a.out
 </pre></div><p>Map the entirety of a.out to VMA 0x400000 and the entirety of libc.so.6 to 0x7f626a934000: </p>
-<div class="fragment"><pre class="fragment">opdis -m @0x400000 -m 2:0x7f626a934000 a.out /usr/lib/libc.so.6
+<div class="fragment"><pre class="fragment">opdis -m @0x400000 -m 2:0x7f626a934000 --dry-run a.out /usr/lib/libc.so.6
 </pre></div><p>Map offset 0x1000 of a.out to VMA 0x401000: </p>
-<div class="fragment"><pre class="fragment">opdis -m :0x1000@0x401000 a.out
+<div class="fragment"><pre class="fragment">opdis -m :0x1000@0x401000 --dry-run a.out
 </pre></div><p>Map buffer 1 to 0x400000 and offset 0x1000 of a.out to VMA 0x401000: </p>
-<div class="fragment"><pre class="fragment">opdis -m 1@400000 -m 2:0x1000@0x401000 -b <span class="stringliteral">&apos;7f 45 4c 46 02 01 01 00 00&apos;</span> a.out
+<div class="fragment"><pre class="fragment">opdis -m 1@400000 -m 2:0x1000@0x401000 -b <span class="stringliteral">&apos;7f 45 4c 46 02 01 01 00 00&apos;</span> --dry-run a.out
 </pre></div><p>Make buffer 1 and buffer 2 contiguous in memory: </p>
-<div class="fragment"><pre class="fragment">opdis -m 1@0 2@4 -b <span class="stringliteral">&apos;2e 2e 74 50&apos;</span> -b <span class="stringliteral">&apos;89 e1 31 d2&apos;</span>
+<div class="fragment"><pre class="fragment">opdis -m 1@0 2@4 -b <span class="stringliteral">&apos;2e 2e 74 50&apos;</span> -b <span class="stringliteral">&apos;89 e1 31 d2&apos;</span> --dry-run
 </pre></div><p>Make buffer 2 and buffer 1 contiguous in memory: </p>
-<div class="fragment"><pre class="fragment">opdis -m 2@0 1@4 -b <span class="stringliteral">&apos;2e 2e 74 50&apos;</span> -b <span class="stringliteral">&apos;89 e1 31 d2&apos;</span>
+<div class="fragment"><pre class="fragment">opdis -m 2@0 1@4 -b <span class="stringliteral">&apos;2e 2e 74 50&apos;</span> -b <span class="stringliteral">&apos;89 e1 31 d2&apos;</span> --dry-run
+</pre></div><p>Use <b>ldd</b> to determine the load address of a shared library: </p>
+<div class="fragment"><pre class="fragment">bash$ ldd a.out 
+        linux-vdso.so.1 =&gt;  (0x00007fffc74cf000)
+        libssl.so.0.9.8 =&gt; /lib/libssl.so.0.9.8 (0x00007f0340274000)
+        libc.so.6 =&gt; /lib/libc.so.6 (0x00007f033ff05000)
+        libcrypto.so.0.9.8 =&gt; /lib/libcrypto.so.0.9.8 (0x00007f033fb7e000)
+        libdl.so.2 =&gt; /lib/libdl.so.2 (0x00007f033f97a000)
+        libz.so.1 =&gt; /lib/libz.so.1 (0x00007f033f763000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f03404c2000)
+bash$ opdis -m 2@0x7f0340274000 --dry-run a.out /usr/lib/libssl.so
+</pre></div><p>Use <b>readelf</b> to get the load address of the .text section for linear disassembly: </p>
+<div class="fragment"><pre class="fragment">bash$ readelf a.out -S | grep -A 1 text
+  [14] .text             PROGBITS         00000000004005d0  000005d0
+       00000000000001f8  0000000000000000  AX       0     0     16
+bash$ opdis -m :0x5d0@0x4005d0+0x1f8 -l @0x4005d0 a.out
+</pre></div><p>Use <b>readelf</b> to get the executable program segment and program entry point for control-flow disassembly: </p>
+<div class="fragment"><pre class="fragment">bash$ readelf a.out -l | grep -A 1 LOAD | grep -B 1 <span class="stringliteral">&apos;R E&apos;</span>
+  LOAD           0x0000000000000000 0x0000000000400000 0x0000000000400000
+                 0x000000000000087c 0x000000000000087c  R E    200000
+bash$ readelf a.out -h | grep Entry
+  Entry point address:               0x4005d0
+bash$ opdis -m :@0x400000+0x87C -c @0x4005d0 a.out
 </pre></div><h2><a class="anchor" id="howto_app">
 libopdis API</a></h2>
 <h3><a class="anchor" id="howto_app_visited">
@@ -279,7 +301,7 @@ Writing a decoder callback</a></h3>
 <div class="fragment"><pre class="fragment">        <a class="code" href="group__configuration.html#ga0b8981e6d86cbe9da620bd1d5c973b90" title="Set the callback used to build an opdis_insn_t from libopcodes data.">opdis_set_decoder</a>( o, my_decoder, NULL );
 </pre></div> <dl class="note"><dt><b>Note:</b></dt><dd>While chaining of the default decoder (<a class="el" href="group__configuration.html#gab14a31bd82821fecdb9c6b1f38e73fa4">opdis_default_decoder</a>) is not required, it is strongly encouraged. The default decoder ensures that all instructions have their <b>status</b>, <b>ascii</b>, <b>vma</b>, <b>offset</b>, <b>size</b>, and <b>bytes</b> fields set reliably. </dd></dl>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Wed Mar 10 00:40:34 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Wed Mar 10 14:20:48 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>

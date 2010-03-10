@@ -126,7 +126,8 @@ Writing a Linear Disassembler</a></h3>
         
         <span class="keywordflow">return</span> (rv &gt; 0) ? 0 : -2;
 }
-</pre></div> <hr/>
+</pre></div> <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="howtos.html#howto_app_display">Writing a display callback</a> </dd></dl>
+<hr/>
  <h3><a class="anchor" id="tute_cflow_disasm">
 Writing a Control-flow Disassembler</a></h3>
 <p>This tutorial demonstrates how to write a basic control-flow disassembler which stores instructions instead of displaying them immediately.</p>
@@ -204,7 +205,8 @@ Writing a Control-flow Disassembler</a></h3>
         
         <span class="keywordflow">return</span> (rv &gt; 0) ? 0 : -2;
 }
-</pre></div> <p>4. Add an <a class="el" href="group__tree.html#gaa9a9d27400c3b328fc91e68f513dcfa7">opdis_insn_tree_t</a> to store the instructions. </p>
+</pre></div> <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="howtos.html#howto_app_display">Writing a display callback</a> </dd></dl>
+<p>4. Add an <a class="el" href="group__tree.html#gaa9a9d27400c3b328fc91e68f513dcfa7">opdis_insn_tree_t</a> to store the instructions. </p>
 <div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">void</span> store_insn( <span class="keyword">const</span> <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * insn, <span class="keywordtype">void</span> * arg ) {
         <a class="code" href="structopdis__tree__base__t.html" title="The base of the tree.">opdis_insn_tree_t</a> tree = (<a class="code" href="structopdis__tree__base__t.html" title="The base of the tree.">opdis_insn_tree_t</a>) arg;
         <a class="code" href="structopdis__insn__t.html" title="Instruction object.">opdis_insn_t</a> * i = <a class="code" href="group__model.html#ga6c019dce7557b07130f039ffbbdfba0f" title="Duplicate an instruction object.">opdis_insn_dupe</a>( insn );
@@ -390,7 +392,7 @@ Writing a BFD-based disassembler</a></h3>
 }
 </pre></div> <p>5. Add code to store instructions in an <a class="el" href="group__tree.html#gaa9a9d27400c3b328fc91e68f513dcfa7">opdis_insn_tree_t</a> and print the instructions after disassembly as demonstrated in <a class="el" href="tutorials.html#tute_cflow_disasm">Writing a Control-flow Disassembler</a>. </p>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Wed Mar 10 00:40:34 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Wed Mar 10 14:20:48 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>
