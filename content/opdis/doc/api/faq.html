@@ -272,8 +272,8 @@ xor     %ebp,%ebp
 mov     %rdx,%r9
 pop     %rsi
 </pre></div> <div class="fragment"><pre class="fragment">opdis -f <span class="stringliteral">&apos;%ao: %b &quot;%bC&quot;\n&apos;</span> -E /bin/ls  | head -3
-0x0: 31 ED <span class="stringliteral">&quot;1 í&quot;</span>
-0x2: 49 89 D1 <span class="stringliteral">&quot;I  Ñ&quot;</span>
+0x0: 31 ED <span class="stringliteral">&quot;1 .&quot;</span>
+0x2: 49 89 D1 <span class="stringliteral">&quot;I . .&quot;</span>
 0x5: 5E <span class="stringliteral">&quot;^&quot;</span>
 </pre></div> <div class="fragment"><pre class="fragment">bash$ opdis -f <span class="stringliteral">&apos;%a %i\t#%iC%?:%iF\n&apos;</span> -E /bin/ls  | head -3
 0x4026e0 xor    %ebp,%ebp       #bitwise:bitwise xor
@@ -389,7 +389,7 @@ How much work is it to write a decoder?</a></h3>
 <p>More complete support of an architecture, such as detection of register flags or stack trap instruction types, is a great deal of work, and should ideally be automated. </p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="howtos.html#howto_app_decoder">Writing a decoder callback</a>. </dd></dl>
 </div>
-<hr size="1"/><address style="text-align: right;"><small>Generated on Wed Mar 10 14:20:48 2010 for Opdis Disassembly Library by&nbsp;
+<hr size="1"/><address style="text-align: right;"><small>Generated on Wed Mar 10 14:30:46 2010 for Opdis Disassembly Library by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.1 </small></address>
 </body>
