@@ -16,17 +16,17 @@ int main( int argc, char * argv[] )
 	EQ ( 1, 1 );
 	NEQ( 1, 232 );
 	char * testphrase = "Hello world.";
-	char * str = NewTagStr( testphrase );
+	char * str = NewStr( testphrase );
 	NEQ( strlen( str ), 0 );
-	NEQ( LenTagStr( str ), 0 );
-	EQ ( strlen( str ), LenTagStr( str ) );
+	NEQ( LenStr( str ), 0 );
+	EQ ( strlen( str ), LenStr( str ) );
 	EQ ( strcmp( testphrase, str ), 0 );
 	NEQ( str, NULL );
-	DelTagStr( str );
+	DelStr( str );
 	printf( "%s\n", __FILE__ );
 	char * tmp = ( char * )malloc( sizeof( char )*strlen( str ) ); 
 	sprintf( tmp, "%s", testphrase );
-	char * buf = NewTagStr( tmp );
+	char * buf = NewStr( tmp );
 	EQ ( strcmp( buf, testphrase ), 0 );
 	//TS_substring_p?
 	return -0;
