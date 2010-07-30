@@ -8,3 +8,39 @@ The TaggedString is an implementation of a C string that will have:
 3. the ability to concat 2 TaggedStrings together, non destructively
    with the new TaggedString being returned to the user.  ConCatTagStr().
 
+TODO:
+
+Sorts:
+(are there any in std c lib?)
+- merge sort
+- quick sort
+
+Memoized Maths:
+n-choose-k function 
+- ship the lib with a database of these things, if we have to save the
+  memoised hash table to the disk then so be it.
+
+Datastructures
+- hashtable with arrays
+- Copy the avl tree into here so it can work seperately
+- need a nary tree 
+- trie-tries(?)
+- probablistic data structures  
+
+locks
+- mutex, semaphore
+
+stuff to do:
+construct/traverse data structures
+do system routines
+distill large data sets to single values
+transform one data set to another
+
+Graphs:
+we want 3 types of graphs:
+- Adjacency matrix
+- Adjacency list
+- Objects and ptrs
+
+notes:
+http://stackoverflow.com/questions/199418/using-c-library-in-c-code
