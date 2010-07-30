@@ -1,9 +1,9 @@
 CXX	= `which gcc`
 CFLAGS	= -g -Wall
-INCPATH = ../release
-LIBPATH = ../release
+INCPATH = ../output/necessity
+LIBPATH = ../output
 SRCS	= TestSuite.c
-LIBNAME = taggedstring
+LIBNAME = necessity
 
 main:	
 	$(CXX) $(CFLAGS) -I$(INCPATH) -L$(LIBPATH) -l$(LIBNAME) $(SRCS) -o main

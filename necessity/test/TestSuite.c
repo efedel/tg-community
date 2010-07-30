@@ -28,7 +28,10 @@ int main( int argc, char * argv[] )
 	sprintf( tmp, "%s", testphrase );
 	char * buf = NewTagStr( tmp );
 	EQ ( strcmp( buf, testphrase ), 0 );
+	//TS_substring_p?
 	return -0;
+
+
 }
 
 void Test( int x, int y, int lnum, bool polarity )   

@@ -8,4 +8,3 @@ The TaggedString is an implementation of a C string that will have:
 3. the ability to concat 2 TaggedStrings together, non destructively
    with the new TaggedString being returned to the user.  ConCatTagStr().
 
-

@@ -13,13 +13,13 @@ CharBuf get_buf( void * rawbuf )
 	return( ( CharBuf ) rawbuf + sizeof( uint ) );
 }
 
-uint LenTagStr( CharBuf bstr ) 
+uint LenStr( CharBuf bstr ) 
 {
 	uint * tmp = (uint *) ( bstr - sizeof( uint ) );
 	return *tmp;
 }
 
-CharBuf NewTagStr( const CharBuf rawstr ) 
+CharBuf NewStr( const CharBuf rawstr ) 
 {
 	uint len = strlen( rawstr );
 	void * rawbuf = malloc( sizeof( int ) + ( sizeof( char ) * len ) );
@@ -30,7 +30,7 @@ CharBuf NewTagStr( const CharBuf rawstr )
 	return buf;
 }
 
-void DelTagStr( CharBuf tagstr ) 
+void DelStr( CharBuf tagstr ) 
 {
 	free( tagstr - sizeof ( uint ) );		
 }
