@@ -1,10 +1,8 @@
-// TaggedString.c
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
 
-typedef char * CharBuf;
-typedef unsigned int uint;
+#include "Defs.h"
 
 uint get_len( void * rawbuf ) { return( ( uint ) rawbuf ); }
 
@@ -19,7 +17,7 @@ uint LenStr( CharBuf bstr )
 	return *tmp;
 }
 
-CharBuf NewStr( const CharBuf rawstr ) 
+CharBuf String( const CharBuf rawstr ) 
 {
 	uint len = strlen( rawstr );
 	void * rawbuf = malloc( sizeof( int ) + ( sizeof( char ) * len ) );

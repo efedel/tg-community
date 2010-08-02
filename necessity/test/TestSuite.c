@@ -4,7 +4,7 @@
 #include <strings.h>
 #include <stdlib.h>
 
-#include "TaggedString.h"
+#include "Api.h"
 
 void Test( int x, int y, int lnum, bool polarity ); 
 #define EQ(X, Y)  Test( ( int )X, ( int )Y, __LINE__, true  )
@@ -16,7 +16,7 @@ int main( int argc, char * argv[] )
 	EQ ( 1, 1 );
 	NEQ( 1, 232 );
 	char * testphrase = "Hello world.";
-	char * str = NewStr( testphrase );
+	char * str = String( testphrase );
 	NEQ( strlen( str ), 0 );
 	NEQ( LenStr( str ), 0 );
 	EQ ( strlen( str ), LenStr( str ) );
@@ -26,12 +26,9 @@ int main( int argc, char * argv[] )
 	printf( "%s\n", __FILE__ );
 	char * tmp = ( char * )malloc( sizeof( char )*strlen( str ) ); 
 	sprintf( tmp, "%s", testphrase );
-	char * buf = NewStr( tmp );
+	char * buf = String( tmp );
 	EQ ( strcmp( buf, testphrase ), 0 );
-	//TS_substring_p?
 	return -0;
-
-
 }
 
 void Test( int x, int y, int lnum, bool polarity )   
