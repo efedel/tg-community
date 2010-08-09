@@ -7,7 +7,7 @@ LIBNAME = necessity
 
 main:	
 	$(CXX) $(CFLAGS) -I$(INCPATH) -L$(LIBPATH) -l$(LIBNAME) $(SRCS) -o main
-	./runme.sh
+#	./runme.sh
 
 test:
 	./runme.sh

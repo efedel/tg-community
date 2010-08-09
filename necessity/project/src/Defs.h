@@ -8,7 +8,7 @@ typedef unsigned int uint;
 
 typedef char * CharBuf;
 
-typedef void * Thing;
+typedef void * Pointer;
 
 void (*PureSideEffect)();
 

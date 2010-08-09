@@ -6,7 +6,6 @@
 void CommentLine() 
 {
 	int i;
-	uint cols = MAXCOL;
 	CharBuf pre = "/* ";
 	CharBuf end = " */";
 	printf("%s\n", pre);
