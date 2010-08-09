@@ -13,7 +13,7 @@ typedef enum Vartype_t
 VARTYPE;
 
 typedef struct Thing_t * Thing;
-typedef void (*Dtor)(Thing T);
+typedef void (*Dtor)(Pointer P);
 struct Thing_t
 {
 	VARTYPE type;	// has the type of data encoded
