@@ -2,9 +2,20 @@
 #define Api_h
 
 /* Basic Definitions -------------------------------------------------------- */
+typedef unsigned int uint;
+
+typedef void * Pointer;
+typedef char * CharBuf;
+
+typedef enum Boolean_t { FALSE, TRUE } BOOLEAN; /* Boolean */
+typedef enum Ufo_t { LT, EQ, GT } UFO;          /* <=> */
 
 /* The Thing ---------------------------------------------------------------- */
-typedef void * Pointer;
+
+/* The user is to create a thing, and supply it a destructor and a type */
+
+/* these might be expounded upon: 
+ * TODO: there should be a good way to make this user definable. */
 typedef enum Vartype_t
 {
         CHAR,
@@ -14,9 +25,11 @@ typedef enum Vartype_t
 } 
 VARTYPE;
 
-
-typedef struct Thing_t * Thing;
-typedef void (*Dtor)(Pointer P);
+typedef struct  Thing_t * Thing;
+typedef void    (*Dtor)(Pointer P);
+typedef UFO     (*CompFN)(const Thing const T1, const Thing const T2);
+typedef Thing   (*CopyFN)(Thing const to, const Thing const from);
+typedef CharBuf (*StrFN) (const Thing const T);
 struct Thing_t
 {
         VARTYPE type;   // has the type of data encoded
@@ -26,17 +39,20 @@ struct Thing_t
                         // not just the data
 };
 
-Pointer GetData(Thing const T);
-VARTYPE GetType(const Thing const T); 
-Dtor    GetDtor(const Thing const T);
-
-
+/* getters */
+Pointer GetThingData(Thing const T);
+VARTYPE GetThingType(const Thing const T); 
+Dtor    GetThingDtor(const Thing const T);
 
 /* TODO this is just here temporarily, we probably can abstract this away */
-Thing NewThing(const Pointer data, const VARTYPE vartype, const Dtor const destructor); // ctor
+Thing NewThing(const VARTYPE vartype, 
+	       const Pointer const data, 
+	       const Dtor    const destructor, 
+	       const CompFN  const compare,
+	       const CopyFN  const copy,
+	       const StrFN   const toString);
+
 void  DelThing(Thing const self);                                        // dtor 
-
-
 
 /* Pairs -------------------------------------------------------------------- */
 

@@ -24,7 +24,7 @@ void killerfoo(Pointer ACoord)
 	printf("killerfoo: ");
 	Coords tmp=(Coords) ACoord;
 	printf("free(%p)\n", ACoord);
-	//printf("freeing the coords (%d, %d)! \t", tmp->x, tmp->y);
+	printf("freeing the coords (%d, %d)! \t", tmp->x, tmp->y);
 	fflush(stdout);
 	free(ACoord); // should free the coords
 }
@@ -40,20 +40,25 @@ void MassTestThing()
 	{
 		foo=(Coords)malloc(sizeof(struct Coords_t));	
 		printf("new coords %p\n", (void*)foo);
-		foo->x=555, foo->y=MAXCOUNT-i;
-		things[i] = NewThing((Pointer) foo, POINTER, killerfoo);
+		foo->x=i, foo->y=MAXCOUNT-i;
+		things[i] = NewThing(POINTER, 
+				     (Pointer) foo, 
+				     killerfoo, 
+				     NULL, 
+				     NULL, 
+				     NULL);
 		addrs[i]  = (uint)foo;
-		printf("(%d, %d)\n", ((Coords)GetData(things[i]))->x, 
-				     ((Coords)GetData(things[i]))->y);
+		printf("(%d, %d)\n", ((Coords)GetThingData(things[i]))->x, 
+				     ((Coords)GetThingData(things[i]))->y);
 	}
 	for (i = 0; i < MAXCOUNT; i++)
 	{
 		printf("deleting arr[%d]\n", i);
-		if (addrs[i] == (uint)GetData(things[i])) 
+		if (addrs[i] == (uint)GetThingData(things[i])) 
 		{ 
 			printf("%p: %d is ok\n", (void*)addrs[i], i); 
 		}
-		if (GetType(things[i])==POINTER) { printf("found a pointer\n"); }
+		if (GetThingType(things[i])==POINTER) { printf("found a pointer\n"); }
 		DelThing(things[i]);
 	}
 }

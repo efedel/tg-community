@@ -47,7 +47,10 @@ static void SetListSize(List const L, const uint sz)          { L->size = sz; }
 List NewList()  			/* list ctor */
 {
 	List self = (List)malloc(sizeof(struct List_t));
-	ListNode pad = NewListNode(NewThing(0, INTEGER, NULL));
+	/* Pad the top of the list with a fake node that contains 
+	 * some rudimentary non important info for the list */
+	ListNode pad = NewListNode(NewThing(INTEGER, self, 
+				            NULL, NULL, NULL, NULL));
 	SetListTop (self, pad);
 	SetListEnd (self, pad);
 	SetListSize(self, 0);
