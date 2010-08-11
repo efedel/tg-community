@@ -10,7 +10,6 @@ void Test( int x, int y, int lnum, bool polarity );
 #define EQ(X, Y)  Test( ( int )X, ( int )Y, __LINE__, true  )
 #define NEQ(X, Y) Test( ( int )X, ( int )Y, __LINE__, false )
 
-#define MAXCOUNT 100
 
 typedef struct Coords_t * Coords;
 typedef struct Coords_t
@@ -21,13 +20,14 @@ typedef struct Coords_t
 
 void killerfoo(Pointer ACoord)
 {
-	printf("killerfoo: ");
+	printf("killerfoo: free(%p)\n", ACoord);
 	Coords tmp=(Coords) ACoord;
-	printf("free(%p)\n", ACoord);
 	printf("freeing the coords (%d, %d)! \t", tmp->x, tmp->y);
 	fflush(stdout);
 	free(ACoord); // should free the coords
 }
+
+#define MAXCOUNT 100 
 
 void MassTestThing()
 {
@@ -58,15 +58,13 @@ void MassTestThing()
 		{ 
 			printf("%p: %d is ok\n", (void*)addrs[i], i); 
 		}
-		if (GetThingType(things[i])==POINTER) { printf("found a pointer\n"); }
+		if (GetThingType(things[i])!=POINTER) { printf("error not a pointer\n"); }
 		DelThing(things[i]);
 	}
 }
 
-int main( int argc, char * argv[] )
+void StrTests() 
 {
-	
-	printf("Starting tests\n");	
 	EQ ( 1, 1 );
 	NEQ( 1, 232 );
 	char * testphrase = "Hello world.";
@@ -77,13 +75,77 @@ int main( int argc, char * argv[] )
 	EQ ( strcmp( testphrase, str ), 0 );
 	NEQ( str, NULL );
 	DelStr( str );
-	printf( "%s\n", __FILE__ );
 	char * tmp = ( char * )malloc( sizeof( char )*strlen( str ) ); 
 	sprintf( tmp, "%s", testphrase );
 	char * buf = String( tmp );
 	EQ ( strcmp( buf, testphrase ), 0 );
+}
 
-	MassTestThing();
+UFO CompareIntThings(const Thing const T1, const Thing const T2)
+{
+	int one = (int)GetThingData(T1);
+	int two = (int)GetThingData(T2); 
+
+	if      (one < two) return(LT);
+	else if (one > two) return(GT);
+	else return(EQ);
+}
+
+#define TOSTRINGINTTHINGSBUF 80
+CharBuf ToStringIntThings(const Thing const T)
+{
+	char buf[TOSTRINGINTTHINGSBUF];
+	int i = (int)GetThingData(T);
+	// Bad coding but we're going to say 80 is max here.
+	snprintf((char*)&buf, TOSTRINGINTTHINGSBUF, "%d", i);
+	return(String(buf));
+}
+
+void ListTest()
+{
+	int i;
+	Thing T;
+	List L = NewList();
+	DelList(L);
+	printf("deleted empty list\n");
+	L = NewList();
+	Thing things[MAXCOUNT];
+	for (i=0; i<MAXCOUNT; i++)
+	{
+		T = NewThing(INTEGER, 
+			     (Pointer) i, 
+			     NULL,  // no need for dtor 
+			     CompareIntThings,  
+			     NULL,  // no need to copy 
+			     ToStringIntThings);
+		things[i]=T;
+		//printf("made: >>%s<<\n", ThingToString(T));
+		InsItemList(L, T);
+	}
+	//asm("int3");
+	for (i=0; i<MAXCOUNT; i++)
+	{
+		if (strcmp(ThingToString(things[i]), 
+			  ThingToString(GetItemList(L, things[i]))) != 0)
+		{
+			printf("*** no match\n");
+			printf("%s ",ThingToString(things[i]));
+			printf("!= %s\n", ThingToString(GetItemList(L, things[i])));
+		}
+	}
+	DelList(L);
+	fflush(stdout);
+	printf("Done ListTest(), write DelItemList next time!\n");
+}
+
+
+int main( int argc, char * argv[] )
+{
+	printf("Starting tests\n");	
+	printf( "%s\n", __FILE__ );
+	//StrTests();	
+	//MassTestThing();
+	ListTest();
 	return -0;
 }
 

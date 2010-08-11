@@ -17,7 +17,6 @@ typedef void    (*Dtor)(Pointer P);
 typedef UFO     (*CompFN)(const Thing const T1, const Thing const T2);
 typedef Thing   (*CopyFN)(Thing const to, const Thing const from);
 typedef CharBuf (*StrFN) (const Thing const T);
-// copy constructor?
 struct Thing_t
 {
 	VARTYPE type;	 // has the type of data encoded
@@ -30,7 +29,7 @@ struct Thing_t
 	StrFN  toString; // converts to a string for easy debugging
 };
 
-
+/* general API for the thing: */
 Thing NewThing(const VARTYPE vartype, 
 	       const Pointer const data, 
 	       const Dtor    const destructor,
@@ -43,12 +42,25 @@ void  DelThing(Thing const T);		        // dtor
 /* getters */
 Pointer GetThingData(Thing const T); 
 VARTYPE GetThingType(const Thing const T); 
+
+/* I dont think these are needed for the general world 
 Dtor    GetThingDtor(const Thing const T);
+CompFN  GetThingComp(const Thing const T); 
+CopyFN  GetThingCopy(const Thing const T); 
+StrFN  GetThingToStr(const Thing const T);
+*/
 
 /* setters */
+/* not needed for the general world
 void SetThingType(Thing const T, const VARTYPE vt); 
 void SetThingData(Thing const T, const Pointer const d); 
 void SetThingDtor(Thing const T, const Dtor const fn);  
 void SetThingComp(Thing const T, const CompFN  const fn);
+*/
+
+/* operations */
+UFO   	ThingCmp(const Thing const T1, const Thing const T2);
+Thing   ThingCopy(const Thing to, const Thing from);
+CharBuf ThingToString(const Thing const T);
 
 #endif 

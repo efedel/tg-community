@@ -5,11 +5,11 @@
 
 /* node getter */
 static Thing 	GetListNodeThing(ListNode const N) 	{ return(N->t); } 
-static ListNode	GetListNodeNext(const ListNode const N) { return(N->next); }
+static ListNode	GetNextListNode(const ListNode const N) { return(N->next); }
 
 /* node setter */
 static void SetListNodeThing(ListNode const N, const Thing const T) { N->t = T; } 
-static ListNode SetListNodeNext (ListNode const N, const ListNode const LN) 
+static ListNode SetNextListNode (ListNode const N, const ListNode const LN) 
 { 
 	N->next = LN; 
 	return LN;
@@ -24,12 +24,26 @@ static ListNode NewListNode(const Thing const T) 		/* node ctor */
 
 static void DelListNode(ListNode const X) 			/* node dtor */
 {
-	if (GetListNodeNext(X) != NULL) 
+	if (GetNextListNode(X) != NULL) 
 	{
-		DelListNode(GetListNodeNext(X));
+		DelListNode(GetNextListNode(X));
 	}
 	DelThing(GetListNodeThing(X));
+	SetNextListNode(X, NULL);
 	free(X);
+}
+
+/* node ops 
+ * these are basically helper functions for the list ops */
+static ListNode FindListNode(const ListNode const N, const Thing const T)
+{
+	ListNode next	   = GetNextListNode(N);
+	BOOLEAN IsLastNode = next == NULL;
+	BOOLEAN FoundNode  = ThingCmp(T, GetListNodeThing(N)) == EQ;
+
+	if (FoundNode) return(N); /* you found it! party on! */
+	else if (IsLastNode) return(NULL); /* still not found: at the end  */
+	else return(FindListNode(next, T));
 }
 
 /* list ops */
@@ -59,16 +73,26 @@ List NewList()  			/* list ctor */
 
 void DelList(List const X)		/* list dtor */
 {
+	SetListSize(X, 0);
 	DelListNode(GetListTop(X));	
 	free(X);	
 }
 
+/* List Insertion  */
 List InsItemList(List const L, const Thing const T)
 {
-	SetListEnd(L, SetListNodeNext(GetListEnd(L), NewListNode(T)));
+	SetListEnd(L, SetNextListNode(GetListEnd(L), NewListNode(T)));
+	SetListSize(L, GetListSize(L) + 1);
 	return(L);
 }
 
+/* Fetch an item */
+Thing GetItemList(List const L, const Thing const T) 
+{
+	return(GetListNodeThing(FindListNode(GetListTop(L), T)));
+}
+
+// TODO: impl this!
 List DelItemList(List const L, const Thing const T) 
 {
 	//TODO

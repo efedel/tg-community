@@ -2,5 +2,6 @@
 *.so.*
 *.o
 *.swp
+*.swo
 release*
 main

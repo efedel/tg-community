@@ -9,7 +9,7 @@ typedef char * CharBuf;
 typedef void * Pointer;
 
 typedef enum Boolean_t { FALSE, TRUE } BOOLEAN;	/* Boolean */ 
-typedef enum Ufo_t { LT, EQ, GT } UFO;		/* <=> */
+typedef enum Ufo_t { LT, EQ, GT, UFOERR } UFO;	/* <=> */
 
 void (*PureSideEffect)();
 
