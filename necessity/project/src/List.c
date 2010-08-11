@@ -80,7 +80,7 @@ void DelList(List const X)		/* list dtor */
 }
 
 /* List Insertion  */
-List InsItemList(List const L, const Thing const T)
+List ListIns(List const L, const Thing const T)
 {
 	SetListEnd(L, SetNextListNode(GetListEnd(L), NewListNode(T)));
 	SetListSize(L, GetListSize(L) + 1);
@@ -88,16 +88,18 @@ List InsItemList(List const L, const Thing const T)
 }
 
 /* Fetch an item */
-Thing GetItemList(List const L, const Thing const T) 
+Thing ListGet(List const L, const Thing const T) 
 {
 	return(GetListNodeThing(FindListNode(GetListTop(L), T)));
 }
 
 // TODO: impl this!
-List DelItemList(List const L, const Thing const T) 
+#include <stdio.h>
+Thing ListRem(List const L, const Thing const T) 
 {
 	//TODO
-	return(L);
+	printf("***I hope you remembered to write this function.\n");
+	return(NULL);
 }
 
 // TODO List iterator

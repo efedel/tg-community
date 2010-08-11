@@ -1,6 +1,4 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "Thing.h"
 #include "Defs.h"
 
@@ -48,6 +46,8 @@ Thing NewThing(const VARTYPE vartype,
  * decls for each function and not Pointer vftable[MAXFN] and indexes mapping
  * to dtor, comp, copy, tostr. Sorry, it's not as elegant as lisp.*/
 
+//#include <stdio.h>
+#include <string.h>
 void  DelThing(Thing const self)
 {
 	Dtor fn = GetThingDtor(self); 	// get the Dtor

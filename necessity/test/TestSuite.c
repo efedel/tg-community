@@ -120,22 +120,22 @@ void ListTest()
 			     ToStringIntThings);
 		things[i]=T;
 		//printf("made: >>%s<<\n", ThingToString(T));
-		InsItemList(L, T);
+		ListIns(L, T);
 	}
 	//asm("int3");
 	for (i=0; i<MAXCOUNT; i++)
 	{
 		if (strcmp(ThingToString(things[i]), 
-			  ThingToString(GetItemList(L, things[i]))) != 0)
+			  ThingToString(ListGet(L, things[i]))) != 0)
 		{
 			printf("*** no match\n");
 			printf("%s ",ThingToString(things[i]));
-			printf("!= %s\n", ThingToString(GetItemList(L, things[i])));
+			printf("!= %s\n", ThingToString(ListGet(L, things[i])));
 		}
 	}
 	DelList(L);
 	fflush(stdout);
-	printf("Done ListTest(), write DelItemList next time!\n");
+	printf("Done ListTest(), write ListRem next time!\n");
 }
 
 void TestASM()

@@ -87,9 +87,9 @@ struct List_t
 
 List NewList();                         	     	/* list ctor */
 void DelList(List const X);             		/* list dtor */
-List InsItemList(List const L, const Thing const T); 	/* list insert */
-Thing GetItemList(List const L, const Thing const T); 	/* list find item */
-List DelItemList(List const L, const Thing const T);	/* NOT IMPLEMENTED YET*/
+List  ListIns(List const L, const Thing const T); 	/* list insert */
+Thing ListGet(List const L, const Thing const T); 	/* list find item */
+Thing ListRem(List const L, const Thing const T);	/* NOT IMPLEMENTED YET*/
 
 /* Hash Table --------------------------------------------------------------- */
 

@@ -63,4 +63,8 @@ UFO   	ThingCmp(const Thing const T1, const Thing const T2);
 Thing   ThingCopy(const Thing to, const Thing from);
 CharBuf ThingToString(const Thing const T);
 
+// TODO:
+// default "Things" for integer, float, char, etc.
+// make the function names for this Integer(int X); Char(int c), so forth
+
 #endif 

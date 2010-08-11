@@ -7,17 +7,14 @@ Pointer GetESP() { asm("mov %esp, %eax"); }
 
 void CommentLine() 
 {
-	int i;
+	int i=0;
 	CharBuf pre = "/* ";
 	CharBuf end = " */";
 	printf("%s\n", pre);
-	for (i=0; i<(MAXCOL-(strlen(pre)+strlen(end))); i++) 
-	{
-		printf("-");
-	}
-
+	/* trying to get out of the habit of writing for loops, since 
+	 * for is out, and foreaches are in */
+	while (i++ < (MAXCOL-(strlen(pre)+strlen(end)))) printf("-");
 	printf("%s\n", end);
-
 }
 
 void println(CharBuf cstr)
