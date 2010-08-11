@@ -16,6 +16,6 @@ void DelHash(Hash const H);
 
 Hash  HashIns(Hash const self, const Thing const T);
 Thing HashGet(const Hash const self, const Thing const T);
-Thing HashRem(Hash const self, const Thing const T);
+Thing HashRm(Hash const self, const Thing const T);
 
 #endif

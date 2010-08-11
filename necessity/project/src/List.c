@@ -95,7 +95,7 @@ Thing ListGet(List const L, const Thing const T)
 
 // TODO: impl this!
 #include <stdio.h>
-Thing ListRem(List const L, const Thing const T) 
+Thing ListRm(List const L, const Thing const T) 
 {
 	//TODO
 	printf("***I hope you remembered to write this function.\n");

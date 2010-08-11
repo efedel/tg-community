@@ -44,9 +44,9 @@ Thing HashGet(const Hash const self, const Thing const T)
 	return(ListGet(GetBuckets(self, GetHasher(self)(T)), T));
 }
 
-Thing HashRem(Hash const self, const Thing const T)
+Thing HashRm(Hash const self, const Thing const T)
 {
-	return(ListRem(GetBuckets(self, GetHasher(self)(T)), T));
+	return(ListRm(GetBuckets(self, GetHasher(self)(T)), T));
 }
 
 
