@@ -138,14 +138,22 @@ void ListTest()
 	printf("Done ListTest(), write DelItemList next time!\n");
 }
 
+void TestASM()
+{
+	CommentLine();
+	println("testing asm");
+	printf("ESP: %p\n", GetESP());
+}
+
 
 int main( int argc, char * argv[] )
 {
 	printf("Starting tests\n");	
 	printf( "%s\n", __FILE__ );
-	//StrTests();	
+	StrTests();	
 	MassTestThing();
 	ListTest();
+	TestASM();
 	return -0;
 }
 

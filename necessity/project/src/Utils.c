@@ -3,6 +3,8 @@
 
 #include "Defs.h"
 
+Pointer GetESP() { asm("mov %esp, %eax"); }
+
 void CommentLine() 
 {
 	int i;

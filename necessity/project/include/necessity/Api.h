@@ -100,4 +100,11 @@ char * 		String( const char * );
 void 		DelStr( char * );
 unsigned int 	LenStr( char * );
 
+/* Easter Eggs -------------------------------------------------------------- */
+/* probably take this out after debuggine */
+Pointer GetESP();
+void CommentLine();
+void println(CharBuf cstr);
+
+
 #endif
