@@ -13,4 +13,4 @@ test:
 	./runme.sh
 
 clean:
-	rm -rf main *.o
+	rm -rf main *.o core

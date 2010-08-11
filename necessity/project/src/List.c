@@ -19,6 +19,7 @@ static ListNode NewListNode(const Thing const T) 		/* node ctor */
 {
 	ListNode self = (ListNode)malloc(sizeof(struct ListNode_t));
 	SetListNodeThing(self, T);
+	SetNextListNode(self, NULL);
 	return(self);
 }
 

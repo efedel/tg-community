@@ -144,7 +144,7 @@ int main( int argc, char * argv[] )
 	printf("Starting tests\n");	
 	printf( "%s\n", __FILE__ );
 	//StrTests();	
-	//MassTestThing();
+	MassTestThing();
 	ListTest();
 	return -0;
 }
