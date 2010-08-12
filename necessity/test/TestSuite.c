@@ -141,9 +141,43 @@ void TestASM()
 	printf("ESP: %p\n", GetESP());
 }
 
-unsigned int Factorial(int n)
+void AddAnswer   (Hash const H, const uint key, const uint item)
 {
+	HashIns(H, Word(key), Word(item));
+}
+
+uint LookupAnswer(Hash const H, const uint x)
+{
+	Thing wx  = Word(x);
+	Thing ans = HashGet(H, wx);
+	return((ans) ? (uint)IntWord(ans) : 0);
+}
+
+uint Factorial(Hash const H, const uint n)
+{
+	int ans;
+	if (n==0) return 1;
+	else 
+	{
+		ans = LookupAnswer(H, n);
+		if (!ans) 
+		{
+			ans = n * Factorial(H, n-1);
+			AddAnswer(H, n, ans);
+		}
+		return ans;
+	}
 	return 0;
+}
+
+void TestFactorial()
+{
+	uint c;
+	Hash H = NewHash(NULL);
+	for (c=0; c<14; c++) 
+	{
+		printf("%d\n", Factorial(H, c));
+	}
 }
 
 void TestHash()
@@ -175,6 +209,7 @@ int main( int argc, char * argv[] )
 	TestList();
 	TestASM();
 	TestHash();
+	TestFactorial();
 	return -0;
 }
 
