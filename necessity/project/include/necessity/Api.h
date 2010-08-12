@@ -18,6 +18,7 @@ typedef enum Ufo_t { LT, EQ, GT } UFO;          /* <=> */
  * TODO: there should be a good way to make this user definable. */
 typedef enum Vartype_t
 {
+	SPECIAL,
         CHAR,
         FLOAT,
         INTEGER,
@@ -28,7 +29,7 @@ VARTYPE;
 typedef struct  Thing_t * Thing;
 typedef void    (*Dtor)(Pointer P);
 typedef UFO     (*CompFN)(const Thing const T1, const Thing const T2);
-typedef Thing   (*CopyFN)(Thing const to, const Thing const from);
+typedef Thing   (*CopyFN)(const Thing const from);
 typedef CharBuf (*StrFN) (const Thing const T);
 struct Thing_t
 {
@@ -64,7 +65,7 @@ void  DelThing(Thing const self);                                   // dtor
 
 /* oerations */
 UFO     ThingCmp(const Thing const T1, const Thing const T2); 	/* compare */
-Thing   ThingCopy(const Thing to, const Thing from);		/* copy */	
+Thing   ThingCopy(const Thing const from);	 		/* copy */	
 CharBuf ThingToString(const Thing const T); 			/* toString */
 
 /* Pairs -------------------------------------------------------------------- */
@@ -92,13 +93,29 @@ Thing ListGet(List const L, const Thing const T); 	/* list find item */
 Thing ListRm(List const L, const Thing const T);	/* NOT IMPLEMENTED YET*/
 
 /* Hash Table --------------------------------------------------------------- */
+#define MAXLISTS 4095 
+typedef uint (*HashFN)(const Thing const T);
+typedef struct Hash_t * Hash;
+struct Hash_t
+{
+	List lists[MAXLISTS];
+	HashFN hasher;
+};
 
+Hash NewHash(const HashFN const f);			/* hash ctor */
+void DelHash(Hash const H);				/* hash dtor */
 
+Hash  HashIns(Hash const self, const Thing const T); 	   /* insert */
+Thing HashGet(const Hash const self, const Thing const T); /* get */	
+Thing HashRm(Hash const self, const Thing const T);	   /* remove */
 
 /* String Operations -------------------------------------------------------- */
 char * 		String( const char * );
 void 		DelStr( char * );
 unsigned int 	LenStr( char * );
+
+/* Integer Thing ------------------------------------------------------------ */
+Thing   Integer(const int i);
 
 /* Easter Eggs -------------------------------------------------------------- */
 /* probably take this out after debuggine */

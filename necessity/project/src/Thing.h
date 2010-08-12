@@ -2,9 +2,11 @@
 #define Thing_h
 
 #include "Defs.h"
+#include "String.h"
 
 typedef enum Vartype_t
 {
+	SPECIAL, /* unused */
 	CHAR,
 	FLOAT,
 	INTEGER,
@@ -15,7 +17,7 @@ VARTYPE;
 typedef struct  Thing_t * Thing;
 typedef void    (*Dtor)(Pointer P);
 typedef UFO     (*CompFN)(const Thing const T1, const Thing const T2);
-typedef Thing   (*CopyFN)(Thing const to, const Thing const from);
+typedef Thing   (*CopyFN)(const Thing const from);
 typedef CharBuf (*StrFN) (const Thing const T);
 struct Thing_t
 {
@@ -60,7 +62,7 @@ void SetThingComp(Thing const T, const CompFN  const fn);
 
 /* operations */
 UFO   	ThingCmp(const Thing const T1, const Thing const T2);
-Thing   ThingCopy(const Thing to, const Thing from);
+Thing   ThingCopy(const Thing const from);
 CharBuf ThingToString(const Thing const T);
 
 // TODO:

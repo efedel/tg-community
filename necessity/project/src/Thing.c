@@ -1,6 +1,7 @@
 #include <stdlib.h>
-#include "Thing.h"
 #include "Defs.h"
+//#include "String.h"
+#include "Thing.h"
 
 /* getters */
 VARTYPE GetThingType(const Thing const T) { return T->type; }
@@ -64,7 +65,7 @@ void  DelThing(Thing const self)
  * */
 
 /* comparision between 2 things */
-UFO   ThingCmp(const Thing const T1, const Thing const T2)
+UFO    ThingCmp(const Thing const T1, const Thing const T2)
 {
 	CompFN F1 = GetThingComp(T1);
 	CompFN F2 = GetThingComp(T2);
@@ -74,16 +75,14 @@ UFO   ThingCmp(const Thing const T1, const Thing const T2)
 
 /* toString */
 CharBuf ThingToString(const Thing const T) 
-{
+{ 
 	StrFN F = GetThingToStr(T);
 	return F(T);
 }
 
 /* copy */
-Thing 	ThingCopy(const Thing to, const Thing from)
+Thing  ThingCopy(const Thing const from)
 {
-	CopyFN F1 = GetThingCopy(to);
-	CopyFN F2 = GetThingCopy(from);
-	if (F1 == F2) return(F1(to, from));
-	else return NULL;
+	return(GetThingCopy(from)(from));
 }
+

@@ -6,10 +6,18 @@
 
 // TODO: resize
 
-static List  GetBuckets(Hash self, uint index) { return(self->lists[index]); }
-static HashFN GetHasher(Hash self) { return(self->hasher); }
+static List  GetBuckets(const Hash const self, const uint index) 
+{ 
+	return(self->lists[index]); 
+}
+static HashFN GetHasher(const Hash const self) { return(self->hasher); }
 
-static void SetHasher (Hash self, HashFN f) { self->hasher=f; }
+static void SetBuckets(Hash const self, const uint index, const List const L) 
+{
+	self->lists[index] = L;
+}
+
+static void SetHasher (Hash const self, const HashFN const f) { self->hasher=f; }
 
 /* very simple and stupid hash function, there are probably better */
 static uint SimpleHasher(const Thing const T)
@@ -22,7 +30,7 @@ Hash NewHash(const HashFN const f)
 {
 	int i=0;
 	Hash self = (Hash)malloc(sizeof(struct Hash_t));
-	while (i++ < MAXLISTS) self->lists[i] = NewList();
+	while (i++ < MAXLISTS) SetBuckets(self, i, NewList());
 	if (f == NULL) SetHasher(self, SimpleHasher);
 	return(self);
 }

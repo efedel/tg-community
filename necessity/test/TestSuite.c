@@ -25,6 +25,7 @@ void killerfoo(Pointer ACoord)
 	printf("freeing the coords (%d, %d)! \t", tmp->x, tmp->y);
 	fflush(stdout);
 	free(ACoord); // should free the coords
+	printf("\n");
 }
 
 #define MAXCOUNT 100 
@@ -34,6 +35,7 @@ void MassTestThing()
 	uint i=0;
 	uint   addrs[MAXCOUNT];
 	Thing things[MAXCOUNT];
+	CommentLine("Test Things en masse.");
 	printf("MassTestThing()\n");
 	Coords foo;
 	for (i = 0; i < MAXCOUNT; i++)
@@ -63,8 +65,9 @@ void MassTestThing()
 	}
 }
 
-void StrTests() 
+void TestStr() 
 {
+	CommentLine("Test String");
 	EQ ( 1, 1 );
 	NEQ( 1, 232 );
 	char * testphrase = "Hello world.";
@@ -91,47 +94,40 @@ UFO CompareIntThings(const Thing const T1, const Thing const T2)
 	else return(EQ);
 }
 
-#define TOSTRINGINTTHINGSBUF 80
-CharBuf ToStringIntThings(const Thing const T)
-{
-	char buf[TOSTRINGINTTHINGSBUF];
-	int i = (int)GetThingData(T);
-	// Bad coding but we're going to say 80 is max here.
-	snprintf((char*)&buf, TOSTRINGINTTHINGSBUF, "%d", i);
-	return(String(buf));
-}
-
-void ListTest()
+void TestList()
 {
 	int i;
 	Thing T;
 	List L = NewList();
 	DelList(L);
+	CommentLine("Test List");
 	printf("deleted empty list\n");
 	L = NewList();
 	Thing things[MAXCOUNT];
 	for (i=0; i<MAXCOUNT; i++)
 	{
-		T = NewThing(INTEGER, 
-			     (Pointer) i, 
-			     NULL,  // no need for dtor 
-			     CompareIntThings,  
-			     NULL,  // no need to copy 
-			     ToStringIntThings);
+		T = Integer(i);
 		things[i]=T;
 		//printf("made: >>%s<<\n", ThingToString(T));
 		ListIns(L, T);
 	}
 	//asm("int3");
+	CharBuf s1, s2;
 	for (i=0; i<MAXCOUNT; i++)
 	{
-		if (strcmp(ThingToString(things[i]), 
-			  ThingToString(ListGet(L, things[i]))) != 0)
+		// seperate assignments are NECESSARY because if i assign
+		// inline with strcmp(ThingToString ... ) they will never 
+		// get deleted and it will be a memory leak!!
+		s1 = ThingToString(things[i]);
+		s2 = ThingToString(ListGet(L, things[i]));
+		if (strcmp(s1, s2) != 0)
 		{
 			printf("*** no match\n");
 			printf("%s ",ThingToString(things[i]));
 			printf("!= %s\n", ThingToString(ListGet(L, things[i])));
 		}
+		DelStr(s1); // sigh, there is no real way around this.
+		DelStr(s2); 
 	}
 	DelList(L);
 	fflush(stdout);
@@ -140,20 +136,29 @@ void ListTest()
 
 void TestASM()
 {
-	CommentLine();
+	CommentLine("TestASM");
 	println("testing asm");
 	printf("ESP: %p\n", GetESP());
 }
 
 
+void TestHash()
+{
+	CommentLine("Testing Hashtable");
+	Hash H = NewHash(NULL);
+
+
+}
+
 int main( int argc, char * argv[] )
 {
 	printf("Starting tests\n");	
 	printf( "%s\n", __FILE__ );
-	StrTests();	
-	MassTestThing();
-	ListTest();
+	TestStr();	
+	MassTestThing(); 
+	TestList();
 	TestASM();
+	TestHash();
 	return -0;
 }
 

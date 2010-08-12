@@ -64,7 +64,7 @@ List NewList()  			/* list ctor */
 	List self = (List)malloc(sizeof(struct List_t));
 	/* Pad the top of the list with a fake node that contains 
 	 * some rudimentary non important info for the list */
-	ListNode pad = NewListNode(NewThing(INTEGER, self, 
+	ListNode pad = NewListNode(NewThing(SPECIAL, self, 
 				            NULL, NULL, NULL, NULL));
 	SetListTop (self, pad);
 	SetListEnd (self, pad);
