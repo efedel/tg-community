@@ -49,6 +49,11 @@ Hash HashIns(Hash const self,
 	return(self);
 }
 
+/* TODO:
+ * what we really want is if there is a list size of 2 or more, is
+ * to return a Pointer Thing containing a Pointer to  a List of Things
+ * type SPECIAL or something more descriptive.
+ */
 Thing HashGet(const Hash const self, const Thing const key)
 {
 	//return(ListGet(GetBuckets(self, GetHasher(self)(T)), T));
