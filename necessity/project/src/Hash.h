@@ -11,11 +11,13 @@ struct Hash_t
 	HashFN hasher;
 };
 
-Hash NewHash(const HashFN const f);
+Hash NewHash(const HashFN const HFN);
 void DelHash(Hash const H);
 
-Hash  HashIns(Hash const self, const Thing const T);
-Thing HashGet(const Hash const self, const Thing const T);
+Hash  HashIns(Hash const self, 
+	      const Thing const key, 
+	      const Thing const item);
+Thing HashGet(const Hash const self, const Thing const key);
 Thing HashRm(Hash const self, const Thing const T);
 
 #endif

@@ -1,7 +1,15 @@
 #include <stdlib.h>
+#include <assert.h>
 #include "Defs.h"
 //#include "String.h"
 #include "Thing.h"
+
+/* this is for the typechecking */
+/* maybe for release we make this a bool */         
+void TypeCheck(const Thing const T, const VARTYPE type ) 
+{ 
+	assert(GetThingType(T)==type); 
+}
 
 /* getters */
 VARTYPE GetThingType(const Thing const T) { return T->type; }

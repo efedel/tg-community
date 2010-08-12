@@ -41,15 +41,20 @@ void DelHash(Hash const X)
 	while (i++ < MAXLISTS) DelList(GetBuckets(X, i));
 }
 
-Hash HashIns(Hash const self, const Thing const T) 
+Hash HashIns(Hash const self, 
+	     const Thing const key,
+	     const Thing const item) 
 {
-	ListIns(GetBuckets(self, GetHasher(self)(T)), T);
+	ListIns(GetBuckets(self, GetHasher(self)(key)), item);
 	return(self);
 }
 
-Thing HashGet(const Hash const self, const Thing const T)
+Thing HashGet(const Hash const self, const Thing const key)
 {
-	return(ListGet(GetBuckets(self, GetHasher(self)(T)), T));
+	//return(ListGet(GetBuckets(self, GetHasher(self)(T)), T));
+	//HashFN F = GetHasher(self);
+	//List L = GetBuckets(self, F(key));
+	return(ListTop(GetBuckets(self, GetHasher(self)(key))));
 }
 
 Thing HashRm(Hash const self, const Thing const T)

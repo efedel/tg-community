@@ -106,7 +106,7 @@ void TestList()
 	Thing things[MAXCOUNT];
 	for (i=0; i<MAXCOUNT; i++)
 	{
-		T = Integer(i);
+		T = Word(i);
 		things[i]=T;
 		//printf("made: >>%s<<\n", ThingToString(T));
 		ListIns(L, T);
@@ -144,20 +144,31 @@ void TestASM()
 
 void TestHash()
 {
+	Thing key  = Word(7);
+	Thing item = Word(11);
+	Thing X;
 	CommentLine("Testing Hashtable");
 	Hash H = NewHash(NULL);
-
+	
+	HashIns(H, key, item);
+	//BAD CODE: if (IntWord(HashGet(H, key)) != 11) 
+	//{ printf("no match!\n"); }
+	//HashGet can return NULL!
+	X = HashGet(H, key);	
+	if (ThingCmp(X, item) != 0) printf("error in retr hash"); 
+	//asm("int3");
 
 }
+
 
 int main( int argc, char * argv[] )
 {
 	printf("Starting tests\n");	
 	printf( "%s\n", __FILE__ );
-	TestStr();	
-	MassTestThing(); 
-	TestList();
-	TestASM();
+	//TestStr();	
+	//MassTestThing(); 
+	//TestList();
+	//TestASM();
 	TestHash();
 	return -0;
 }

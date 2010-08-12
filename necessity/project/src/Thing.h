@@ -5,13 +5,11 @@
 #include "String.h"
 
 typedef enum Vartype_t
-{
-	SPECIAL, /* unused */
-	CHAR,
-	FLOAT,
-	INTEGER,
+{ 
+	SPECIAL, /* unused */ 
+	WORD,
 	POINTER
-} 
+}
 VARTYPE;
 
 typedef struct  Thing_t * Thing;
@@ -30,6 +28,9 @@ struct Thing_t
 	CopyFN copy;     // copy ctor
 	StrFN  toString; // converts to a string for easy debugging
 };
+
+/* No other good place to put this. */
+void TypeCheck(const Thing const T, const VARTYPE type);
 
 /* general API for the thing: */
 Thing NewThing(const VARTYPE vartype, 

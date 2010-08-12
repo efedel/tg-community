@@ -8,7 +8,7 @@ typedef void * Pointer;
 typedef char * CharBuf;
 
 typedef enum Boolean_t { FALSE, TRUE } BOOLEAN; /* Boolean */
-typedef enum Ufo_t { LT, EQ, GT } UFO;          /* <=> */
+typedef enum Ufo_t { LT = -1 , EQ = 0, GT = 1, UFOERR } UFO;          /* <=> */
 
 /* The Thing ---------------------------------------------------------------- */
 
@@ -19,9 +19,7 @@ typedef enum Ufo_t { LT, EQ, GT } UFO;          /* <=> */
 typedef enum Vartype_t
 {
 	SPECIAL,
-        CHAR,
-        FLOAT,
-        INTEGER,
+	WORD,
         POINTER
 } 
 VARTYPE;
@@ -102,11 +100,13 @@ struct Hash_t
 	HashFN hasher;
 };
 
-Hash NewHash(const HashFN const f);			/* hash ctor */
+Hash NewHash(const HashFN const HFN);			/* hash ctor */
 void DelHash(Hash const H);				/* hash dtor */
 
-Hash  HashIns(Hash const self, const Thing const T); 	   /* insert */
-Thing HashGet(const Hash const self, const Thing const T); /* get */	
+Hash  HashIns(Hash const self, 
+	      const Thing const key, 
+	      const Thing const item);	   /* insert */
+Thing HashGet(const Hash const self, const Thing const key); /* get */	
 Thing HashRm(Hash const self, const Thing const T);	   /* remove */
 
 /* String Operations -------------------------------------------------------- */
@@ -114,8 +114,10 @@ char * 		String( const char * );
 void 		DelStr( char * );
 unsigned int 	LenStr( char * );
 
-/* Integer Thing ------------------------------------------------------------ */
-Thing   Integer(const int i);
+/* Word Thing --------------------------------------------------------------- */
+Thing Word(const int i);
+int   IntWord(Thing T);
+char  CharWord(Thing T);
 
 /* Easter Eggs -------------------------------------------------------------- */
 /* probably take this out after debuggine */
