@@ -28,17 +28,17 @@ static uint SimpleHasher(const Thing const T)
 
 Hash NewHash(const HashFN const f)
 {
-	int i=0;
+	int i;
 	Hash self = (Hash)malloc(sizeof(struct Hash_t));
-	while (i++ < MAXLISTS) SetBuckets(self, i, NewList());
+	for(i=0; i < MAXLISTS; i++) SetBuckets(self, i, NewList());
 	if (f == NULL) SetHasher(self, SimpleHasher);
 	return(self);
 }
 
 void DelHash(Hash const X) 
 {
-	int i=0;
-	while (i++ < MAXLISTS) DelList(GetBuckets(X, i));
+	int i;
+	for(i=0; i < MAXLISTS; i++) DelList(GetBuckets(X, i));
 }
 
 Hash HashIns(Hash const self, 

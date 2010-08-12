@@ -141,6 +141,10 @@ void TestASM()
 	printf("ESP: %p\n", GetESP());
 }
 
+unsigned int Factorial(int n)
+{
+	return 0;
+}
 
 void TestHash()
 {
@@ -155,7 +159,8 @@ void TestHash()
 	//{ printf("no match!\n"); }
 	//HashGet can return NULL!
 	X = HashGet(H, key);	
-	if (ThingCmp(X, item) != 0) printf("error in retr hash"); 
+	if (ThingCmp(X, item) != EQ) printf("error in retr hash"); 
+	DelHash(H);
 	//asm("int3");
 
 }
@@ -165,10 +170,10 @@ int main( int argc, char * argv[] )
 {
 	printf("Starting tests\n");	
 	printf( "%s\n", __FILE__ );
-	//TestStr();	
-	//MassTestThing(); 
-	//TestList();
-	//TestASM();
+	TestStr();	
+	MassTestThing(); 
+	TestList();
+	TestASM();
 	TestHash();
 	return -0;
 }
