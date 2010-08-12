@@ -3,7 +3,7 @@
 
 #define MAXLISTS 4095
 
-typedef uint (*HashFN)(const Thing const T);
+typedef int (*HashFN)(const Thing const T);
 typedef struct Hash_t * Hash;
 struct Hash_t
 {

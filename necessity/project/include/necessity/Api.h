@@ -92,7 +92,7 @@ Thing ListRm(List const L, const Thing const T);	/* NOT IMPLEMENTED YET*/
 
 /* Hash Table --------------------------------------------------------------- */
 #define MAXLISTS 4095 
-typedef uint (*HashFN)(const Thing const T);
+typedef int (*HashFN)(const Thing const T);
 typedef struct Hash_t * Hash;
 struct Hash_t
 {

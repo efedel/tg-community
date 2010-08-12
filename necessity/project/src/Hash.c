@@ -20,9 +20,9 @@ static void SetBuckets(Hash const self, const uint index, const List const L)
 static void SetHasher (Hash const self, const HashFN const f) { self->hasher=f; }
 
 /* very simple and stupid hash function, there are probably better */
-static uint SimpleHasher(const Thing const T)
+static int SimpleHasher(const Thing const T)
 {
-	int x=(uint) T; // get the pointer value
+	int x=(int) T; // get the pointer value
 	return(x%MAXLISTS);
 }
 
@@ -31,7 +31,8 @@ Hash NewHash(const HashFN const f)
 	int i;
 	Hash self = (Hash)malloc(sizeof(struct Hash_t));
 	for(i=0; i < MAXLISTS; i++) SetBuckets(self, i, NewList());
-	if (f == NULL) SetHasher(self, SimpleHasher);
+	//if (f == NULL) SetHasher(self, SimpleHasher);
+	SetHasher(self, (f == NULL) ? SimpleHasher : f);
 	return(self);
 }
 

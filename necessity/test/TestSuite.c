@@ -141,15 +141,21 @@ void TestASM()
 	printf("ESP: %p\n", GetESP());
 }
 
-void AddAnswer   (Hash const H, const uint key, const uint item)
+void AddAnswer(Hash const H, const uint key, const uint item)
 {
 	HashIns(H, Word(key), Word(item));
+}
+
+static int FactHasher(const Thing const T)
+{
+	return((IntWord(T))%MAXLISTS);
 }
 
 uint LookupAnswer(Hash const H, const uint x)
 {
 	Thing wx  = Word(x);
 	Thing ans = HashGet(H, wx);
+	//if (ans) printf("Found answer!\n");
 	return((ans) ? (uint)IntWord(ans) : 0);
 }
 
@@ -173,11 +179,13 @@ uint Factorial(Hash const H, const uint n)
 void TestFactorial()
 {
 	uint c;
-	Hash H = NewHash(NULL);
+	Hash H = NewHash(FactHasher);
 	for (c=0; c<14; c++) 
 	{
 		printf("%d\n", Factorial(H, c));
 	}
+	//asm("int3");
+	DelHash(H);
 }
 
 void TestHash()
