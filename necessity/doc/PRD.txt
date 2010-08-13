@@ -11,8 +11,7 @@ The TaggedString is an implementation of a C string that will have:
 TODO:
 
 Sorts:
-(are there any in std c lib?)
-- merge sort
+(are there any in std c lib?) - merge sort
 - quick sort
 
 Memoized Maths:
@@ -42,5 +41,10 @@ we want 3 types of graphs:
 - Adjacency list
 - Objects and ptrs
 
+Want skiplists;
+and scapegoat tree
+
 notes:
 http://stackoverflow.com/questions/199418/using-c-library-in-c-code
+
+
