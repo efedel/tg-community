@@ -2,9 +2,9 @@
 #define Utils_h
 
 /* asm */
-Pointer GetESP();
+Pointer GetReg();
 
 /* printing */
-void CommentLine();
-void println(CharBuf cstr);
+void CommentLine(const char * const);
+void println(const char * const);
 #endif

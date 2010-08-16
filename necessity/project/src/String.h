@@ -4,12 +4,12 @@
 #include "Defs.h"
 
 /* Makes a new string: */
-CharBuf String(const CharBuf);  /* Forgot C had a const. */
+String NewStr(const char * const);  /* Forgot C had a const. */
 
 /* Deletes a string: */
-void DelStr( CharBuf );
+void DelStr(String);
 
 /* returns the length of a string: */
-uint LenStr( CharBuf );
+uint LenStr(const String const);
 
 #endif

@@ -37,13 +37,14 @@ static Thing WordCopy(const Thing const from)
 }
 
 #define LARGESTINTLEN 32
-/* i hate constants, but 64 bit ints convert to length 20 bits + sign */
-static CharBuf WordToString(const Thing const T)
+/* i hate constants, but 64 bit ints convert to a number that is 
+ * length 20 char + sign, make it the nearest power of 2 above 20 */
+static String WordToString(const Thing const T)
 {
 	int i = (int)GetThingData(T);
 	char buf[LARGESTINTLEN];
 	snprintf((char*)&buf, LARGESTINTLEN, "%d", i);
-	return(String(buf));
+	return(NewStr(buf));
 }
 
 Thing 	Word(const int i)

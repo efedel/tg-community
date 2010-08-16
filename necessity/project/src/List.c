@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include <assert.h>
 #include "List.h"
 #include "Thing.h"
@@ -51,8 +52,8 @@ static void DelListNode(ListNode const X) 			/* node dtor */
 static ListNode FindListNode(const ListNode const N, const Thing const T)
 {
 	ListNode next	   = GetNextListNode(N);
-	BOOLEAN IsLastNode = next == NULL;
-	BOOLEAN FoundNode  = 
+	bool IsLastNode = next == NULL;
+	bool FoundNode  = 
 		(GetThingType(T) != SPECIAL) &&
 		(ThingCmp(T, GetListNodeThing(N)) == EQ); 
 

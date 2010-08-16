@@ -82,7 +82,7 @@ UFO    ThingCmp(const Thing const T1, const Thing const T2)
 }
 
 /* toString */
-CharBuf ThingToString(const Thing const T) 
+String ThingToString(const Thing const T) 
 { 
 	StrFN F = GetThingToStr(T);
 	return F(T);

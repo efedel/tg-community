@@ -3,11 +3,11 @@
 
 /* Basic Definitions -------------------------------------------------------- */
 typedef unsigned int uint;
+typedef char * String;
 
 typedef void * Pointer;
-typedef char * CharBuf;
 
-typedef enum Boolean_t { FALSE, TRUE } BOOLEAN; /* Boolean */
+
 typedef enum Ufo_t { LT = -1 , EQ = 0, GT = 1, UFOERR } UFO;          /* <=> */
 
 /* The Thing ---------------------------------------------------------------- */
@@ -24,11 +24,11 @@ typedef enum Vartype_t
 } 
 VARTYPE;
 
-typedef struct  Thing_t * Thing;
-typedef void    (*Dtor)(Pointer P);
-typedef UFO     (*CompFN)(const Thing const T1, const Thing const T2);
-typedef Thing   (*CopyFN)(const Thing const from);
-typedef CharBuf (*StrFN) (const Thing const T);
+typedef struct Thing_t * Thing;
+typedef void   (*Dtor)(Pointer P);
+typedef UFO    (*CompFN)(const Thing const T1, const Thing const T2);
+typedef Thing  (*CopyFN)(const Thing const from);
+typedef String (*StrFN) (const Thing const T);
 struct Thing_t
 {
         VARTYPE type;    // has the type of data encoded
@@ -38,7 +38,7 @@ struct Thing_t
                          // not just the data
         CompFN comp;     // what to use for comparisons
         CopyFN copy;     // copy ctor
-        StrFN  toString; // converts to a string for easy debugging
+        StrFN  toString; // converts to a String for easy debugging
 };
 
 /* after this there should only be 4 functions the user needs, everything else
@@ -64,7 +64,7 @@ void  DelThing(Thing const self);                                   // dtor
 /* oerations */
 UFO     ThingCmp(const Thing const T1, const Thing const T2); 	/* compare */
 Thing   ThingCopy(const Thing const from);	 		/* copy */	
-CharBuf ThingToString(const Thing const T); 			/* toString */
+String ThingToString(const Thing const T); 			/* toString */
 
 /* Pairs -------------------------------------------------------------------- */
 
@@ -110,20 +110,38 @@ Thing HashGet(const Hash const self, const Thing const key); /* get */
 Thing HashRm(Hash const self, const Thing const T);	   /* remove */
 
 /* String Operations -------------------------------------------------------- */
-char * 		String( const char * );
-void 		DelStr( char * );
-unsigned int 	LenStr( char * );
+String 		NewStr( const char * );
+void 		DelStr( String );
+unsigned int 	LenStr( const String const );
 
 /* Word Thing --------------------------------------------------------------- */
 Thing Word(const int i);
 int   IntWord(Thing T);
 char  CharWord(Thing T);
 
+/* Registers ---------------------------------------------------------------- */
+Pointer GetEAX();
+Pointer GetEBX(); 
+Pointer GetECX(); 
+Pointer GetEDX(); 
+Pointer GetESI(); 
+Pointer GetEDI(); 
+
+Pointer GetESP(); 
+Pointer GetEBP(); 
+Pointer GetEIP();
+
+Pointer GetCS(); 
+Pointer GetDS(); 
+Pointer GetSS(); 
+Pointer GetES(); 
+
 /* Easter Eggs -------------------------------------------------------------- */
 /* probably take this out after debuggine */
-Pointer GetESP();
 void CommentLine();
-void println(CharBuf cstr);
+void println(String cstr);
+
+uint Fibonacci(int n);
 
 
 #endif

@@ -12,11 +12,11 @@ typedef enum Vartype_t
 }
 VARTYPE;
 
-typedef struct  Thing_t * Thing;
-typedef void    (*Dtor)(Pointer P);
-typedef UFO     (*CompFN)(const Thing const T1, const Thing const T2);
-typedef Thing   (*CopyFN)(const Thing const from);
-typedef CharBuf (*StrFN) (const Thing const T);
+typedef struct Thing_t * Thing;
+typedef void   (*Dtor)(Pointer P);
+typedef UFO    (*CompFN)(const Thing const T1, const Thing const T2);
+typedef Thing  (*CopyFN)(const Thing const from);
+typedef String (*StrFN) (const Thing const T);
 struct Thing_t
 {
 	VARTYPE type;	 // has the type of data encoded
@@ -62,9 +62,9 @@ void SetThingComp(Thing const T, const CompFN  const fn);
 */
 
 /* operations */
-UFO   	ThingCmp(const Thing const T1, const Thing const T2);
-Thing   ThingCopy(const Thing const from);
-CharBuf ThingToString(const Thing const T);
+UFO    ThingCmp(const Thing const T1, const Thing const T2);
+Thing  ThingCopy(const Thing const from);
+String ThingToString(const Thing const T);
 
 // TODO:
 // default "Things" for integer, float, char, etc.
