@@ -23,10 +23,10 @@ static void killerfoo(Pointer ACoord)
 {
 	printf("killerfoo: free(%p)\n", ACoord);
 	Coords tmp=(Coords) ACoord;
-	printf("freeing the coords (%d, %d)! \t", tmp->x, tmp->y);
+	//printf("freeing the coords (%d, %d)! \t", tmp->x, tmp->y);
 	fflush(stdout);
 	free(ACoord); // should free the coords
-	printf("\n");
+	//printf("\n");
 }
 
 #define MAXCOUNT 100 
@@ -42,7 +42,7 @@ static void MassTestThing()
 	for (i = 0; i < MAXCOUNT; i++)
 	{
 		foo=(Coords)malloc(sizeof(struct Coords_t));	
-		printf("new coords %p\n", (void*)foo);
+		//printf("new coords %p\n", (void*)foo);
 		foo->x=i, foo->y=MAXCOUNT-i;
 		things[i] = NewThing(POINTER, 
 				     (Pointer) foo, 
@@ -51,8 +51,10 @@ static void MassTestThing()
 				     NULL, 
 				     NULL);
 		addrs[i]  = (uint)foo;
+		/*
 		printf("(%d, %d)\n", ((Coords)GetThingData(things[i]))->x, 
 				     ((Coords)GetThingData(things[i]))->y);
+				     */
 	}
 	for (i = 0; i < MAXCOUNT; i++)
 	{
@@ -69,20 +71,25 @@ static void MassTestThing()
 static void TestStr() 
 {
 	CommentLine("Test String");
-	EQ ( 1, 1 );
-	NEQ( 1, 232 );
+	EQ (1, 1);
+	NEQ(1, 232);
 	char * testphrase = "Hello world.";
-	char * str = NewStr( testphrase );
-	NEQ( strlen( str ), 0 );
-	NEQ( LenStr( str ), 0 );
-	EQ ( strlen( str ), LenStr( str ) );
-	EQ ( strcmp( testphrase, str ), 0 );
-	NEQ( str, NULL );
-	DelStr( str );
-	char * tmp = ( char * )malloc( sizeof( char )*strlen( str ) ); 
-	sprintf( tmp, "%s", testphrase );
-	String buf = NewStr( tmp );
-	EQ ( strcmp( buf, testphrase ), 0 );
+	char * str = NewStr(testphrase);
+	NEQ(strlen(str), 0 );
+	NEQ(LenStr(str), 0 );
+	EQ (strlen(str), LenStr(str));
+	EQ (strcmp(testphrase, str), 0);
+	NEQ(str, NULL);
+	DelStr(str);
+	char * tmp = (char *)malloc(sizeof(char) * strlen(str)); 
+	sprintf(tmp, "%s", testphrase);
+	String buf = NewStr(tmp);
+	EQ (strcmp(buf, testphrase), 0);
+	String sub = SubStr(tmp, 0, 4);
+	printf ("%s:%d %s:%d\n", buf, LenStr(buf), sub, LenStr(sub));
+	DelStr(buf);
+	DelStr(sub);
+
 }
 
 static UFO CompareIntThings(const Thing const T1, const Thing const T2)
@@ -239,6 +246,7 @@ void TestFactorial()
 				TESTFACTORIALMAX,
 				FactCheck) == false) printf ("test failed.\n");
 	DelHash(H);
+	printf("Factorial, using a hash table for memoization passed.\n");
 }
 
 void TestHash()
@@ -291,6 +299,7 @@ static void TestFibiter()
 			printf("Issue with fib(%d) = %d\n", c, checkbuff[c]);
 	if (TestCheckBufferWithFunction(checkbuff, TESTFIBITERMAX,
 				FibCheck) == false) printf ("test failed.\n");
+	printf("Fibiter passed.\n");
 }
 
 
@@ -299,13 +308,13 @@ int main( int argc, char * argv[] )
 {
 	printf("Starting tests\n");	
 	printf( "%s\n", __FILE__ );
-	TestStr();	
 	MassTestThing(); 
 	TestList();
 	TestASM();
 	TestHash();
 	TestFactorial();
 	TestFibiter();
+	TestStr();	
 	return -0;
 }
 

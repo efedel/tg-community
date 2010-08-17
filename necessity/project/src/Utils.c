@@ -11,7 +11,7 @@ Pointer GetESI() { asm("mov %esi, %eax"); }
 Pointer GetEDI() { asm("mov %edi, %eax"); }
 Pointer GetESP() { asm("mov %esp, %eax"); }
 Pointer GetEBP() { asm("mov %ebp, %eax"); }
-//Pointer GetEIP() { asm("mov %ip, %eax"); }
+//Pointer GetEIP() { asm("mov %eip, %eax"); }
 Pointer GetCS() { asm("mov %cs, %eax"); } 
 Pointer GetDS() { asm("mov %ds, %eax"); } 
 Pointer GetSS() { asm("mov %ss, %eax"); } 

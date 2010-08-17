@@ -113,6 +113,7 @@ Thing HashRm(Hash const self, const Thing const T);	   /* remove */
 String 		NewStr( const char * );
 void 		DelStr( String );
 unsigned int 	LenStr( const String const );
+String SubStr(const String const str, const uint start, const uint end);
 
 /* Word Thing --------------------------------------------------------------- */
 Thing Word(const int i);
