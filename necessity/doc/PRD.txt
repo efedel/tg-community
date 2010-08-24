@@ -10,21 +10,10 @@ The TaggedString is an implementation of a C string that will have:
 
 TODO:
 
-Sorts:
-(are there any in std c lib?) - merge sort
-- quick sort
-
-Memoized Maths:
-n-choose-k function 
-- ship the lib with a database of these things, if we have to save the
-  memoised hash table to the disk then so be it.
-
 Datastructures
-- hashtable with arrays
+- fix resizing hashtable
 - Copy the avl tree into here so it can work seperately
-- need a nary tree 
 - trie-tries(?)
-- probablistic data structures  
 
 locks
 - mutex, semaphore

@@ -130,7 +130,7 @@ Pointer GetEDI();
 
 Pointer GetESP(); 
 Pointer GetEBP(); 
-Pointer GetEIP();
+//Pointer GetEIP(); // TODO this needs more work
 
 Pointer GetCS(); 
 Pointer GetDS(); 
