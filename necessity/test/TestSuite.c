@@ -106,8 +106,9 @@ static UFO CompareIntThings(const Thing const T1, const Thing const T2)
 static void TestList()
 {
 	int i;
-	Thing T;
+	Thing T, S, X;
 	List L = NewList();
+	Thing W;
 	DelList(L);
 	CommentLine("Test List");
 	printf("deleted empty list\n");
@@ -141,12 +142,38 @@ static void TestList()
 	DelList(L);
 	fflush(stdout);
 	L = NewList();
-	T = Word(93);
+	ListIns(L, Word(32));
+	T = Word(32);
+	X = ListRm(L, T);
+
+	DelList(L);
+/*	
+	L = NewList();
+	for (i = 0; i < MAXCOUNT; i++) 
+	{
+		W = Word(i);
+		ListIns(L, W);
+	}
+	assert(GetListSize(L) == MAXCOUNT);
+
+	L = NewList();
+	DelThing(T);
+	S = Word(93);
+	T = Word(2112);
+	assert(SameThing(S, T) == false);
 	ListIns(L, T);
-	printf("Size= %d\n", GetListSize(L));
+	i = GetListSize(L);
+	X = ListRm(L, T);
+	assert(GetListSize(L) == (i - 1));
+	assert(SameThing(X, T) == true);
+	assert(ListRm(L, T) == NULL);
+	for (i = 0; i < MAXCOUNT; i++) { ListIns(L, T); }
+	assert(GetListSize(L) == MAXCOUNT);
 	ListRm(L, T);
-	printf("Size= %d\n", GetListSize(L));
-	printf("Done ListTest(), write ListRem next time!\n");
+	//for (i = 0; i < MAXCOUNT; i++) { ListRm (L, T); }
+	//assert(GetListSize(L) == 0);
+	*/
+	printf("Done ListTest()\n");
 }
 
 static void TestASM()

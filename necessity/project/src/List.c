@@ -45,11 +45,16 @@ static ListNode NewListNode(const Thing const T) 		/* node ctor */
 	return(self);
 }
 
+/* removes only ONE list node, do NOT call this unless you really mean it
+ * because you will end up with memory leaks since you will unlink the rest
+ * of the list! */
+static void DelOneListNode(ListNode const X) { free(X); }
+
 static Thing ListNodeRm(ListNode const node)
 {
 	/* take yourself out of the loop */
 	ListNode prev = GetPrevListNode(node);
-	ListNode next = GetNextListNode(next);
+	ListNode next = GetNextListNode(node);
 	/* what if prev is null?  what if next is null? */
 	/* tho we are always guaranteed to have a previous because of the
 	 * List Implementation hidden SPECIAL node; it's just good form */
@@ -60,14 +65,20 @@ static Thing ListNodeRm(ListNode const node)
 	Thing ret=GetListNodeThing(node);
 	SetListNodeThing(SetPrevListNode(
 				SetNextListNode(node, NULL), NULL), NULL);
-	free(node);  // dump the node and return the Thing
+	/* absolutely make sure you are deleting only ONE list node
+	 * so call DelOneListNode, not the other function */
+	DelOneListNode(node);  // dump the node and return the Thing
 	return(ret);
 }
 
 /* this needs to be void because it's recursive */
 /* this might be a poor choice of words, what this function does is given
  * a ListNode Head, it will delete Head  and all the ListNodes after head.
- * it is not meant to be called by anyone but the List*/
+ * it is not meant to be called by anyone but the List */
+
+/* the reason for this is so that you can delete the REST of a list starting
+ * from a node, otherwise you will just leave things hanging.  The only 
+ * function that should be calling this is DelList, and of course itself. */
 static void DelListNode(ListNode const X) 			/* node dtor */
 {
 	if (GetNextListNode(X) != NULL) 
@@ -80,8 +91,9 @@ static void DelListNode(ListNode const X) 			/* node dtor */
 	 * free it up */
 	//DelThing(GetListNodeThing(X));
 	SetPrevListNode(SetNextListNode(X, NULL), NULL);
-	free(X);
+	DelOneListNode(X);
 }
+
 
 /* node ops 
  * these are basically helper functions for the list ops */
@@ -188,7 +200,7 @@ static Thing ListGetRefactor(List const L,
 		ret = cache; 
 	/* this next line can return NULL!!! check it!!*/
 	else 
-		ret = (CacheListRecent(L, FindListNode(GetListTop(L), T)));
+		ret = FindListNode(GetListTop(L), T);
 	/* checking to see if ret is null */
 	if (ret) 
 	{
@@ -198,6 +210,8 @@ static Thing ListGetRefactor(List const L,
 		/* if we have a valid return AND we are deleting an node
 		 * decrement the size of the list */
 		if (fn == ListNodeRm) SetListSize(L, GetListSize(L) - 1);
+		/* if we are fetching it not deleting it, we should cache */
+		else CacheListRecent(L, ret);
 		return(fn(ret));
 	}
 	else return(NULL);

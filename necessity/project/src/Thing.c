@@ -82,6 +82,11 @@ UFO    ThingCmp(const Thing const T1, const Thing const T2)
 	else return(UFOERR);
 }
 
+bool 	SameThing(const Thing const T1, const Thing const T2)
+{
+	return(ThingCmp(T1, T2) == EQ);
+}
+
 /* toString */
 String ThingToString(const Thing const T) 
 { 

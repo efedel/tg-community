@@ -66,6 +66,8 @@ UFO     ThingCmp(const Thing const T1, const Thing const T2); 	/* compare */
 Thing   ThingCopy(const Thing const from);		 	/* copy */	
 String  ThingToString(const Thing const); 			/* toString */
 
+bool    SameThing(const Thing const T1, const Thing const T2);
+
 /* Linked List -------------------------------------------------------------- */
 typedef struct ListNode_t * ListNode;
 struct ListNode_t

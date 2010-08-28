@@ -68,6 +68,10 @@ UFO    ThingCmp(const Thing const T1, const Thing const T2);
 Thing  ThingCopy(const Thing const from);
 String ThingToString(const Thing const T);
 
+/* just a shorthand for determining if two Things are the same it is NOT
+ * a compare function */
+bool 	SameThing(const Thing const T1, const Thing const T2);
+
 // TODO:
 // default "Things" for integer, float, char, etc.
 // make the function names for this Integer(int X); Char(int c), so forth
