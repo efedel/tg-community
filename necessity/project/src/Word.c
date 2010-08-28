@@ -1,26 +1,37 @@
-//#include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
+/* TODO: figure out a way to "throw exceptions" instead of using this assert
+ * although since this is a fairly simple data type this should not be an 
+ * issue. */
+#include <assert.h>
 #include "Thing.h"
 #include "Defs.h"
 #include "Word.h"
 
+/* 
+ * There really is no good way for this.  We can't return any value that 
+ * wouldn't be a valid one.  It would be nice to throw an * exception but 
+ * we cannot.
+ */
+static void AssertTypeWord(Thing T) { assert(TypeCheck(T, WORD) == true); }
+
 int  IntWord(Thing T)
 {
-	TypeCheck(T, WORD);
+	AssertTypeWord(T);
 	return((int)GetThingData(T));
 }
 
 char CharWord(Thing T)
 {
-	TypeCheck(T, WORD);
+	AssertTypeWord(T);
 	return((char)(((int)GetThingData(T)) % 255));
 }
 /* raw integer classes */
 static UFO WordUFO(const Thing const T1, const Thing const T2)
 {
-	int x, y;
-	TypeCheck(T1, WORD);
-	TypeCheck(T2, WORD);
+	int x, y; 
+	AssertTypeWord(T1);
+	AssertTypeWord(T2);	
 
 	x = (int)GetThingData(T1);
 	y = (int)GetThingData(T2);
@@ -32,7 +43,7 @@ static UFO WordUFO(const Thing const T1, const Thing const T2)
 
 static Thing WordCopy(const Thing const from)
 {
-	TypeCheck(from, WORD);
+	AssertTypeWord(from);
 	return(Word((int)GetThingData(from)));
 }
 

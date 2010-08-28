@@ -5,9 +5,9 @@
 #include "Defs.h"
 
 /* internal use only -------------------------------------------------------- */
-static uint get_len(void * rawbuf) { return((uint)rawbuf); }
+//static uint get_len(void * rawbuf) { return((uint)rawbuf); }
 
-static char * get_buf(void * rawbuf)
+static char * ConvertToChars(void * rawbuf)
 {
 	return((char *)rawbuf + sizeof(uint));
 }
@@ -22,7 +22,7 @@ String NewStr(const char * const rawstr)
 	void * rawbuf = malloc(sizeof(int) + (sizeof(char) * real_len));
 	uint * metadata = (uint *) rawbuf;
 	*metadata = len; /* like strlen we ignore '\0' */
-	char * buf = get_buf(rawbuf);
+	char * buf = ConvertToChars(rawbuf);
 	/* but of course strncpy, strcpy copies the \0 as well */
 	strncpy(buf, rawstr, real_len);
 	buf[real_len] = '\0';

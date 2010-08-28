@@ -1,14 +1,17 @@
 #ifndef Hash_h
 #define Hash_h
 
+#include "Defs.h"
+
 #define MAXLISTS 4095
 
-typedef int (*HashFN)(const Thing const T);
+/* hash implementation */
+typedef uint (*HashFN)(const Thing const T);
 typedef struct Hash_t * Hash;
 struct Hash_t
 {
-	List lists[MAXLISTS];
-	HashFN hasher;
+	List Lists[MAXLISTS];
+	HashFN Hasher;
 };
 
 Hash NewHash(const HashFN const HFN);

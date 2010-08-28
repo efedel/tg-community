@@ -1,32 +1,32 @@
 #include <stdlib.h>
-#include <assert.h>
+#include <stdbool.h>
 #include "Defs.h"
 //#include "String.h"
 #include "Thing.h"
 
 /* this is for the typechecking */
 /* maybe for release we make this a bool */         
-void TypeCheck(const Thing const T, const VARTYPE type ) 
+bool TypeCheck(const Thing const T, const VARTYPE type ) 
 { 
-	assert(GetThingType(T)==type); 
+	return(GetThingType(T)==type);
 }
 
 /* getters */
-VARTYPE GetThingType(const Thing const T) { return T->type; }
-Pointer GetThingData(Thing const T)       { return T->data; }
-Dtor    GetThingDtor(const Thing const T) { return T->dtor; }
-CompFN  GetThingComp(const Thing const T) { return T->comp; }
-CopyFN  GetThingCopy(const Thing const T) { return T->copy; }
-StrFN  GetThingToStr(const Thing const T) { return T->toString; }
+VARTYPE GetThingType(const Thing const T) { return T->Type; }
+Pointer GetThingData(Thing const T)       { return T->Data; }
+Dtor    GetThingDtor(const Thing const T) { return T->Dtor; }
+CompFN  GetThingComp(const Thing const T) { return T->Comp; }
+CopyFN  GetThingCopy(const Thing const T) { return T->Copy; }
+StrFN  GetThingToStr(const Thing const T) { return T->ToString; }
 
 
 /* setters */
-void SetThingType (Thing const T, const VARTYPE vt)       { T->type = vt; }
-void SetThingData (Thing const T, const Pointer const d)  { T->data = d; }
-void SetThingDtor (Thing const T, const Dtor    const fn) { T->dtor = fn; }
-void SetThingComp (Thing const T, const CompFN  const fn) { T->comp = fn; }
-void SetThingCopy (Thing const T, const CopyFN  const fn) { T->copy = fn; }
-void SetThingToStr(Thing const T, const StrFN   const fn) { T->toString = fn; } 
+void SetThingType (Thing const T, const VARTYPE vt)       { T->Type = vt; }
+void SetThingData (Thing const T, const Pointer const d)  { T->Data = d; }
+void SetThingDtor (Thing const T, const Dtor    const fn) { T->Dtor = fn; }
+void SetThingComp (Thing const T, const CompFN  const fn) { T->Comp = fn; }
+void SetThingCopy (Thing const T, const CopyFN  const fn) { T->Copy = fn; }
+void SetThingToStr(Thing const T, const StrFN   const fn) { T->ToString = fn; } 
 
 
 Thing NewThing(const VARTYPE vartype, 
@@ -77,6 +77,7 @@ UFO    ThingCmp(const Thing const T1, const Thing const T2)
 {
 	CompFN F1 = GetThingComp(T1);
 	CompFN F2 = GetThingComp(T2);
+
 	if (F1 == F2) return(F1(T1, T2));
 	else return(UFOERR);
 }
@@ -91,6 +92,7 @@ String ThingToString(const Thing const T)
 /* copy */
 Thing  ThingCopy(const Thing const from)
 {
+	/* get the copy function  and then apply it to yourself */
 	return(GetThingCopy(from)(from));
 }
 

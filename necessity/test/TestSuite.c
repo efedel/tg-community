@@ -3,6 +3,7 @@
 #include <string.h>
 #include <strings.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "Api.h"
 
@@ -29,7 +30,7 @@ static void killerfoo(Pointer ACoord)
 	//printf("\n");
 }
 
-#define MAXCOUNT 100 
+#define MAXCOUNT 2 
 
 static void MassTestThing()
 {
@@ -139,6 +140,12 @@ static void TestList()
 	}
 	DelList(L);
 	fflush(stdout);
+	L = NewList();
+	T = Word(93);
+	ListIns(L, T);
+	printf("Size= %d\n", GetListSize(L));
+	ListRm(L, T);
+	printf("Size= %d\n", GetListSize(L));
 	printf("Done ListTest(), write ListRem next time!\n");
 }
 
@@ -262,6 +269,7 @@ void TestHash()
 	//{ printf("no match!\n"); }
 	//HashGet can return NULL!
 	X = HashGet(H, key);	
+	assert(X);
 	if (ThingCmp(X, item) != EQ) printf("error in retr hash"); 
 	DelHash(H);
 	//asm("int3");
