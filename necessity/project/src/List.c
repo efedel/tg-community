@@ -114,7 +114,6 @@ static ListNode FindListNode(const ListNode const N, const Thing const T)
 	else return(FindListNode(next, T));
 }
 
-
 /* list ops */
 
 /* getters */
@@ -164,8 +163,10 @@ void DelList(List const X)		/* list dtor */
 	DelListNode(GetListTop(X));	
 	free(X);	
 }
-
 /* List Insertion  */
+/* TODO: this should be scrapped and broken down into ListNodeIns and
+ * a ListIns that takes a position where things are to be inserted. 
+ * default would be at the beginning (for speed) */
 List ListIns(List const L, const Thing const T)
 {
 	ListNode end = GetListEnd(L);
@@ -209,7 +210,23 @@ static Thing ListGetRefactor(List const L,
 		cache = ret;
 		/* if we have a valid return AND we are deleting an node
 		 * decrement the size of the list */
-		if (fn == ListNodeRm) SetListSize(L, GetListSize(L) - 1);
+		if (fn == ListNodeRm) 
+		{
+			int listsize = GetListSize(L);	
+			listsize -= 1;
+			SetListSize(L, listsize);
+			/* if the list is all the way back to empty, we need
+			 * to reset end so that it points to null otherwise
+			 * the list insert will have it point to BADMEM! */
+			if (GetListSize(L) == 0) 
+			{
+				printf ("setting list to zero!\n");
+				/* set this back to the fake node! */
+				SetListEnd(L, GetListTop(L));
+				/* remember to set the cache NULL!!! */
+				SetListRecent(L, NULL);
+			}
+		}
 		/* if we are fetching it not deleting it, we should cache */
 		else CacheListRecent(L, ret);
 		return(fn(ret));

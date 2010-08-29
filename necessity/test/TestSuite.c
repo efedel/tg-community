@@ -30,7 +30,7 @@ static void killerfoo(Pointer ACoord)
 	//printf("\n");
 }
 
-#define MAXCOUNT 2 
+#define MAXCOUNT 100 
 
 static void MassTestThing()
 {
@@ -105,15 +105,25 @@ static UFO CompareIntThings(const Thing const T1, const Thing const T2)
 
 static void TestList()
 {
-	int i;
-	Thing T, S, X;
-	List L = NewList();
-	Thing W;
-	DelList(L);
-	CommentLine("Test List");
-	printf("deleted empty list\n");
-	L = NewList();
+	uint i, a;
+	Thing S, T, U, W, X;
 	Thing things[MAXCOUNT];
+	List L;
+	a=-93;
+	W = Word(a);
+	
+	CommentLine("Test List");
+
+	L = NewList(); /* insert and empty list */
+	DelList(L); /* delete an empty list */
+
+	/* insert into a list, delete a list make sure thing is ok */
+	L = NewList();
+	ListIns(L, W);
+	DelList(L);
+	assert(a == IntWord(W));
+
+	L = NewList();
 	for (i=0; i<MAXCOUNT; i++)
 	{
 		T = Word(i);
@@ -141,13 +151,16 @@ static void TestList()
 	}
 	DelList(L);
 	fflush(stdout);
-	L = NewList();
-	ListIns(L, Word(32));
-	T = Word(32);
-	X = ListRm(L, T);
 
+	/* S, T, U, X are unused */
+	L = NewList();
+	S = Word(-64);
+	ListIns(L, S);  // memory leak but these are just tests.
+	T = Word(-64);
+	X = ListRm(L, T);
 	DelList(L);
-/*	
+
+	/* X is unused */
 	L = NewList();
 	for (i = 0; i < MAXCOUNT; i++) 
 	{
@@ -155,24 +168,41 @@ static void TestList()
 		ListIns(L, W);
 	}
 	assert(GetListSize(L) == MAXCOUNT);
+	 
+	a = GetListSize(L);
+
+	for (i = 0; i < MAXCOUNT; i++) 
+	{
+		a -= 1;
+		W = Word(i);
+		assert(i == IntWord(ListRm(L, W)));
+		assert(GetListSize(L) == a);
+		//printf("a: %d, size: %d\n", a, GetListSize(L));
+	}
+	DelList(L);
 
 	L = NewList();
-	DelThing(T);
-	S = Word(93);
-	T = Word(2112);
-	assert(SameThing(S, T) == false);
+	assert(SameThing(S, W) == false);
 	ListIns(L, T);
 	i = GetListSize(L);
 	X = ListRm(L, T);
 	assert(GetListSize(L) == (i - 1));
 	assert(SameThing(X, T) == true);
+	/* check to make sure it's not in there anymore */
 	assert(ListRm(L, T) == NULL);
+
+
 	for (i = 0; i < MAXCOUNT; i++) { ListIns(L, T); }
+
 	assert(GetListSize(L) == MAXCOUNT);
-	ListRm(L, T);
-	//for (i = 0; i < MAXCOUNT; i++) { ListRm (L, T); }
-	//assert(GetListSize(L) == 0);
-	*/
+
+	for (i = 0; i < MAXCOUNT; i++) 
+	{ 
+		X = ListRm (L, T); 
+		assert(X != NULL);
+	}
+	assert(GetListSize(L) == 0);
+
 	printf("Done ListTest()\n");
 }
 
@@ -230,7 +260,9 @@ static uint Factorial(Hash const H, const uint n)
 		{
 			ans = n * Factorial(H, n-1);
 			AddAnswer(H, n, ans);
-		}
+		} 
+		//else printf("found %d in the hashtable!\n", ans); 
+		
 		return ans;
 	}
 	return 0;

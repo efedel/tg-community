@@ -47,7 +47,7 @@ String SubStr(const String const str, const uint start, const uint end)
 	const char * tmp = str;	
 	String ret;
 	uint count = start;
-	uint len = 1 + 1 + (end - start);  // len = end - str + 1 + '\0' 
+	uint len = 1 + (end - start);  // len = end - str + '\0' 
 	tmpbuf = (char *)malloc(sizeof(char)*len);
 	while (count <= end) 
 	{

@@ -11,12 +11,33 @@ The TaggedString is an implementation of a C string that will have:
 TODO:
 
 Datastructures
-- fix resizing hashtable
-- Copy the avl tree into here so it can work seperately
-- trie-tries(?)
+- Hashtable 
+  - make it resize if max list depth is too long
 
-locks
-- mutex, semaphore
+- Tree
+  - scapegoat tree
+
+- Graph implementation 
+  - box and pointer
+  - adjacency list
+  - adjacency matrix
+  - conversions between the types
+
+- List
+  - map
+  - filter
+  - accumulate
+  - GetElement(L, n) -gets the nth element
+  - RemoveElementL, (n) -removes and returns the nth element
+  - pop()
+    (removal of RemoveElement(L, GetListSize(L)) in the list always)
+	- this changes when we change ListIns
+  - deque
+    (removal of RemoveElement(L, 1) first element in the list alawys)
+	- this changes when we change ListIns
+
+- SkipList
+  - implementation
 
 stuff to do:
 construct/traverse data structures
@@ -24,16 +45,5 @@ do system routines
 distill large data sets to single values
 transform one data set to another
 
-Graphs:
-we want 3 types of graphs:
-- Adjacency matrix
-- Adjacency list
-- Objects and ptrs
-
-Want skiplists;
-and scapegoat tree
-
 notes:
 http://stackoverflow.com/questions/199418/using-c-library-in-c-code
-
-
