@@ -21,6 +21,8 @@ static ListNode GetPrevListNode(const ListNode const N)
 	else return(NULL);
 }
 
+static List GetListNodeList(const ListNode const N) { return(N->MyList); }
+
 /* node setter */
 static ListNode SetListNodeThing(ListNode const N, const Thing const t) 
 { 
@@ -38,10 +40,19 @@ static ListNode SetPrevListNode (ListNode const N, const ListNode const prev)
 	return(N);
 }
 
-static ListNode NewListNode(const Thing const T) 		/* node ctor */
+static ListNode SetListNodeList (ListNode const N, const List const L)
+{
+	N->MyList = L;
+	return(N);
+}
+
+static ListNode NewListNode(const List L, const Thing const T) 		/* node ctor */
 {
 	ListNode self = (ListNode)malloc(sizeof(struct ListNode_t));
-	SetNextListNode(SetPrevListNode(SetListNodeThing(self, T), NULL), NULL);
+	SetListNodeList( 
+		SetNextListNode(
+			SetPrevListNode( 
+				SetListNodeThing(self, T), NULL), NULL), L);
 	return(self);
 }
 
@@ -50,8 +61,19 @@ static ListNode NewListNode(const Thing const T) 		/* node ctor */
  * of the list! */
 static void DelOneListNode(ListNode const X) { free(X); }
 
+/* need for forward declare these so that ListNodeRm will have them */
+static ListNode GetListDummyNode(const List const);
+static ListNode GetListTop (const List const); 
+static ListNode GetListEnd (const List const); 
+static List SetListTop(List const, const ListNode const); 
+static List SetListEnd(List const, const ListNode const); 
+static ListNode GetListRecent(const List const);
+static List ClearListCache(List const);
+
 static Thing ListNodeRm(ListNode const node)
 {
+	/* get the list, we're going to need it */
+	List L  = GetListNodeList(node);
 	/* take yourself out of the loop */
 	ListNode prev = GetPrevListNode(node);
 	ListNode next = GetNextListNode(node);
@@ -65,6 +87,19 @@ static Thing ListNodeRm(ListNode const node)
 	Thing ret=GetListNodeThing(node);
 	SetListNodeThing(SetPrevListNode(
 				SetNextListNode(node, NULL), NULL), NULL);
+
+	/* we could be deleting the cache, the top or the end. 
+	 * we need to check ALL these cases. */
+	/* are we deleting the list top? */
+	//if (GetListTop(L) == node) SetListTop(L, next);
+	if (GetListTop(L) == node) SetListTop(L, 
+	/* if we are back to an empty list, set the top back to dummy */
+			(GetListSize(L) == 0) ? GetListDummyNode(L) : next);
+	/* are we deleting the list end? */
+	if (GetListEnd(L) == node) SetListEnd(L, prev);
+	/* are we deleting the cache? */
+	if (GetListRecent(L) == node) ClearListCache(L);
+	
 	/* absolutely make sure you are deleting only ONE list node
 	 * so call DelOneListNode, not the other function */
 	DelOneListNode(node);  // dump the node and return the Thing
@@ -117,6 +152,7 @@ static ListNode FindListNode(const ListNode const N, const Thing const T)
 /* list ops */
 
 /* getters */
+static ListNode GetListDummyNode (const List const L) { return(L->Dummy); }
 static ListNode GetListTop (const List const L) { return(L->Top); }
 static ListNode GetListEnd (const List const L) { return(L->End); }
        uint   	GetListSize(const List const L) { return(L->Size); }
@@ -124,16 +160,18 @@ static ListNode GetListEnd (const List const L) { return(L->End); }
 static ListNode GetListRecent(const List const L) { return(L->Recent); }
 
 /* setters */
+static List SetListDummyNode(List const L,
+		             const ListNode const N) { L->Dummy = N; return(L); }
 static List SetListTop(List const L, 
 		const ListNode const N) { L->Top = N; return(L); }
 static List SetListEnd(List const L, 
 		const ListNode const N) { L->End = N; return(L); }
 static List SetListSize(List const L, 
 		const uint sz) { L->Size = sz; return(L); }
-static List SetListRecent(List const L, 
-		const ListNode const N) { L->Recent = N; return(L); }
 
 /* -------------------------------------------------------------------------- */
+
+static List ClearListCache(List const L) { L->Recent = NULL; return(L); }
 
 /* this is not a setter.  it will not set the Recent to null ever. */
 static ListNode CacheListRecent(List const L, const ListNode const N) 
@@ -148,19 +186,24 @@ List NewList()  			/* list ctor */
 	List self = (List)malloc(sizeof(struct List_t));
 	/* Pad the top of the list with a fake node that contains 
 	 * some rudimentary non important info for the list */
-	ListNode pad = NewListNode(NewThing(SPECIAL, self, 
+	ListNode pad = NewListNode(self, NewThing(SPECIAL, self, 
 				            NULL, NULL, NULL, NULL));
 	/* call SetListRecent, not Cache, otherwise you will never 
 	 * be able to initialize it.  This wasn't a problem when we used to
 	 * bzero every datastructure */
-	SetListRecent(SetListSize(SetListEnd(SetListTop (self, pad), pad), 0), NULL);
+	ClearListCache(
+		SetListSize(
+			SetListEnd(
+				SetListTop(
+					SetListDummyNode(self, pad), 
+					pad), pad), 0));
 	return(self);
 }
 
 void DelList(List const X)		/* list dtor */
 {
 	SetListSize(X, 0);
-	DelListNode(GetListTop(X));	
+	DelListNode(GetListDummyNode(X));	
 	free(X);	
 }
 /* List Insertion  */
@@ -169,14 +212,21 @@ void DelList(List const X)		/* list dtor */
  * default would be at the beginning (for speed) */
 List ListIns(List const L, const Thing const T)
 {
-	ListNode end = GetListEnd(L);
-	ListNode new = NewListNode(T);
+	int size = GetListSize(L);
+	ListNode new = NewListNode(L, T); /* make a new list node with T */
+	ListNode end = GetListEnd(L);  /* get end list node, will not be NULL */
 
-	SetPrevListNode(new, end);
-	SetNextListNode(end, new);
+	SetPrevListNode(new, end);     /* set the new.prev to be the end */
+
+	/* end might be NULL so we check before we set end.next to us */
+	/* end will never be NULL because we have set it to the pad */
+	SetNextListNode(end, new); 
+
+	/* if this is the first node in the list, NOT the dummy node, we
+	 * set the list top to it.  */
+	if (size == 0) SetListTop(L, new);
 	SetListEnd(L, new);
-
-	SetListSize(L, GetListSize(L) + 1);
+	SetListSize(L, size + 1);
 	return(L);
 }
 
@@ -201,7 +251,7 @@ static Thing ListGetRefactor(List const L,
 		ret = cache; 
 	/* this next line can return NULL!!! check it!!*/
 	else 
-		ret = FindListNode(GetListTop(L), T);
+		ret = FindListNode(GetListDummyNode(L), T);
 	/* checking to see if ret is null */
 	if (ret) 
 	{
@@ -220,11 +270,10 @@ static Thing ListGetRefactor(List const L,
 			 * the list insert will have it point to BADMEM! */
 			if (GetListSize(L) == 0) 
 			{
-				printf ("setting list to zero!\n");
 				/* set this back to the fake node! */
-				SetListEnd(L, GetListTop(L));
+				SetListEnd(L, GetListDummyNode(L));
 				/* remember to set the cache NULL!!! */
-				SetListRecent(L, NULL);
+				ClearListCache(L);
 			}
 		}
 		/* if we are fetching it not deleting it, we should cache */
@@ -247,7 +296,7 @@ Thing ListTop(const List const L)
 {
 	return((GetListSize(L) == 0) 
 		? NULL 
-		: GetListNodeThing(GetNextListNode(GetListTop(L))));
+		: GetListNodeThing(GetNextListNode(GetListDummyNode(L))));
 }
 
 /* returns NULL if list is empty */

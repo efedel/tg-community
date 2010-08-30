@@ -145,17 +145,10 @@ static Thing ThingifyHKP(HashKeyPair hkpair)
 			StringHashKeyPair));
 }
 
-Hash HashIns(Hash const self, 
-	     const Thing const key,
-	     const Thing const item) 
-{
-	/* key + item -> key item pair */
-	HashKeyPair kptmp = NewHashKeyPair(key, item);
-	List l = GetBuckets(self, GetHasher(self)(key));
-	/* insert the encapsulated thing into the list */	
-	ListIns(l, ThingifyHKP(kptmp));
-	return(self);
-}
+static Thing ThingToKey(Thing T) 
+{ 
+	return(ThingifyHKP(NewHashKeyPair(T, NULL))); 
+} 
 
 Thing HashGet(const Hash const self, const Thing const KeyThing)
 {
@@ -169,8 +162,8 @@ Thing HashGet(const Hash const self, const Thing const KeyThing)
 	/* we need to make a tmp key, because of the invariant that 
 	 * we can only compare 2 Thigns of the same type it has to 
 	 * be a HKP, but we can have the item NULL */
-	HashKeyPair tmpkey = NewHashKeyPair(KeyThing, NULL);
-	Thing    tmpbucket = ThingifyHKP(tmpkey);
+	/* do NOT inline this you need to DELETE it later */
+	Thing    tmpbucket = ThingToKey(KeyThing);
 
 	List l         = GetBuckets(self, GetHasher(self)(KeyThing));
 	/* don't bother to check if the list is size 0 */
@@ -186,9 +179,53 @@ Thing HashGet(const Hash const self, const Thing const KeyThing)
 	return(ret);
 }
 
-Thing HashRm(Hash const self, const Thing const T)
+
+/* TODO: you can probably refactor the code so that GetBuckets takes in 
+ * HashIns, HashGet or HashRm function  but not right now.*/
+Hash HashIns(Hash const self, 
+	     const Thing const key,
+	     const Thing const item) 
 {
-	return(ListRm(GetBuckets(self, GetHasher(self)(T)), T));
+	/* check to see if it's not in there already */
+	/* key + item -> key item pair */
+	HashKeyPair kptmp = NewHashKeyPair(key, item);
+	uint ndx = GetHasher(self)(key);
+	List l = GetBuckets(self, ndx);
+	/* we could do cool tricks here with trying to queue up
+	 * multiple items for one key, but for right now we're going
+	 * to follow the C++ standard, where insert destroys items
+	 * on the same key */
+	if (GetListSize(l) != 0) 
+	{
+		DelList(l); /* if we've got a list on there already, kill it */
+		l = NewList(); /* make new one and assign to that bucket index */
+		SetBuckets(self, ndx, l);
+	}
+	/* insert the encapsulated thing into the list */	
+	ListIns(l, ThingifyHKP(kptmp));
+	return(self);
+}
+
+/* TODO: 
+ * two things to refactor here: HashRm, HashIns, and HashGet are probably all
+ * the same; just need to pass a function in to get them to work */
+/* second thing is we want a function that takes in a Thing as a key and 
+ * returns a Thing that holds a HashKeyPair */
+
+Thing HashRm(Hash const self, const Thing const KeyThing)
+{
+	Thing ret = NULL;
+	/* DO NOT INLINE THIS BECAUSE YOU NEED TO DELETE IT LATER */
+	Thing    tmpbucket = ThingToKey(KeyThing);
+	List l             = GetBuckets(self, GetHasher(self)(KeyThing));
+	if (GetListSize(l))
+	{
+		Thing tmp  = ListRm(l, tmpbucket);
+		HashKeyPair kp = (HashKeyPair)GetThingData(tmp);
+		ret = (GetHashKeyPairItem(kp));
+	}
+	DelThing(tmpbucket);
+	return(ret);
 }
 
 

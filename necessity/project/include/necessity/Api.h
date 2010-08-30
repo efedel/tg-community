@@ -69,19 +69,21 @@ String  ThingToString(const Thing const); 			/* toString */
 bool    SameThing(const Thing const T1, const Thing const T2);
 
 /* Linked List -------------------------------------------------------------- */
+typedef struct List_t * List;
 typedef struct ListNode_t * ListNode;
 struct ListNode_t
 { 
 	Thing T; 
 	ListNode Next;
 	ListNode Prev;
+	List MyList;
 };
 
-typedef struct List_t * List;
 struct List_t 
 { 
 	uint Size; 
 	ListNode Top; 
+	ListNode Dummy;
 	ListNode End;
 	ListNode Recent;
 };

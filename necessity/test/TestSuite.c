@@ -31,6 +31,7 @@ static void killerfoo(Pointer ACoord)
 }
 
 #define MAXCOUNT 100 
+//#define MAXCOUNT 4 
 
 static void MassTestThing()
 {
@@ -140,23 +141,31 @@ static void TestList()
 		// get deleted and it will be a memory leak!!
 		s1 = ThingToString(things[i]);
 		s2 = ThingToString(ListGet(L, things[i]));
+		assert(strcmp(s1, s2)==0);
+		/*
 		if (strcmp(s1, s2) != 0)
 		{
+			
 			printf("*** no match\n");
 			printf("%s ",ThingToString(things[i]));
 			printf("!= %s\n", ThingToString(ListGet(L, things[i])));
 		}
+		*/
 		DelStr(s1); // sigh, there is no real way around this.
 		DelStr(s2); 
 	}
 	DelList(L);
 	fflush(stdout);
 
-	/* S, T, U, X are unused */
+	/* S, T, X are unused */
 	L = NewList();
 	S = Word(-64);
+	U = Word(64);
 	ListIns(L, S);  // memory leak but these are just tests.
 	T = Word(-64);
+	assert(SameThing(S, T));
+	assert(SameThing(S, U) == false);
+
 	X = ListRm(L, T);
 	DelList(L);
 
@@ -202,8 +211,17 @@ static void TestList()
 		assert(X != NULL);
 	}
 	assert(GetListSize(L) == 0);
+	assert(ListRm(L, T) == NULL);
 
-	printf("Done ListTest()\n");
+	DelList(L);
+	/* these are the only ones we actually made new */
+	/* W is a, S is -64, T= -64 */
+	DelThing(S);
+	DelThing(T);
+	DelThing(U);
+	DelThing(W);
+
+	printf("Done TestList()\n");
 }
 
 static void TestASM()
@@ -319,7 +337,7 @@ void TestHash()
 {
 	Thing key  = Word(7);
 	Thing item = Word(11);
-	Thing X;
+	Thing X, Y;
 	CommentLine("Testing Hashtable");
 	Hash H = NewHash(NULL);
 	
@@ -329,11 +347,19 @@ void TestHash()
 	//HashGet can return NULL!
 	X = HashGet(H, key);	
 	assert(X);
+	assert(SameThing(X, item));
 	if (ThingCmp(X, item) != EQ) printf("error in retr hash"); 
+	Y = HashRm(H, key);
+	assert(SameThing(Y, item));
+	assert(SameThing(X, Y));
+	DelThing(X);
+	X = HashRm(H, key);
+	assert(X == NULL);
 	DelHash(H);
 	//asm("int3");
+	DelThing(Y); // this calls the dtor on item 
+	DelThing(key);
 	printf("Basic insert/retrieve in hash table done.\n");
-
 }
 
 // not mine:

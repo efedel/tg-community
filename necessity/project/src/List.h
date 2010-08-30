@@ -3,6 +3,8 @@
 
 #include "Thing.h"
 
+/* sigh no other good place for this */
+typedef struct List_t * List;
 /* List Node ---------------------------------------------------------------- */
 typedef struct ListNode_t * ListNode;
 struct ListNode_t
@@ -10,14 +12,15 @@ struct ListNode_t
 	Thing T;
 	ListNode Next;
 	ListNode Prev;
+	List MyList;
 };
 
 /* List --------------------------------------------------------------------- */
-typedef struct List_t * List;
 struct List_t 
 {
 	uint Size;
 	ListNode Top;
+	ListNode Dummy;
 	ListNode End;
 	ListNode Recent;
 };
