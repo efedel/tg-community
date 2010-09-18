@@ -1,0 +1,9 @@
+*.so
+*.so.*
+*.o
+*.swp
+*.swo
+.*.*.swp
+.*.*.swo
+release*
+main

@@ -1,6 +1,8 @@
 #ifndef Thing_h
 #define Thing_h
 
+#include <stdbool.h>
+
 #include "Defs.h"
 #include "String.h"
 
@@ -19,18 +21,18 @@ typedef Thing  (*CopyFN)(const Thing const from);
 typedef String (*StrFN) (const Thing const T);
 struct Thing_t
 {
-	VARTYPE type;	 // has the type of data encoded
-	Pointer data;	 // void pointer, cast to an int, char, whatnot.
-	Dtor dtor;	 // function pointer supplied to be called to delete
+	VARTYPE Type;	 // has the type of data encoded
+	Pointer Data;	 // void pointer, cast to an int, char, whatnot.
+	Dtor Dtor;	 // function pointer supplied to be called to delete
 			 // assumes that we delete the entire datum as well 
 			 // not just the data
-	CompFN comp;	 // what to use for comparisons
-	CopyFN copy;     // copy ctor
-	StrFN  toString; // converts to a string for easy debugging
+	CompFN Comp;	 // what to use for comparisons
+	CopyFN Copy;     // copy ctor
+	StrFN  ToString; // converts to a string for easy debugging
 };
 
 /* No other good place to put this. */
-void TypeCheck(const Thing const T, const VARTYPE type);
+bool TypeCheck(const Thing const, const VARTYPE);
 
 /* general API for the thing: */
 Thing NewThing(const VARTYPE vartype, 
@@ -65,6 +67,10 @@ void SetThingComp(Thing const T, const CompFN  const fn);
 UFO    ThingCmp(const Thing const T1, const Thing const T2);
 Thing  ThingCopy(const Thing const from);
 String ThingToString(const Thing const T);
+
+/* just a shorthand for determining if two Things are the same it is NOT
+ * a compare function */
+bool 	SameThing(const Thing const T1, const Thing const T2);
 
 // TODO:
 // default "Things" for integer, float, char, etc.

@@ -3,32 +3,38 @@
 
 #include "Thing.h"
 
+/* sigh no other good place for this */
+typedef struct List_t * List;
 /* List Node ---------------------------------------------------------------- */
 typedef struct ListNode_t * ListNode;
 struct ListNode_t
 {
-	Thing t;
-	ListNode next;
+	Thing T;
+	ListNode Next;
+	ListNode Prev;
+	List MyList;
 };
 
 /* List --------------------------------------------------------------------- */
-typedef struct List_t * List;
 struct List_t 
 {
-	uint size;
-	ListNode top;
-	ListNode end;
+	uint Size;
+	ListNode Top;
+	ListNode Dummy;
+	ListNode End;
+	ListNode Recent;
 };
 
 /* List ops */
-List NewList();                                         /* list ctor */
-void DelList(List const X);                             /* list dtor */
-List  ListIns(List const L, const Thing const T);       /* list insert */
-Thing ListGet(List const L, const Thing const T);       /* list find item */
-Thing ListRm (List const L, const Thing const T);       /* NOT IMPLEMENTED YET*/
+List NewList();                                     /* list ctor */
+void DelList(List const);                           /* list dtor */
+List  ListIns(List const, const Thing const);       /* list insert */
+Thing ListGet(List const, const Thing const);       /* list find item */
+Thing ListRm (List const, const Thing const);       /* NOT IMPLEMENTED YET*/
+uint  GetListSize(const List const);
 
 /* not for API */
-Thing ListTop(List const L);	// thse can return NULL if the list size
-Thing ListEnd(List const L);	// is 0
+Thing ListTop(List const);	// thse can return NULL if the list size
+Thing ListEnd(List const);	// is 0
 
 #endif

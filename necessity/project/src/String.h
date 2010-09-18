@@ -12,4 +12,7 @@ void DelStr(String);
 /* returns the length of a string: */
 uint LenStr(const String const);
 
+String SubStr(const String const str, const uint start, const uint end);
+
+
 #endif

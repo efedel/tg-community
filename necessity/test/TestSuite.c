@@ -3,6 +3,7 @@
 #include <string.h>
 #include <strings.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "Api.h"
 
@@ -23,13 +24,14 @@ static void killerfoo(Pointer ACoord)
 {
 	printf("killerfoo: free(%p)\n", ACoord);
 	Coords tmp=(Coords) ACoord;
-	printf("freeing the coords (%d, %d)! \t", tmp->x, tmp->y);
+	//printf("freeing the coords (%d, %d)! \t", tmp->x, tmp->y);
 	fflush(stdout);
 	free(ACoord); // should free the coords
-	printf("\n");
+	//printf("\n");
 }
 
 #define MAXCOUNT 100 
+//#define MAXCOUNT 4 
 
 static void MassTestThing()
 {
@@ -42,7 +44,7 @@ static void MassTestThing()
 	for (i = 0; i < MAXCOUNT; i++)
 	{
 		foo=(Coords)malloc(sizeof(struct Coords_t));	
-		printf("new coords %p\n", (void*)foo);
+		//printf("new coords %p\n", (void*)foo);
 		foo->x=i, foo->y=MAXCOUNT-i;
 		things[i] = NewThing(POINTER, 
 				     (Pointer) foo, 
@@ -51,8 +53,10 @@ static void MassTestThing()
 				     NULL, 
 				     NULL);
 		addrs[i]  = (uint)foo;
+		/*
 		printf("(%d, %d)\n", ((Coords)GetThingData(things[i]))->x, 
 				     ((Coords)GetThingData(things[i]))->y);
+				     */
 	}
 	for (i = 0; i < MAXCOUNT; i++)
 	{
@@ -69,20 +73,25 @@ static void MassTestThing()
 static void TestStr() 
 {
 	CommentLine("Test String");
-	EQ ( 1, 1 );
-	NEQ( 1, 232 );
+	EQ (1, 1);
+	NEQ(1, 232);
 	char * testphrase = "Hello world.";
-	char * str = NewStr( testphrase );
-	NEQ( strlen( str ), 0 );
-	NEQ( LenStr( str ), 0 );
-	EQ ( strlen( str ), LenStr( str ) );
-	EQ ( strcmp( testphrase, str ), 0 );
-	NEQ( str, NULL );
-	DelStr( str );
-	char * tmp = ( char * )malloc( sizeof( char )*strlen( str ) ); 
-	sprintf( tmp, "%s", testphrase );
-	String buf = NewStr( tmp );
-	EQ ( strcmp( buf, testphrase ), 0 );
+	char * str = NewStr(testphrase);
+	NEQ(strlen(str), 0 );
+	NEQ(LenStr(str), 0 );
+	EQ (strlen(str), LenStr(str));
+	EQ (strcmp(testphrase, str), 0);
+	NEQ(str, NULL);
+	DelStr(str);
+	char * tmp = (char *)malloc(sizeof(char) * strlen(str)); 
+	sprintf(tmp, "%s", testphrase);
+	String buf = NewStr(tmp);
+	EQ (strcmp(buf, testphrase), 0);
+	String sub = SubStr(tmp, 0, 4);
+	printf ("%s:%d %s:%d\n", buf, LenStr(buf), sub, LenStr(sub));
+	DelStr(buf);
+	DelStr(sub);
+
 }
 
 static UFO CompareIntThings(const Thing const T1, const Thing const T2)
@@ -97,14 +106,25 @@ static UFO CompareIntThings(const Thing const T1, const Thing const T2)
 
 static void TestList()
 {
-	int i;
-	Thing T;
-	List L = NewList();
-	DelList(L);
-	CommentLine("Test List");
-	printf("deleted empty list\n");
-	L = NewList();
+	uint i, a;
+	Thing S, T, U, W, X;
 	Thing things[MAXCOUNT];
+	List L;
+	a=-93;
+	W = Word(a);
+	
+	CommentLine("Test List");
+
+	L = NewList(); /* insert and empty list */
+	DelList(L); /* delete an empty list */
+
+	/* insert into a list, delete a list make sure thing is ok */
+	L = NewList();
+	ListIns(L, W);
+	DelList(L);
+	assert(a == IntWord(W));
+
+	L = NewList();
 	for (i=0; i<MAXCOUNT; i++)
 	{
 		T = Word(i);
@@ -121,18 +141,87 @@ static void TestList()
 		// get deleted and it will be a memory leak!!
 		s1 = ThingToString(things[i]);
 		s2 = ThingToString(ListGet(L, things[i]));
+		assert(strcmp(s1, s2)==0);
+		/*
 		if (strcmp(s1, s2) != 0)
 		{
+			
 			printf("*** no match\n");
 			printf("%s ",ThingToString(things[i]));
 			printf("!= %s\n", ThingToString(ListGet(L, things[i])));
 		}
+		*/
 		DelStr(s1); // sigh, there is no real way around this.
 		DelStr(s2); 
 	}
 	DelList(L);
 	fflush(stdout);
-	printf("Done ListTest(), write ListRem next time!\n");
+
+	/* S, T, X are unused */
+	L = NewList();
+	S = Word(-64);
+	U = Word(64);
+	ListIns(L, S);  // memory leak but these are just tests.
+	T = Word(-64);
+	assert(SameThing(S, T));
+	assert(SameThing(S, U) == false);
+
+	X = ListRm(L, T);
+	DelList(L);
+
+	/* X is unused */
+	L = NewList();
+	for (i = 0; i < MAXCOUNT; i++) 
+	{
+		W = Word(i);
+		ListIns(L, W);
+	}
+	assert(GetListSize(L) == MAXCOUNT);
+	 
+	a = GetListSize(L);
+
+	for (i = 0; i < MAXCOUNT; i++) 
+	{
+		a -= 1;
+		W = Word(i);
+		assert(i == IntWord(ListRm(L, W)));
+		assert(GetListSize(L) == a);
+		//printf("a: %d, size: %d\n", a, GetListSize(L));
+	}
+	DelList(L);
+
+	L = NewList();
+	assert(SameThing(S, W) == false);
+	ListIns(L, T);
+	i = GetListSize(L);
+	X = ListRm(L, T);
+	assert(GetListSize(L) == (i - 1));
+	assert(SameThing(X, T) == true);
+	/* check to make sure it's not in there anymore */
+	assert(ListRm(L, T) == NULL);
+
+
+	for (i = 0; i < MAXCOUNT; i++) { ListIns(L, T); }
+
+	assert(GetListSize(L) == MAXCOUNT);
+
+	for (i = 0; i < MAXCOUNT; i++) 
+	{ 
+		X = ListRm (L, T); 
+		assert(X != NULL);
+	}
+	assert(GetListSize(L) == 0);
+	assert(ListRm(L, T) == NULL);
+
+	DelList(L);
+	/* these are the only ones we actually made new */
+	/* W is a, S is -64, T= -64 */
+	DelThing(S);
+	DelThing(T);
+	DelThing(U);
+	DelThing(W);
+
+	printf("Done TestList()\n");
 }
 
 static void TestASM()
@@ -189,7 +278,9 @@ static uint Factorial(Hash const H, const uint n)
 		{
 			ans = n * Factorial(H, n-1);
 			AddAnswer(H, n, ans);
-		}
+		} 
+		//else printf("found %d in the hashtable!\n", ans); 
+		
 		return ans;
 	}
 	return 0;
@@ -239,13 +330,14 @@ void TestFactorial()
 				TESTFACTORIALMAX,
 				FactCheck) == false) printf ("test failed.\n");
 	DelHash(H);
+	printf("Factorial, using a hash table for memoization passed.\n");
 }
 
 void TestHash()
 {
 	Thing key  = Word(7);
 	Thing item = Word(11);
-	Thing X;
+	Thing X, Y;
 	CommentLine("Testing Hashtable");
 	Hash H = NewHash(NULL);
 	
@@ -254,11 +346,20 @@ void TestHash()
 	//{ printf("no match!\n"); }
 	//HashGet can return NULL!
 	X = HashGet(H, key);	
+	assert(X);
+	assert(SameThing(X, item));
 	if (ThingCmp(X, item) != EQ) printf("error in retr hash"); 
+	Y = HashRm(H, key);
+	assert(SameThing(Y, item));
+	assert(SameThing(X, Y));
+	DelThing(X);
+	X = HashRm(H, key);
+	assert(X == NULL);
 	DelHash(H);
 	//asm("int3");
+	DelThing(Y); // this calls the dtor on item 
+	DelThing(key);
 	printf("Basic insert/retrieve in hash table done.\n");
-
 }
 
 // not mine:
@@ -291,6 +392,7 @@ static void TestFibiter()
 			printf("Issue with fib(%d) = %d\n", c, checkbuff[c]);
 	if (TestCheckBufferWithFunction(checkbuff, TESTFIBITERMAX,
 				FibCheck) == false) printf ("test failed.\n");
+	printf("Fibiter passed.\n");
 }
 
 
@@ -299,13 +401,13 @@ int main( int argc, char * argv[] )
 {
 	printf("Starting tests\n");	
 	printf( "%s\n", __FILE__ );
-	TestStr();	
 	MassTestThing(); 
 	TestList();
 	TestASM();
 	TestHash();
 	TestFactorial();
 	TestFibiter();
+	TestStr();	
 	return -0;
 }
 

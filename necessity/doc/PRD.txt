@@ -10,24 +10,55 @@ The TaggedString is an implementation of a C string that will have:
 
 TODO:
 
-Sorts:
-(are there any in std c lib?) - merge sort
-- quick sort
-
-Memoized Maths:
-n-choose-k function 
-- ship the lib with a database of these things, if we have to save the
-  memoised hash table to the disk then so be it.
+Algorithms/Refactoring:
+  - It seems to me that *Ins, *Get, *Rm are all refactorable into one 
+    function that takes in a function and data pair, finds a place and 
+    then runs that function on the data and assigns it to that place.
+    - Maybe not Ins but certainly get/rm.
 
 Datastructures
-- hashtable with arrays
-- Copy the avl tree into here so it can work seperately
-- need a nary tree 
-- trie-tries(?)
-- probablistic data structures  
+- Hashtable 
+  - make it resize if max list depth is too long
+  - refactor HashRm, HashIns, HashGet,
 
-locks
-- mutex, semaphore
+- Tree
+  - scapegoat tree
+
+- Graph implementation 
+  - box and pointer
+  - adjacency list
+  - adjacency matrix
+  - conversions between the types
+
+- List
+  - Change the list so that we always insert at the top.
+  - Keep the dummy node and make the list a circular list.  This way
+    GetListTop is always GetNextListNode(GetListDummy(L)) and 
+    GetListEnd is always GetPrevListNode(GetListDummy(L))
+    we can also support negative indexing.  
+    - we're currently doing alot of seperate extra logics for list size
+      of 0 or 1, we should change that.
+
+  - change the code to make use of the listnode pointing to the list
+    - no need to pass the L around, the listnode will have it.
+
+  - add features:
+    - map
+    - filter
+    - accumulate
+
+  - Nth element access
+    - support negative indexing!! 
+    - GetElement(L, n) -gets the nth element
+    - RemoveElementL, (n) -removes and returns the nth element
+
+  - pop()
+    ListRm(GetListTop())
+  - deque
+    ListRm(GetListEnd())
+
+- SkipList
+  - implementation
 
 stuff to do:
 construct/traverse data structures
@@ -35,16 +66,5 @@ do system routines
 distill large data sets to single values
 transform one data set to another
 
-Graphs:
-we want 3 types of graphs:
-- Adjacency matrix
-- Adjacency list
-- Objects and ptrs
-
-Want skiplists;
-and scapegoat tree
-
 notes:
 http://stackoverflow.com/questions/199418/using-c-library-in-c-code
-
-

@@ -25,10 +25,10 @@ typedef enum Vartype_t
 VARTYPE;
 
 typedef struct Thing_t * Thing;
-typedef void   (*Dtor)(Pointer P);
-typedef UFO    (*CompFN)(const Thing const T1, const Thing const T2);
+typedef void   (*Dtor)(Pointer);
+typedef UFO    (*CompFN)(const Thing const, const Thing const);
 typedef Thing  (*CopyFN)(const Thing const from);
-typedef String (*StrFN) (const Thing const T);
+typedef String (*StrFN) (const Thing const);
 struct Thing_t
 {
         VARTYPE type;    // has the type of data encoded
@@ -45,8 +45,8 @@ struct Thing_t
  * is under the hood. */
 
 /* getters */
-Pointer GetThingData(Thing const T);
-VARTYPE GetThingType(const Thing const T); 
+Pointer GetThingData(Thing const);
+VARTYPE GetThingType(const Thing const); 
 /* not needed 
 Dtor    GetThingDtor(const Thing const T);
 */
@@ -59,65 +59,71 @@ Thing NewThing(const VARTYPE vartype,
 	       const CopyFN  const copy,
 	       const StrFN   const toString);
 
-void  DelThing(Thing const self);                                   // dtor 
+void  DelThing(Thing const);                                   // dtor 
 
-/* oerations */
+/* operations */
 UFO     ThingCmp(const Thing const T1, const Thing const T2); 	/* compare */
-Thing   ThingCopy(const Thing const from);	 		/* copy */	
-String ThingToString(const Thing const T); 			/* toString */
+Thing   ThingCopy(const Thing const from);		 	/* copy */	
+String  ThingToString(const Thing const); 			/* toString */
 
-/* Pairs -------------------------------------------------------------------- */
+bool    SameThing(const Thing const T1, const Thing const T2);
 
 /* Linked List -------------------------------------------------------------- */
+typedef struct List_t * List;
 typedef struct ListNode_t * ListNode;
 struct ListNode_t
 { 
-	Thing t; 
-	ListNode next;
+	Thing T; 
+	ListNode Next;
+	ListNode Prev;
+	List MyList;
 };
 
-typedef struct List_t * List;
 struct List_t 
 { 
-	uint size; 
-	ListNode top; 
-	ListNode end;
+	uint Size; 
+	ListNode Top; 
+	ListNode Dummy;
+	ListNode End;
+	ListNode Recent;
 };
 
 List NewList();                         	     	/* list ctor */
-void DelList(List const X);             		/* list dtor */
-List  ListIns(List const L, const Thing const T); 	/* list insert */
-Thing ListGet(List const L, const Thing const T); 	/* list find item */
-Thing ListRm(List const L, const Thing const T);	/* NOT IMPLEMENTED YET*/
+void DelList(List const);	             		/* list dtor */
+List  ListIns(List const, const Thing const); 		/* list insert */
+Thing ListGet(List const, const Thing const); 		/* list find item */
+Thing ListRm(List const, const Thing const);		/* list remove item */
+uint  GetListSize(const List const);		        /* list size */
 
 /* Hash Table --------------------------------------------------------------- */
 #define MAXLISTS 4095 
-typedef int (*HashFN)(const Thing const T);
+typedef int (*HashFN)(const Thing const);
 typedef struct Hash_t * Hash;
 struct Hash_t
 {
-	List lists[MAXLISTS];
-	HashFN hasher;
+	List Lists[MAXLISTS];
+	HashFN Hasher;
 };
 
-Hash NewHash(const HashFN const HFN);			/* hash ctor */
-void DelHash(Hash const H);				/* hash dtor */
+Hash NewHash(const HashFN const);			/* hash ctor */
+void DelHash(Hash const);				/* hash dtor */
 
-Hash  HashIns(Hash const self, 
-	      const Thing const key, 
-	      const Thing const item);	   /* insert */
-Thing HashGet(const Hash const self, const Thing const key); /* get */	
-Thing HashRm(Hash const self, const Thing const T);	   /* remove */
+Hash  HashIns(Hash const, 				/* insert */
+	      const Thing const key, 	   		/* this is the  key */
+	      const Thing const item);	   		/* this is the item */
+Thing HashGet(const Hash const, const Thing const key); /* get */	
+Thing HashRm(Hash const, const Thing const key);	/* remove */
 
 /* String Operations -------------------------------------------------------- */
 String 		NewStr( const char * );
 void 		DelStr( String );
 unsigned int 	LenStr( const String const );
+String SubStr(const String const, const uint start, const uint end);
 
 /* Word Thing --------------------------------------------------------------- */
-Thing Word(const int i);
-int   IntWord(Thing T);
-char  CharWord(Thing T);
+Thing Word(const int);
+int   IntWord(Thing);
+char  CharWord(Thing);
 
 /* Registers ---------------------------------------------------------------- */
 Pointer GetEAX();
@@ -129,7 +135,7 @@ Pointer GetEDI();
 
 Pointer GetESP(); 
 Pointer GetEBP(); 
-Pointer GetEIP();
+//Pointer GetEIP(); // TODO this needs more work
 
 Pointer GetCS(); 
 Pointer GetDS(); 
@@ -139,9 +145,9 @@ Pointer GetES();
 /* Easter Eggs -------------------------------------------------------------- */
 /* probably take this out after debuggine */
 void CommentLine();
-void println(String cstr);
+void println(String);
 
-uint Fibonacci(int n);
+uint Fibonacci(int);
 
 
 #endif

@@ -4,11 +4,34 @@
 
 #include "Defs.h"
 
-uint get_len(void * rawbuf) { return((uint)rawbuf); }
+/* internal use only -------------------------------------------------------- */
+//static uint get_len(void * rawbuf) { return((uint)rawbuf); }
 
-String get_buf(void * rawbuf)
+static char * ConvertToChars(void * rawbuf)
 {
-	return((String)rawbuf + sizeof(uint));
+	return((char *)rawbuf + sizeof(uint));
+}
+
+/* String operations. ------------------------------------------------------- */
+
+String NewStr(const char * const rawstr) 
+{
+	uint len = strlen(rawstr);
+	/* strlen doesn't take into account the trailing /0 */
+	uint real_len = len + 1;
+	void * rawbuf = malloc(sizeof(int) + (sizeof(char) * real_len));
+	uint * metadata = (uint *) rawbuf;
+	*metadata = len; /* like strlen we ignore '\0' */
+	char * buf = ConvertToChars(rawbuf);
+	/* but of course strncpy, strcpy copies the \0 as well */
+	strncpy(buf, rawstr, real_len);
+	buf[real_len] = '\0';
+	return buf;
+}
+
+void DelStr(String tagstr) 
+{
+	free(tagstr - sizeof(uint));		
 }
 
 uint LenStr(const String const bstr) 
@@ -17,18 +40,22 @@ uint LenStr(const String const bstr)
 	return *tmp;
 }
 
-String NewStr(const char * const rawstr) 
+/* takes in a string, returns a substring of that string */
+String SubStr(const String const str, const uint start, const uint end)
 {
-	uint len = strlen(rawstr);
-	void * rawbuf = malloc(sizeof(int) + (sizeof(char) * len));
-	uint * metadata = (uint *) rawbuf;
-	*metadata = len;
-	String buf = get_buf(rawbuf);
-	strncpy(buf, rawstr, len);
-	return buf;
-}
-
-void DelStr(String tagstr) 
-{
-	free(tagstr - sizeof(uint));		
+	char * tmpbuf = NULL;
+	const char * tmp = str;	
+	String ret;
+	uint count = start;
+	uint len = 1 + (end - start);  // len = end - str + '\0' 
+	tmpbuf = (char *)malloc(sizeof(char)*len);
+	while (count <= end) 
+	{
+		tmpbuf[count] = tmp[count];
+		count++;
+	}
+	tmpbuf[len] = '\0'; // null term.
+	ret = NewStr(tmpbuf);	
+	free(tmpbuf);
+	return(ret);
 }
