@@ -1,39 +1,167 @@
 #!/usr/bin/env ruby
 # Show multiple instances of the same file that exist under specified
 # directory trees.
+#
 # Usage: dircomm [[PATH] ...]
+# Note: this searches . if no paths are specified.
+#
+# LICENSE: Released under the FreeBSD license. 
+#          http://www.freebsd.org/copyright/freebsd-license.html
 
-require 'digest/md5'
+require 'digest/sha1'
+require 'optparse'
+require 'ostruct'
 
-DELIM='|' # delimiter between md5sum and path in output
+require 'etc'
 
+APP_VERSION="1.1"
+
+# ----------------------------------------------------------------------
 # Fill 'dict' with files in 'dir'. Each key is n MD5sum that maps to an array of
 # identical files. Recurses on subdirs.
-def find_files(dict, dir)
+def find_files(dict, dir, options)
+
   Dir.foreach(dir) do |entry|
+
+    # ignore dot-files
     next if entry == '.' || entry == '..'
+    next if (entry.start_with? '.') && options.ignore_hidden
 
-    path = File.join(dir, entry)
+    path = File.expand_path(File.join(dir, entry))
+    next if (! File.readable? path)
+
     if (File.directory? path)
+      find_files(dict, path, options) if options.recurse
 
-      find_files(dict, path)
     else
 
-      File.open(path, 'rb') do |f|
-        key = Digest::MD5.hexdigest(f.read)
-        dict[key] ||= []
-        dict[key] << path
+      # dereference symlinks, if requested
+      if (File.symlink? path) && options.dereference
+        path = File.readlink(path)
       end
+
+      # only read actual files
+      if (File.file? path)
+        File.open(path, 'rb') do |f|
+          key = Digest::SHA1.hexdigest(f.read)
+          dict[key] ||= []
+          dict[key] << path
+        end
+      end
+
     end
+
   end
 end
 
-def build_file_dict(paths)
-  paths.inject({}) { |h, path| find_files(h, path); h }
+# Build a dictionary [digest -> Array] of files
+def build_file_dict(paths, options)
+  paths.inject({}) { |h, path| find_files(h, path, options); h }
+end
+
+# ----------------------------------------------------------------------
+
+# Convert file size to human-readable format
+def humanize(size)
+    suffix = ['', 'K', 'M', 'G', 'T']
+    pow = (Math.log(size)/Math.log(1024)).floor
+    (pow > 0) ? "%.1f%s" % [size.to_f / 1024**pow, suffix[pow]] : size.to_s
+end
+
+# Return a string describing the file stats
+def file_stats(path)
+  stats = File.stat(path)
+  humanize(stats.size)
+end
+
+# Return a string providing details for -l matches
+def match_detail(digest, path, options)
+  [digest, file_stats(path)].join(options.delim)
+end
+
+# Print all identical files on a single line, separated by field separator
+def print_matches(dict, options)
+  dict.each do |digest,names| 
+    str = options.long ? match_detail(digest, names.first, options) : ''
+    puts str + names.join(options.delim)
+  end
+end
+
+# print a human-readable report of all identical files
+def print_report(dict, options)
+  dict.each do |digest,names| 
+    puts digest + (options.long ? ' (' + file_stats(names.first) + ')' : '')
+    names.each { |path| puts "\t" + path }
+    puts
+  end
+end
+
+# ----------------------------------------------------------------------
+def get_opts(args)
+  opts_str = ' [PATH]...'
+  options = OpenStruct.new
+
+  options.ignore_hidden = true
+  options.dereference = false
+  options.recurse = true
+  options.human = false
+  options.long = false
+  options.delim = "\t"
+
+  opts = OptionParser.new do |opts|
+    opts.banner = "Usage: dircomm #{opts_str}"
+    opts.separator "Find duplicate files"
+    opts.separator "Options:"
+
+    opts.on('-a', '--all', '') do
+      options.ignore_hidden = false
+    end
+
+    opts.on('-d', '--directory', '') do
+      options.recurse = false
+    end
+
+    opts.on('-f fs', '--field-separator fs', '') do |fs|
+      options.delim = fs
+    end
+
+    opts.on('-l', '--long', 'Long listing format') do
+      options.long = true 
+    end
+
+    opts.on('-L', '--dereference', '') do
+      options.dereference = true 
+    end
+
+    opts.on('-h', '--human-readable', '') do
+      options.human = true
+    end
+
+    opts.on_tail('-?', '--help', 'Show this help message') do
+      puts ops
+      exit 1
+    end
+    
+    opts.on_tail('-v', '--version', 'Show version info') do
+      puts "dircomm #{APP_VERSION}"
+      exit 1
+    end
+
+  end
+
+  opts.parse!(args)
+
+  return options
+end
+
+# ----------------------------------------------------------------------
+def main(paths, options)
+	dict = build_file_dict( paths, options ).reject { |k,v| v.count <= 1 } 
+  options.human ? print_report(dict, options) : print_matches(dict, options)
 end
 
 if __FILE__ == $0
-	build_file_dict( (ARGV.length > 0? ARGV : ['.']) 
-                  ).select { |k,v| v.count > 1 }.each { |md5,names| 
-                             names.each{ |path| puts "#{md5}#{DELIM}#{path}" } }
+  options = get_opts(ARGV)
+
+  main( (ARGV.length > 0 ? ARGV : ['.']), options )
 end
