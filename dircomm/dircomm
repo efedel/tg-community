@@ -82,7 +82,8 @@ end
 # Print all identical files on a single line, separated by field separator
 def print_matches(dict, options)
   dict.each do |digest,names| 
-    str = options.long ? match_detail(digest, names.first, options) : ''
+    str = options.long ? match_detail(digest, names.first, options) + 
+                         options.delim : ''
     puts str + names.join(options.delim)
   end
 end
@@ -98,7 +99,7 @@ end
 
 # ----------------------------------------------------------------------
 def get_opts(args)
-  opts_str = ' [PATH]...'
+  opts_str = '[-adhlLv?] [-f fs] [PATH]...'
   options = OpenStruct.new
 
   options.ignore_hidden = true
@@ -110,40 +111,41 @@ def get_opts(args)
 
   opts = OptionParser.new do |opts|
     opts.banner = "Usage: dircomm #{opts_str}"
-    opts.separator "Find duplicate files"
+    opts.separator "Find duplicate files in one or more directories."
     opts.separator "Options:"
 
     opts.on('-a', '--all', '') do
       options.ignore_hidden = false
     end
 
-    opts.on('-d', '--directory', '') do
+    opts.on('-d', '--directory', 'Do not descend directories') do
       options.recurse = false
     end
 
-    opts.on('-f fs', '--field-separator fs', '') do |fs|
+    opts.on('-f fs', '--field-separator fs', 
+            'Set field separator to fs') do |fs|
       options.delim = fs
+    end
+
+    opts.on('-h', '--human-readable', 'Display human-readable report') do
+      options.human = true
     end
 
     opts.on('-l', '--long', 'Long listing format') do
       options.long = true 
     end
 
-    opts.on('-L', '--dereference', '') do
+    opts.on('-L', '--dereference', 'Follow symbolic links') do
       options.dereference = true 
-    end
-
-    opts.on('-h', '--human-readable', '') do
-      options.human = true
-    end
-
-    opts.on_tail('-?', '--help', 'Show this help message') do
-      puts ops
-      exit 1
     end
     
     opts.on_tail('-v', '--version', 'Show version info') do
       puts "dircomm #{APP_VERSION}"
+      exit 1
+    end
+
+    opts.on_tail('-?', '--help', 'Show this help message') do
+      puts opts
       exit 1
     end
 
