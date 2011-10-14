@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+# Show multiple instances of the same file that exist under specified
+# directory trees.
+# Usage: dircomm [[PATH] ...]
+
+require 'digest/md5'
+
+DELIM='|' # delimiter between md5sum and path in output
+
+# Fill 'dict' with files in 'dir'. Each key is n MD5sum that maps to an array of
+# identical files. Recurses on subdirs.
+def find_files(dict, dir)
+  Dir.foreach(dir) do |entry|
+    next if entry == '.' || entry == '..'
+
+    path = File.join(dir, entry)
+    if (File.directory? path)
+
+      find_files(dict, path)
+    else
+
+      File.open(path, 'rb') do |f|
+        key = Digest::MD5.hexdigest(f.read)
+        dict[key] ||= []
+        dict[key] << path
+      end
+    end
+  end
+end
+
+def build_file_dict(paths)
+  paths.inject({}) { |h, path| find_files(h, path); h }
+end
+
+if __FILE__ == $0
+	build_file_dict( (ARGV.length > 0? ARGV : ['.']) 
+                  ).select { |k,v| v.count > 1 }.each { |md5,names| 
+                             names.each{ |path| puts "#{md5}#{DELIM}#{path}" } }
+end
