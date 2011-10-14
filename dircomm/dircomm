@@ -12,8 +12,6 @@ require 'digest/sha1'
 require 'optparse'
 require 'ostruct'
 
-require 'etc'
-
 APP_VERSION="1.1"
 
 # ----------------------------------------------------------------------
@@ -158,12 +156,11 @@ end
 
 # ----------------------------------------------------------------------
 def main(paths, options)
-	dict = build_file_dict( paths, options ).reject { |k,v| v.count <= 1 } 
+  dict = build_file_dict( paths, options ).reject { |k,v| v.count <= 1 } 
   options.human ? print_report(dict, options) : print_matches(dict, options)
 end
 
 if __FILE__ == $0
   options = get_opts(ARGV)
-
   main( (ARGV.length > 0 ? ARGV : ['.']), options )
 end
