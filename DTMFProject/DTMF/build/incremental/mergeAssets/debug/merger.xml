@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="ComAndroidSupportAppcompatV71800.aar" >
+        <source path="/home/prole/Desktop/AndroidStudioProjects/tg-community/DTMFProject/DTMF/build/exploded-bundles/ComAndroidSupportAppcompatV71800.aar/assets" />
+    </dataSet>
+    <dataSet config="main" >
+        <source path="/home/prole/Desktop/AndroidStudioProjects/tg-community/DTMFProject/DTMF/src/main/assets" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/home/prole/Desktop/AndroidStudioProjects/tg-community/DTMFProject/DTMF/src/debug/assets" />
+    </dataSet>
+
+</merger>
